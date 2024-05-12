@@ -33,7 +33,7 @@ export async function findOne(req, res) {
 }
 export async function add(req, res) {
     const input = req.body.sanitizedInput;
-    const lugarInput = new Lugar(input.id = crypto.randomUUID(), input.nombre, input.ubicacion, input.codigoPostal, input.provincia, input.pais);
+    const lugarInput = new Lugar(input.nombre, input.ubicacion, input.codigoPostal, input.provincia, input.pais);
     const lugar = await repository.add(lugarInput);
     return res
         .status(201)

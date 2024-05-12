@@ -1,0 +1,15 @@
+GET http://localhost:3000/api/lugares
+###
+GET http://localhost:3000/api/lugares/b20d4893-831e-44e5-9733-0eb17646d4ed
+###
+POST http://localhost:3000/api/lugares
+Content-Type: application/json
+
+{
+    "nombre": "Lugar 1",
+    "ubicacion":"20°0'0\"N-77°0'0\"W",
+    "codigoPostal": "12345",
+    "provincia": "Provincia 1",
+    "pais": "Pais 1",
+
+}

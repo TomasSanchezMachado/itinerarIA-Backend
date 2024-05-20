@@ -1,6 +1,6 @@
 GET http://localhost:3000/api/lugares
 ###
-GET http://localhost:3000/api/lugares/b20d4893-831e-44e5-9733-0eb17646d4ed
+GET http://localhost:3000/api/lugares/462b8f96-973c-46dc-b5bf-1e72b719f220
 ###
 POST http://localhost:3000/api/lugares
 Content-Type: application/json
@@ -15,23 +15,22 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:3000/api/lugares/b20d4893-831e-44e5-9733-0eb17646d4ed
+PUT http://localhost:3000/api/lugares/462b8f96-973c-46dc-b5bf-1e72b719f220
 Content-Type: application/json
 
 {
-    "nombre": "Lugar 1",
+    "nombre": "Rosario",
     "ubicacion":"20°0'0\"N-77°0'0\"W",
     "codigoPostal": "2000",
-    "provincia": "Santa Fe",
-    "pais": "Argentina"
+    "provincia": "Santa Fe"
 
 }
 ###
-PATCH http://localhost:3000/api/lugares/b20d4893-831e-44e5-9733-0eb17646d4ed
+PATCH http://localhost:3000/api/lugares/462b8f96-973c-46dc-b5bf-1e72b719f220
 Content-Type: application/json
 
 {
-    "ubicacion":"20°0'0\"N-77°0'0\"W",
+
     "codigoPostal": "2000",
     "pais": "Argentina"
 
@@ -39,4 +38,4 @@ Content-Type: application/json
 
 
 ###
-DELETE http://localhost:3000/api/lugares/b20d4893-831e-44e5-9733-0eb17646d4ed
+DELETE http://localhost:3000/api/lugares/462b8f96-973c-46dc-b5bf-1e72b719f220

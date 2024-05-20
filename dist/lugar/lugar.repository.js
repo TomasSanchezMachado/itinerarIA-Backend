@@ -17,7 +17,7 @@ export class LugarRepository {
         const index = lugares.findIndex(lugar => lugar.id === item.id);
         if (index === -1)
             return undefined;
-        lugares[index] = item;
+        lugares[index] = { ...lugares[index], ...item };
         return item;
     }
     async delete(item) {

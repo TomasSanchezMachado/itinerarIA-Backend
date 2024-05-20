@@ -37,16 +37,16 @@ export async function add(req, res) {
     const lugar = await repository.add(lugarInput);
     return res
         .status(201)
-        .send({ message: "Lugar cargado", data: lugar });
+        .send({ message: "Lugar cargado correctamente", data: lugar });
 }
 export async function update(req, res) {
     req.body.sanitizedInput.id = req.params.id;
     const lugar = await repository.update(req.body.sanitizedInput);
     if (!lugar) {
-        return res.status(404).send({ message: "lugar not found" });
+        return res.status(404).send({ message: "Lugar no encontrado" });
     }
     res.status(200).send({
-        message: "lugar updated succesfully",
+        message: "Lugar actualizado correctamente",
         data: lugar,
     });
 }

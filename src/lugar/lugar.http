@@ -10,6 +10,33 @@ Content-Type: application/json
     "ubicacion":"20°0'0\"N-77°0'0\"W",
     "codigoPostal": "12345",
     "provincia": "Provincia 1",
-    "pais": "Pais 1",
+    "pais": "Pais 1"
 
 }
+
+###
+PUT http://localhost:3000/api/lugares/b20d4893-831e-44e5-9733-0eb17646d4ed
+Content-Type: application/json
+
+{
+    "nombre": "Lugar 1",
+    "ubicacion":"20°0'0\"N-77°0'0\"W",
+    "codigoPostal": "2000",
+    "provincia": "Santa Fe",
+    "pais": "Argentina"
+
+}
+###
+PATCH http://localhost:3000/api/lugares/b20d4893-831e-44e5-9733-0eb17646d4ed
+Content-Type: application/json
+
+{
+    "ubicacion":"20°0'0\"N-77°0'0\"W",
+    "codigoPostal": "2000",
+    "pais": "Argentina"
+
+}
+
+
+###
+DELETE http://localhost:3000/api/lugares/b20d4893-831e-44e5-9733-0eb17646d4ed

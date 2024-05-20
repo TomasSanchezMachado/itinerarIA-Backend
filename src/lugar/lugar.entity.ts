@@ -5,11 +5,11 @@ type CoordenadasGeograficas = `${number}°${number}'${number}"${direccionY}-${nu
 
 export class Lugar{
     constructor(
-        public id = crypto.randomUUID(),
         public nombre: string,
         public ubicacion: CoordenadasGeograficas,
         public codigoPostal: string,
         public provincia: string,
         public pais: string,
+        public id = crypto.randomUUID()
     ){}
 }

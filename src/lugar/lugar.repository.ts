@@ -2,7 +2,7 @@ import { Repository } from "../shared/repository.js";
 import { Lugar } from "./lugar.entity.js";
 
 const lugares = [
-    new Lugar('b20d4893-831e-44e5-9733-0eb17646d4ed', 'Casa de Juan', '10°10\'10"S-10°10\'10\"W', '12345', 'Sevilla', 'España'),
+    new Lugar('Casa de Juan', '10°10\'10"S-10°10\'10\"W', '12345', 'Sevilla', 'España'),
     
 ]
 

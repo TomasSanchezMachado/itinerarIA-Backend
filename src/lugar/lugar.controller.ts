@@ -1,6 +1,7 @@
 import { Response,Request,NextFunction } from "express";
 import { LugarRepository } from "./lugar.repository.js";
 import { Lugar } from "./lugar.entity.js";
+import { validateLugar, validatePartialLugar } from "../schemas/lugar.js";
 
 const repository = new LugarRepository()
 
@@ -14,10 +15,8 @@ export function sanitizeLugarInput(
     ubicacion: req.body.ubicacion,
     codigoPostal: req.body.codigoPostal,
     provincia: req.body.provincia,
-    pais: req.body.pais}
-
-
-  //more checks here
+    pais: req.body.pais
+  }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
     if (req.body.sanitizedInput[key] === undefined) {
@@ -48,7 +47,11 @@ export async function findOne(req: Request, res: Response) {
 
 
 export async function add(req: Request, res: Response) {
-  const input = req.body.sanitizedInput;
+  const result = validateLugar(req.body.sanitizedInput);
+  if (!result.success) {
+    return res.status(400).send({ message: result.error });
+  }
+  const input = result.data;
   const lugarInput = new Lugar(
     input.nombre,
     input.ubicacion,
@@ -64,7 +67,8 @@ export async function add(req: Request, res: Response) {
 
 export async function update(req: Request, res: Response) {
   req.body.sanitizedInput.id = req.params.id;
-  const lugar = await repository.update(req.body.sanitizedInput);
+  const input = req.body.sanitizedInput;
+  const lugar = await repository.update(input);
   if (!lugar) {
     return res.status(404).send({ message: "Lugar no encontrado" });
   }

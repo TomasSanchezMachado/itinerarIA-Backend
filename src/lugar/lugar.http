@@ -7,7 +7,10 @@ Content-Type: application/json
 
 {
     "nombre": "Lugar 1",
-    "ubicacion":"20°0'0\"N-77°0'0\"W",
+    "ubicacion":{
+        "latitud": "20.0",
+        "longitud": 77.0
+    },
     "codigoPostal": "12345",
     "provincia": "Provincia 1",
     "pais": "Pais 1"

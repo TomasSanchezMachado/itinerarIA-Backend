@@ -1,7 +1,10 @@
 import crypto from 'node:crypto';
-type direccionX =  'E' | 'W';
-type direccionY = 'S' | 'N' 
-type CoordenadasGeograficas = `${number}°${number}'${number}"${direccionY}-${number}°${number}'${number}"${direccionX}`
+type Latitud = number;
+type Longitud = number;
+type CoordenadasGeograficas = {
+    latitud: Latitud,
+    longitud: Longitud
+}
 
 export class Lugar{
     constructor(

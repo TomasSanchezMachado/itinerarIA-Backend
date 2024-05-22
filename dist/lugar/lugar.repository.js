@@ -1,6 +1,6 @@
 import { Lugar } from "./lugar.entity.js";
 const lugares = [
-    new Lugar('Casa de Juan', '10°10\'10"S-10°10\'10\"W', '12345', 'Sevilla', 'España'),
+    new Lugar('Casa de Juan', { latitud: 40.4167, longitud: -3.70325 }, '28001', 'Madrid', 'España'),
 ];
 export class LugarRepository {
     async findAll() {

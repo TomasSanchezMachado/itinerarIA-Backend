@@ -23,12 +23,11 @@ export class LugarRepository implements Repository<Lugar>{
         lugares[index] = {...lugares[index], ...item}
         return item;
     }
-    public async delete(item: {id: string}): Promise<Lugar>{
-        const index = lugares.findIndex(lugar => lugar.id === item.id);
-        if(index === -1) throw new Error('No se ha encontrado el lugar');
-        const lugar = lugares[index];
-        lugares.splice(index, 1);
-        return lugar;
+    public async delete(item: {id: string}): Promise<Lugar | undefined>{
+        const lugarIdx = lugares.findIndex(lugar => lugar.id === item.id);
+        if (lugarIdx !== -1) {
+            return await lugares.splice(lugarIdx, 1)[0];
+        }
     }
     
 

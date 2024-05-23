@@ -8,7 +8,7 @@ Content-Type: application/json
 {
     "nombre": "Lugar 1",
     "ubicacion":{
-        "latitud": "20.0",
+        "latitud": 20.0,
         "longitud": 77.0
     },
     "codigoPostal": "12345",
@@ -23,13 +23,16 @@ Content-Type: application/json
 
 {
     "nombre": "Rosario",
-    "ubicacion":"20°0'0\"N-77°0'0\"W",
+    "ubicacion":{
+        "latitud": 20.0,
+        "longitud": 77.0
+    },
     "codigoPostal": "2000",
     "provincia": "Santa Fe"
 
 }
 ###
-PATCH http://localhost:3000/api/lugares/462b8f96-973c-46dc-b5bf-1e72b719f220
+PATCH http://localhost:3000/api/lugares/9183af62-83b1-4ec5-b091-5ba833721b0e
 Content-Type: application/json
 
 {
@@ -41,4 +44,4 @@ Content-Type: application/json
 
 
 ###
-DELETE http://localhost:3000/api/lugares/462b8f96-973c-46dc-b5bf-1e72b719f220
+DELETE http://localhost:3000/api/lugares/9183af62-83b1-4ec5-b091-5ba833721b0e

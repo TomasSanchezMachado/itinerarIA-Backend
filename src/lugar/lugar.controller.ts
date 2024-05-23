@@ -67,8 +67,12 @@ export async function add(req: Request, res: Response) {
 
 export async function update(req: Request, res: Response) {
   req.body.sanitizedInput.id = req.params.id;
-  const input = req.body.sanitizedInput;
-  const lugar = await repository.update(input);
+  const result = validatePartialLugar(req.body.sanitizedInput);
+  if (!result.success) {
+    return res.status(400).send({ message: result.error });
+  }
+
+  const lugar = await repository.update(req.body.sanitizedInput);
   if (!lugar) {
     return res.status(404).send({ message: "Lugar no encontrado" });
   }

@@ -2,7 +2,7 @@ import { Repository } from "../shared/repository.js";
 import { Lugar } from "./lugar.entity.js";
 
 const lugares = [
-    new Lugar('b20d4893-831e-44e5-9733-0eb17646d4ed', 'Casa de Juan', '10°10\'10"S-10°10\'10\"W', '12345', 'Sevilla', 'España'),
+    new Lugar('Casa de Juan', {latitud: 40.4167, longitud: -3.70325}, '28001', 'Madrid', 'España'),
     
 ]
 
@@ -20,15 +20,14 @@ export class LugarRepository implements Repository<Lugar>{
     public async update(item: Lugar): Promise<Lugar | undefined>{
         const index = lugares.findIndex(lugar => lugar.id === item.id);
         if(index === -1) return undefined;
-        lugares[index] = item;
+        lugares[index] = {...lugares[index], ...item}
         return item;
     }
-    public async delete(item: {id: string}): Promise<Lugar>{
-        const index = lugares.findIndex(lugar => lugar.id === item.id);
-        if(index === -1) throw new Error('No se ha encontrado el lugar');
-        const lugar = lugares[index];
-        lugares.splice(index, 1);
-        return lugar;
+    public async delete(item: {id: string}): Promise<Lugar | undefined>{
+        const lugarIdx = lugares.findIndex(lugar => lugar.id === item.id);
+        if (lugarIdx !== -1) {
+            return await lugares.splice(lugarIdx, 1)[0];
+        }
     }
     
 

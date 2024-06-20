@@ -1,6 +1,7 @@
 import { Response,Request,NextFunction } from "express";
 import { LugarRepository } from "./lugar.repository.js";
 import { Lugar } from "./lugar.entity.js";
+import { validateLugar, validatePartialLugar } from "../schemas/lugar.js";
 
 const repository = new LugarRepository()
 
@@ -15,15 +16,13 @@ export function sanitizeLugarInput(
     codigoPostal: req.body.codigoPostal,
     provincia: req.body.provincia,
     pais: req.body.pais
-  };
-
-  //more checks here
+  }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
     if (req.body.sanitizedInput[key] === undefined) {
       delete req.body.sanitizedInput[key];
     }
-  });
+  })
 
   next();
 }
@@ -48,7 +47,11 @@ export async function findOne(req: Request, res: Response) {
 
 
 export async function add(req: Request, res: Response) {
-  const input = req.body.sanitizedInput;
+  const result = validateLugar(req.body.sanitizedInput);
+  if (!result.success) {
+    return res.status(400).send({ message: result.error });
+  }
+  const input = result.data;
   const lugarInput = new Lugar(
     input.nombre,
     input.ubicacion,
@@ -59,19 +62,23 @@ export async function add(req: Request, res: Response) {
   const lugar = await repository.add(lugarInput);
   return res
     .status(201)
-    .send({ message: "Lugar cargado", data: lugar });
+    .send({ message: "Lugar cargado correctamente", data: lugar });
 }
 
 export async function update(req: Request, res: Response) {
   req.body.sanitizedInput.id = req.params.id;
-  const lugar = await repository.update(req.body.sanitizedInput);
+  const result = validatePartialLugar(req.body.sanitizedInput);
+  if (!result.success) {
+    return res.status(400).send({ message: result.error });
+  }
 
+  const lugar = await repository.update(req.body.sanitizedInput);
   if (!lugar) {
-    return res.status(404).send({ message: "lugar not found" });
+    return res.status(404).send({ message: "Lugar no encontrado" });
   }
 
   res.status(200).send({
-    message: "lugar updated succesfully",
+    message: "Lugar actualizado correctamente",
     data: lugar,
   });
 }

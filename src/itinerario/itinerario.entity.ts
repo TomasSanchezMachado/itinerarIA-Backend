@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
-type Latitud = number;
-type Longitud = number;
+import { Actividad } from '../actividad/actividad.entity.js'
+
 type tipoTransporte = {
 
 }

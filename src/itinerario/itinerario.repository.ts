@@ -2,7 +2,18 @@ import { Repository } from "../shared/repository.js";
 import { Itinerario } from "./itinerario.entity.js";
 
 const itinerarios = [
-    new Itinerario(),
+    new Itinerario('Itinerario 1','Itinerario hecho para 5 dias en Rosario...',5,[{
+        nombre : 'Monumento',
+        descripcion : 'Paseo por monumento a la bandera',
+        aireLibre : true,
+        id : crypto.randomUUID()
+        },  
+        {
+        nombre : 'City Center',
+        descripcion : 'Casino City Center',
+        aireLibre : false,
+        id : crypto.randomUUID()
+        }],'Auto'),
     
 ]
 

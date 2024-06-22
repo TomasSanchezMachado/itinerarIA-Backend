@@ -8,10 +8,10 @@ const lugares = [
 
 export class LugarRepository implements Repository<Lugar>{
   public async findAll(): Promise<Lugar[]>{
-    return await lugares;
+    return lugares;
     } 
     public async findOne(item: {id: string}): Promise<Lugar | undefined>{
-        return await lugares.find(lugar => lugar.id === item.id);
+        return lugares.find(lugar => lugar.id === item.id);
     }
     public async add(item: Lugar): Promise<Lugar | undefined>{
         lugares.push(item);
@@ -26,7 +26,7 @@ export class LugarRepository implements Repository<Lugar>{
     public async delete(item: {id: string}): Promise<Lugar | undefined>{
         const lugarIdx = lugares.findIndex(lugar => lugar.id === item.id);
         if (lugarIdx !== -1) {
-            return await lugares.splice(lugarIdx, 1)[0];
+            return lugares.splice(lugarIdx, 1)[0];
         }
     }
     

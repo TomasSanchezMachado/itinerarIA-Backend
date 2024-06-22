@@ -11,11 +11,11 @@ export function sanitizeItinerarioInput(
   next: NextFunction
 ) {
   req.body.sanitizedInput = {
-    nombre: req.body.nombre,
-    ubicacion: req.body.ubicacion,
-    codigoPostal: req.body.codigoPostal,
-    provincia: req.body.provincia,
-    pais: req.body.pais
+    titulo: req.body.titulo,
+    descripcion: req.body.descripcion,
+    cantDias: req.body.cantDias,
+    actividades: req.body.actividades,
+    transporte: req.body.transporte
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -31,7 +31,7 @@ export function sanitizeItinerarioInput(
 export async function findAll(req: Request, res: Response) {
   const itinerarios = await repository.findAll();
   if (!itinerarios) {
-    return res.status(404).send({data:'Itinerario no encontrado'})
+    return res.status(404).send({data:'No se encontraron itinerarios'})
   }
   res.status(200).json({data:itinerarios});
   
@@ -50,6 +50,11 @@ export async function add(req: Request, res: Response) {
   const result = req.body.sanitizedInput;
   const input = result.data;
   const itinerarioInput = new Itinerario(
+    input.titulo,
+    input.descripcion,
+    input.cantDias,
+    input.actividades,
+    input.transporte
     
   );
   const itinerario = await repository.add(itinerarioInput);

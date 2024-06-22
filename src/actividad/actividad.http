@@ -1,0 +1,35 @@
+GET http://localhost:3000/api/actividades
+###
+GET http://localhost:3000/api/actividades/57c0cfad-b4ce-49b1-b80d-66038e634956
+###
+POST http://localhost:3000/api/actividades
+Content-Type: application/json
+
+{
+    "nombre":"Museo Messi",
+    "descripcion" : "Visita guiada al museo de Lionel Messi",
+    "aireLibre" : false
+
+}
+
+###
+PUT http://localhost:3000/api/actividades/57c0cfad-b4ce-49b1-b80d-66038e634956
+Content-Type: application/json
+
+{
+    "nombre":"Museo Messi",
+    "descripcion" : "Visita guiada al museo de Lionel Messi",
+    "aireLibre" : false
+
+}
+###
+PATCH http://localhost:3000/api/actividades/57c0cfad-b4ce-49b1-b80d-66038e634956
+Content-Type: application/json
+
+{
+    "aireLibre" : false
+}
+
+
+###
+DELETE http://localhost:3000/api/actividades/57c0cfad-b4ce-49b1-b80d-66038e634956

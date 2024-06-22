@@ -1,44 +1,60 @@
-GET http://localhost:3000/api/lugares
+GET http://localhost:3000/api/itinerarios
 ###
 GET http://localhost:3000/api/lugares/57c0cfad-b4ce-49b1-b80d-66038e634956
 ###
-POST http://localhost:3000/api/lugares
+POST http://localhost:3000/api/itinerarios
 Content-Type: application/json
 
 {
-    "nombre": "Lugar 1",
-    "ubicacion":{
-        "latitud": 20.0,
-        "longitud": 77.0
-    },
-    "codigoPostal": "12345",
-    "provincia": "Provincia 1",
-    "pais": "Pais 1"
-
+    "titulo": "Itinerario 2",
+    "descripcion": "Itinerario hecho para 7 dias en Disney...",
+    "cantDias": 5,
+    "actividades": [
+        {
+            "nombre": "Universal Studios",
+            "descripcion": "Parque con atracciones...",
+            "aireLibre": true
+        },
+        {
+            "nombre": "Magic Kingdom",
+            "descripcion": "Parque con atracciones...",
+            "aireLibre": true
+        }
+    ],
+    "transporte": "Auto"
 }
+
 
 ###
 PUT http://localhost:3000/api/lugares/57c0cfad-b4ce-49b1-b80d-66038e634956
 Content-Type: application/json
 
 {
-    "nombre": "Rosario",
-    "ubicacion":{
-        "latitud": 20.0,
-        "longitud": 77.0
-    },
-    "codigoPostal": "2000",
-    "provincia": "Santa Fe"
-
+    "titulo": "Itinerario 2",
+    "descripcion": "Itinerario hecho para 7 dias en Disney...",
+    "cantDias": 5,
+    "actividades": [
+        {
+            "nombre": "Universal Studios",
+            "descripcion": "Parque con atracciones...",
+            "aireLibre": true
+        },
+        {
+            "nombre": "Magic Kingdom",
+            "descripcion": "Parque con atracciones...",
+            "aireLibre": true
+        }
+    ],
+    "transporte": "Auto"
 }
+
 ###
 PATCH http://localhost:3000/api/lugares/57c0cfad-b4ce-49b1-b80d-66038e634956
 Content-Type: application/json
 
 {
-
-    "codigoPostal": "2000",
-    "pais": "Argentina"
+    "cantDias" : 8,
+    "transporte":"Colectivo"
 
 }
 

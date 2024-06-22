@@ -20,7 +20,7 @@ export function sanitizeLugarInput(req, res, next) {
 export async function findAll(req, res) {
     const lugares = await repository.findAll();
     if (!lugares) {
-        return res.status(404).send({ data: 'Lugares not found' });
+        return res.status(404).send({ data: 'No se encontraron lugares' });
     }
     res.status(200).json({ data: lugares });
 }

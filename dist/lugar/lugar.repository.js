@@ -4,10 +4,10 @@ const lugares = [
 ];
 export class LugarRepository {
     async findAll() {
-        return await lugares;
+        return lugares;
     }
     async findOne(item) {
-        return await lugares.find(lugar => lugar.id === item.id);
+        return lugares.find(lugar => lugar.id === item.id);
     }
     async add(item) {
         lugares.push(item);
@@ -23,7 +23,7 @@ export class LugarRepository {
     async delete(item) {
         const lugarIdx = lugares.findIndex(lugar => lugar.id === item.id);
         if (lugarIdx !== -1) {
-            return await lugares.splice(lugarIdx, 1)[0];
+            return lugares.splice(lugarIdx, 1)[0];
         }
     }
 }

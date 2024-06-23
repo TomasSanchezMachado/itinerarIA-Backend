@@ -31,8 +31,7 @@ export async function findOne(req, res) {
     res.json({ data: itinerario });
 }
 export async function add(req, res) {
-    const result = req.body.sanitizedInput;
-    const input = result.data;
+    const input = req.body.sanitizedInput;
     const itinerarioInput = new Itinerario(input.titulo, input.descripcion, input.cantDias, input.actividades, input.transporte);
     const itinerario = await repository.add(itinerarioInput);
     return res

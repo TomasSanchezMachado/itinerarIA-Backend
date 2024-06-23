@@ -45,8 +45,7 @@ export async function findOne(req: Request, res: Response) {
 
 
 export async function add(req: Request, res: Response) {
-  const result = req.body.sanitizedInput;
-  const input = result.data;
+  const input = req.body.sanitizedInput;
   const actividadInput = new Actividad(
     input.nombre,
     input.descripcion,

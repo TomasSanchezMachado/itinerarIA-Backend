@@ -29,8 +29,7 @@ export async function findOne(req, res) {
     res.json({ data: actividad });
 }
 export async function add(req, res) {
-    const result = req.body.sanitizedInput;
-    const input = result.data;
+    const input = req.body.sanitizedInput;
     const actividadInput = new Actividad(input.nombre, input.descripcion, input.aireLibre);
     const actividad = await repository.add(actividadInput);
     return res

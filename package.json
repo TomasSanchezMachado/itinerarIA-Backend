@@ -13,6 +13,7 @@
   "dependencies": {
     "@mikro-orm/core": "6.2.9",
     "express": "4.19.2",
+    "reflect-metadata": "0.2.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {

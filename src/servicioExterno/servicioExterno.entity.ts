@@ -4,12 +4,7 @@ import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 
 @Entity()
 export class ServicioExterno extends BaseEntity{
-  @PrimaryKey()
-  _id?: ObjectId = new ObjectId();
-
-  @SerializedPrimaryKey()
-  id?: string;
-
+ 
   @Property()
   tipoServicio!: string;
 

@@ -1,4 +1,4 @@
-import { Response,Request,NextFunction } from "express";
+import { Response, Request, NextFunction } from "express";
 import { ItinerarioRepository } from "./itinerario.repository.js";
 import { Itinerario } from "./itinerario.entity.js";
 
@@ -31,18 +31,18 @@ export function sanitizeItinerarioInput(
 export async function findAll(req: Request, res: Response) {
   const itinerarios = await repository.findAll();
   if (!itinerarios) {
-    return res.status(404).send({data:'No se encontraron itinerarios'})
+    return res.status(404).send({ data: 'No se encontraron itinerarios' })
   }
-  res.status(200).json({data:itinerarios});
-  
+  res.status(200).json({ data: itinerarios });
+
 }
 
 export async function findOne(req: Request, res: Response) {
   const itinerario = await repository.findOne({ id: req.params.id });
   if (!itinerario) {
-    return res.status(404).send({ message: "Itinerario no encontrado" }); 
+    return res.status(404).send({ message: "Itinerario no encontrado" });
   }
-  res.json({data: itinerario});
+  res.json({ data: itinerario });
 }
 
 
@@ -54,7 +54,7 @@ export async function add(req: Request, res: Response) {
     input.cantDias,
     input.actividades,
     input.transporte
-    
+
   );
   const itinerario = await repository.add(itinerarioInput);
   return res
@@ -80,9 +80,9 @@ export async function update(req: Request, res: Response) {
 export async function remove(req: Request, res: Response) {
   const itinerario = await repository.delete({ id: req.params.id });
   if (!itinerario) {
-    return res.status(404).send({ message: "Itinerario no encontrado" }); 
+    return res.status(404).send({ message: "Itinerario no encontrado" });
   }
-  return res.status(200).json({message:"Itinerario eliminado correctamente", data: itinerario});
+  return res.status(200).json({ message: "Itinerario eliminado correctamente", data: itinerario });
 }
 
 

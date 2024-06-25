@@ -1,12 +1,12 @@
-import { ItinerarioRepository } from "./itinerario.repository.js";
 import { Itinerario } from "./itinerario.entity.js";
-const repository = new ItinerarioRepository();
+import { orm } from "../shared/db/orm.js";
+const em = orm.em;
 export function sanitizeItinerarioInput(req, res, next) {
     req.body.sanitizedInput = {
         titulo: req.body.titulo,
         descripcion: req.body.descripcion,
         cantDias: req.body.cantDias,
-        actividades: req.body.actividades,
+        actividades: new Uint8Array(req.body.actividades),
         transporte: req.body.transporte
     };
     Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -17,44 +17,31 @@ export function sanitizeItinerarioInput(req, res, next) {
     next();
 }
 export async function findAll(req, res) {
-    const itinerarios = await repository.findAll();
-    if (!itinerarios) {
-        return res.status(404).send({ data: 'No se encontraron itinerarios' });
+    try {
+        const itinerarios = await em.find(Itinerario, {});
+        res.status(200).json({ data: itinerarios });
     }
-    res.status(200).json({ data: itinerarios });
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
 }
 export async function findOne(req, res) {
-    const itinerario = await repository.findOne({ id: req.params.id });
-    if (!itinerario) {
-        return res.status(404).send({ message: "Itinerario no encontrado" });
+    try {
+        const id = req.params.id;
+        //const itinerario = await em.findOne(Itinerario,{id: id})
+        return res.status(200).json({ data: "findOne function" });
     }
-    res.json({ data: itinerario });
+    catch (error) {
+        return res.status(404).json({ message: error.message });
+    }
 }
 export async function add(req, res) {
-    const input = req.body.sanitizedInput;
-    const itinerarioInput = new Itinerario(input.titulo, input.descripcion, input.cantDias, input.actividades, input.transporte);
-    const itinerario = await repository.add(itinerarioInput);
-    return res
-        .status(201)
-        .send({ message: "Itinerario cargado correctamente", data: itinerario });
+    return res.status(500).json({ message: "add function" });
 }
 export async function update(req, res) {
-    req.body.sanitizedInput.id = req.params.id;
-    const result = (req.body.sanitizedInput);
-    const itinerario = await repository.update(req.body.sanitizedInput);
-    if (!itinerario) {
-        return res.status(404).send({ message: "Itinerario no encontrado" });
-    }
-    res.status(200).send({
-        message: "Itinerario actualizado correctamente",
-        data: itinerario,
-    });
+    return res.status(500).json({ message: "add function" });
 }
 export async function remove(req, res) {
-    const itinerario = await repository.delete({ id: req.params.id });
-    if (!itinerario) {
-        return res.status(404).send({ message: "Itinerario no encontrado" });
-    }
-    return res.status(200).json({ message: "Itinerario eliminado correctamente", data: itinerario });
+    return res.status(500).json({ message: "add function" });
 }
 //# sourceMappingURL=itinerario.controller.js.map

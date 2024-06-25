@@ -1,5 +1,5 @@
 import { Itinerario } from '../itinerario/itinerario.entity.js'
-import { Property,OneToMany, Collection, Entity, ManyToOne } from '@mikro-orm/core'
+import { Property, Entity, ManyToOne } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 
 @Entity()

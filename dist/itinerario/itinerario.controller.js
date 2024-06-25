@@ -19,6 +19,9 @@ export function sanitizeItinerarioInput(req, res, next) {
 export async function findAll(req, res) {
     try {
         const itinerarios = await em.find(Itinerario, {});
+        if (itinerarios.length === 0) {
+            return res.status(200).json({ message: "No se encontraron itinerarios" });
+        }
         res.status(200).json({ data: itinerarios });
     }
     catch (error) {
@@ -28,20 +31,44 @@ export async function findAll(req, res) {
 export async function findOne(req, res) {
     try {
         const id = req.params.id;
-        //const itinerario = await em.findOne(Itinerario,{id: id})
-        return res.status(200).json({ data: "findOne function" });
+        const itinerario = await em.findOneOrFail(Itinerario, { id });
+        return res.status(200).json({ data: itinerario });
     }
     catch (error) {
-        return res.status(404).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 }
 export async function add(req, res) {
-    return res.status(500).json({ message: "add function" });
+    try {
+        const itinerario = em.create(Itinerario, req.body.sanitizedInput);
+        await em.flush();
+        return res.status(201).json({ message: "Itinerario creado con exito", data: itinerario });
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
 }
 export async function update(req, res) {
-    return res.status(500).json({ message: "add function" });
+    try {
+        const id = req.params.id;
+        const itinerario = em.getReference(Itinerario, id);
+        em.assign(itinerario, req.body.sanitizedInput);
+        await em.flush();
+        return res.status(200).json({ message: "Itinerario actualizado con exito", data: itinerario });
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
 }
 export async function remove(req, res) {
-    return res.status(500).json({ message: "add function" });
+    try {
+        const id = req.params.id;
+        const itinerario = em.getReference(Itinerario, id);
+        await em.removeAndFlush(itinerario);
+        res.status(200).send({ message: 'Itinerario borrado', data: itinerario });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }
 //# sourceMappingURL=itinerario.controller.js.map

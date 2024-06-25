@@ -1,14 +1,13 @@
-import { LugarRepository } from "./lugar.repository.js";
 import { Lugar } from "./lugar.entity.js";
-import { validateLugar, validatePartialLugar } from "../schemas/lugar.js";
-const repository = new LugarRepository();
+import { orm } from "../shared/db/orm.js";
+const em = orm.em;
 export function sanitizeLugarInput(req, res, next) {
     req.body.sanitizedInput = {
-        nombre: req.body.nombre,
-        ubicacion: req.body.ubicacion,
-        codigoPostal: req.body.codigoPostal,
-        provincia: req.body.provincia,
-        pais: req.body.pais
+        titulo: req.body.titulo,
+        descripcion: req.body.descripcion,
+        cantDias: req.body.cantDias,
+        actividades: new Uint8Array(req.body.actividades),
+        transporte: req.body.transporte
     };
     Object.keys(req.body.sanitizedInput).forEach((key) => {
         if (req.body.sanitizedInput[key] === undefined) {
@@ -18,51 +17,58 @@ export function sanitizeLugarInput(req, res, next) {
     next();
 }
 export async function findAll(req, res) {
-    const lugares = await repository.findAll();
-    if (!lugares) {
-        return res.status(404).send({ data: 'No se encontraron lugares' });
+    try {
+        const lugares = await em.find(Lugar, {});
+        if (lugares.length === 0) {
+            return res.status(200).json({ message: "No se encontraron lugares" });
+        }
+        res.status(200).json({ data: lugares });
     }
-    res.status(200).json({ data: lugares });
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
 }
 export async function findOne(req, res) {
-    const lugar = await repository.findOne({ id: req.params.id });
-    if (!lugar) {
-        return res.status(404).send({ message: "Lugar no encontrado" });
+    try {
+        const id = req.params.id;
+        const lugar = await em.findOneOrFail(Lugar, { id });
+        return res.status(200).json({ data: lugar });
     }
-    res.json({ data: lugar });
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
 }
 export async function add(req, res) {
-    const result = validateLugar(req.body.sanitizedInput);
-    if (!result.success) {
-        return res.status(400).send({ message: result.error });
+    try {
+        const lugar = em.create(Lugar, req.body.sanitizedInput);
+        await em.flush();
+        return res.status(201).json({ message: "Lugar creado con exito", data: lugar });
     }
-    const input = result.data;
-    const lugarInput = new Lugar(input.nombre, input.ubicacion, input.codigoPostal, input.provincia, input.pais);
-    const lugar = await repository.add(lugarInput);
-    return res
-        .status(201)
-        .send({ message: "Lugar cargado correctamente", data: lugar });
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
 }
 export async function update(req, res) {
-    req.body.sanitizedInput.id = req.params.id;
-    const result = validatePartialLugar(req.body.sanitizedInput);
-    if (!result.success) {
-        return res.status(400).send({ message: result.error });
+    try {
+        const id = req.params.id;
+        const lugar = em.getReference(Lugar, id);
+        em.assign(lugar, req.body.sanitizedInput);
+        await em.flush();
+        return res.status(200).json({ message: "Lugar actualizado con exito", data: lugar });
     }
-    const lugar = await repository.update(req.body.sanitizedInput);
-    if (!lugar) {
-        return res.status(404).send({ message: "Lugar no encontrado" });
+    catch (error) {
+        return res.status(500).json({ message: error.message });
     }
-    res.status(200).send({
-        message: "Lugar actualizado correctamente",
-        data: lugar,
-    });
 }
 export async function remove(req, res) {
-    const lugar = await repository.delete({ id: req.params.id });
-    if (!lugar) {
-        return res.status(404).send({ message: "Lugar no encontrado" });
+    try {
+        const id = req.params.id;
+        const lugar = em.getReference(Lugar, id);
+        await em.removeAndFlush(lugar);
+        res.status(200).send({ message: 'Lugar borrado', data: lugar });
     }
-    return res.status(200).json({ message: "Lugar eliminado correctamente", data: lugar });
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }
 //# sourceMappingURL=lugar.controller.js.map

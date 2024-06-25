@@ -20,6 +20,6 @@ export class Itinerario extends BaseEntity{
         // @ManyToOne(() => Usuario, {nullable : false})
         // usuario! : Usuario
 
-        @OneToMany(() => Participante, (participante) => participante.itinerario)
+        @OneToMany(() => Participante, (participante) => participante.itinerario, {cascade: [Cascade.ALL]})
         participantes = new Collection<Participante>(this)
 }

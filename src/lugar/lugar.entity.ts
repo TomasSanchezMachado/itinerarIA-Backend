@@ -1,18 +1,33 @@
-import crypto from 'node:crypto';
-type Latitud = number;
-type Longitud = number;
+import { Cascade, Collection, Entity, OneToMany, Property } from "@mikro-orm/core";
+import { BaseEntity } from "../shared/db/baseEntity.entity.js";
+import { ServicioExterno } from "../servicioExterno/servicioExterno.entity.js";
+
+
 type CoordenadasGeograficas = {
-    latitud: Latitud,
-    longitud: Longitud
+    latitud: number,
+    longitud: number,
 }
 
-export class Lugar{
-    constructor(
-        public nombre: string,
-        public ubicacion: CoordenadasGeograficas,
-        public codigoPostal: string,
-        public provincia: string,
-        public pais: string,
-        public id = crypto.randomUUID()
-    ){}
+@Entity()
+export class Lugar extends BaseEntity{
+
+    @Property()
+    nombre!: string
+
+    @Property()
+    ubicacion!: CoordenadasGeograficas
+
+    @Property()
+    codigoPostal!: string
+
+    @Property()
+    provincia!: string
+
+    @Property()
+    pais!: string
+
+    @OneToMany(() => ServicioExterno, servicioExterno => servicioExterno.lugar,
+        { cascade: [Cascade.ALL], })
+    serviciosExternos = new Collection<ServicioExterno>(this)
+        
 }

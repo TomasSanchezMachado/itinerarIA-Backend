@@ -7,41 +7,45 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Cascade, Collection, Entity, OneToMany, Property } from "@mikro-orm/core";
+import { Entity, ManyToOne, Property } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
-import { ServicioExterno } from "../servicioExterno/servicioExterno.entity.js";
-let Lugar = class Lugar extends BaseEntity {
-    constructor() {
-        super(...arguments);
-        this.serviciosExternos = new Collection(this);
-    }
+import { Lugar } from "../lugar/lugar.entity.js";
+let ServicioExterno = class ServicioExterno extends BaseEntity {
 };
 __decorate([
     Property(),
     __metadata("design:type", String)
-], Lugar.prototype, "nombre", void 0);
-__decorate([
-    Property(),
-    __metadata("design:type", Object)
-], Lugar.prototype, "ubicacion", void 0);
+], ServicioExterno.prototype, "tipoServicio", void 0);
 __decorate([
     Property(),
     __metadata("design:type", String)
-], Lugar.prototype, "codigoPostal", void 0);
+], ServicioExterno.prototype, "nombre", void 0);
 __decorate([
     Property(),
     __metadata("design:type", String)
-], Lugar.prototype, "provincia", void 0);
+], ServicioExterno.prototype, "descripcion", void 0);
 __decorate([
     Property(),
     __metadata("design:type", String)
-], Lugar.prototype, "pais", void 0);
+], ServicioExterno.prototype, "direccion", void 0);
 __decorate([
-    OneToMany(() => ServicioExterno, servicioExterno => servicioExterno.lugar, { cascade: [Cascade.ALL], }),
-    __metadata("design:type", Object)
-], Lugar.prototype, "serviciosExternos", void 0);
-Lugar = __decorate([
+    Property(),
+    __metadata("design:type", String)
+], ServicioExterno.prototype, "horario", void 0);
+__decorate([
+    Property(),
+    __metadata("design:type", String)
+], ServicioExterno.prototype, "sitioWeb", void 0);
+__decorate([
+    Property(),
+    __metadata("design:type", String)
+], ServicioExterno.prototype, "telContacto", void 0);
+__decorate([
+    ManyToOne(() => Lugar, { nullable: false }),
+    __metadata("design:type", Lugar)
+], ServicioExterno.prototype, "lugar", void 0);
+ServicioExterno = __decorate([
     Entity()
-], Lugar);
-export { Lugar };
-//# sourceMappingURL=lugar.entity.js.map
+], ServicioExterno);
+export { ServicioExterno };
+//# sourceMappingURL=servicioExterno.entity.js.map

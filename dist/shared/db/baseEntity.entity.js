@@ -7,12 +7,31 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { PrimaryKey } from "@mikro-orm/core";
+import { PrimaryKey, SerializedPrimaryKey } from "@mikro-orm/core";
 import { ObjectId } from "@mikro-orm/mongodb";
 export class BaseEntity {
+    constructor() {
+        this._id = new ObjectId();
+        /*
+    
+      @Property({ type: DateTimeType })
+      createdAt? = new Date()
+    
+      @Property({
+        type: DateTimeType,
+        onUpdate: () => new Date(),
+      })
+      updatedAt? = new Date()
+    
+      */
+    }
 }
 __decorate([
     PrimaryKey(),
     __metadata("design:type", ObjectId)
+], BaseEntity.prototype, "_id", void 0);
+__decorate([
+    SerializedPrimaryKey(),
+    __metadata("design:type", String)
 ], BaseEntity.prototype, "id", void 0);
 //# sourceMappingURL=baseEntity.entity.js.map

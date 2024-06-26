@@ -7,35 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, Property, PrimaryKey, SerializedPrimaryKey } from "@mikro-orm/core";
-import { ObjectId } from '@mikro-orm/mongodb';
+import { Entity, ManyToOne, Property } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
+import { Lugar } from "../lugar/lugar.entity.js";
 let ServicioExterno = class ServicioExterno extends BaseEntity {
-    constructor() {
-        super(...arguments);
-        this._id = new ObjectId();
-        /*
-      
-        @Property({ type: DateTimeType })
-        createdAt? = new Date()
-      
-        @Property({
-          type: DateTimeType,
-          onUpdate: () => new Date(),
-        })
-        updatedAt? = new Date()
-      
-        */
-    }
 };
-__decorate([
-    PrimaryKey(),
-    __metadata("design:type", ObjectId)
-], ServicioExterno.prototype, "_id", void 0);
-__decorate([
-    SerializedPrimaryKey(),
-    __metadata("design:type", String)
-], ServicioExterno.prototype, "id", void 0);
 __decorate([
     Property(),
     __metadata("design:type", String)
@@ -48,10 +24,6 @@ __decorate([
     Property(),
     __metadata("design:type", String)
 ], ServicioExterno.prototype, "descripcion", void 0);
-__decorate([
-    Property(),
-    __metadata("design:type", Number)
-], ServicioExterno.prototype, "precio", void 0);
 __decorate([
     Property(),
     __metadata("design:type", String)
@@ -68,6 +40,10 @@ __decorate([
     Property(),
     __metadata("design:type", String)
 ], ServicioExterno.prototype, "telContacto", void 0);
+__decorate([
+    ManyToOne(() => Lugar, { nullable: false }),
+    __metadata("design:type", Lugar)
+], ServicioExterno.prototype, "lugar", void 0);
 ServicioExterno = __decorate([
     Entity()
 ], ServicioExterno);

@@ -1,16 +1,25 @@
-import crypto from 'node:crypto';
 import { Actividad } from '../actividad/actividad.entity.js'
+import { Property,OneToMany, Collection, Entity, ManyToOne, Cascade } from '@mikro-orm/core'
+import { BaseEntity } from '../shared/db/baseEntity.entity.js'
+import { Participante } from '../participante/participante.entity.js'
 
-type tipoTransporte = {
+@Entity()
+export class Itinerario extends BaseEntity{
+        @Property({nullable:false}) 
+        titulo!: string
+        
+        @Property({nullable:false}) 
+        descripcion!: string
+        
+        @Property({nullable:false}) 
+        cantDias!: number
+    
+        // @OneToMany(() => Actividad, (actividades) => actividades.itinerario) 
+        // actividades = new Collection<Actividad>(this)
 
-}
-export class Itinerario{
-    constructor(
-        public titulo : string,
-        public descripcion : string,
-        public cantDias : number,
-        public actividades : Array<Actividad>,
-        public transporte : tipoTransporte,
-        public id = crypto.randomUUID()
-    ){}
+        // @ManyToOne(() => Usuario, {nullable : false})
+        // usuario! : Usuario
+
+        @OneToMany(() => Participante, (participante) => participante.itinerario, {cascade: [Cascade.ALL]})
+        participantes = new Collection<Participante>(this)
 }

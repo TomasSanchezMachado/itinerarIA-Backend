@@ -1,6 +1,6 @@
 GET http://localhost:3000/api/itinerarios
 ###
-GET http://localhost:3000/api/lugares/57c0cfad-b4ce-49b1-b80d-66038e634956
+GET http://localhost:3000/api/itinerarios/57c0cfad-b4ce-49b1-b80d-66038e634956
 ###
 POST http://localhost:3000/api/itinerarios
 Content-Type: application/json

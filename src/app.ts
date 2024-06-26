@@ -1,7 +1,5 @@
 import 'reflect-metadata';
 import express from 'express';
-import { Lugar } from './lugar/lugar.entity.js';
-import { LugarRepository } from './lugar/lugar.repository.js';
 import { lugarRouter } from './lugar/lugar.routes.js';
 import { itinerarioRouter } from './itinerario/itinerario.routes.js';
 import { actividadRouter } from './actividad/actividad.routes.js';

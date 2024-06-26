@@ -1,0 +1,130 @@
+GET http://localhost:3000/api/usuarios
+###
+GET http://localhost:3000/api/usuarios/58h0dfdt-b8cg-15b1-b70f-86078e644911
+###
+POST http://localhost:3000/api/usuarios
+Content-Type: application/json
+
+{
+    "nombreDeUsuario": "usuario 2",
+    "nombres": "ronnie",
+    "apellidos": "coleman",
+    "fechaNacimiento": 2004-04-24,
+    "mail" : "ronnie666@gmail.com",
+    "nroTelefono" : 3415456985,
+    "itinerarios": [
+    {
+        "titulo":"Itinerario 1",
+        "descripcion": "Itinerario hecho para 5 dias en Rosario...",
+        "cantDias":5,
+        "actividades": [{
+            "nombre" : "Monumento",
+            "descripcion" : "Paseo por monumento a la bandera",
+            "aireLibre" : true,
+            // "id": falta id
+            },  
+            {
+            "nombre" : "City Center",
+            "descripcion" : "Casino City Center",
+            "aireLibre" : false,
+            //"id":
+            }],
+        "transporte": "Auto",
+        "id": "57c0cfad-b4ce-49b1-b80d-66038e634956"
+    },
+    {
+    "titulo": "Itinerario 2",
+    "descripcion": "Itinerario hecho para 7 dias en Disney...",
+    "cantDias": 5,
+    "actividades": [
+        {
+            "nombre": "Universal Studios",
+            "descripcion": "Parque con atracciones...",
+            "aireLibre": true
+            //id:
+        },
+        {
+            "nombre": "Magic Kingdom",
+            "descripcion": "Parque con atracciones...",
+            "aireLibre": true
+            //id:
+        }
+    ],
+    "transporte": "Auto",
+    "id": "57c0cfad-b4ce-49b1-b80d-66038e634956" //es el mismo id que el del itinerario 1
+    }
+    ],
+    "id" : "58h0dfdt-b8cg-15b1-b70f-86078e644922" //del usuario 2 (inventado)
+}
+
+
+###
+PUT http://localhost:3000/api/usuarios/58h0dfdt-b8cg-15b1-b70f-86078e644911
+Content-Type: application/json
+
+{
+    "nombreDeUsuario": "usuario 2",
+    "nombres": "ronnie",
+    "apellidos": "coleman",
+    "fechaNacimiento": 2004-04-24,
+    "mail" : "ronnie666@gmail.com",
+    "nroTelefono" : 3415456985,
+    "itinerarios": [
+    {
+        "titulo":"Itinerario 1",
+        "descripcion": "Itinerario hecho para 5 dias en Rosario...",
+        "cantDias":5,
+        "actividades": [{
+            "nombre" : "Monumento",
+            "descripcion" : "Paseo por monumento a la bandera",
+            "aireLibre" : true,
+            // "id": falta id
+            },  
+            {
+            "nombre" : "City Center",
+            "descripcion" : "Casino City Center",
+            "aireLibre" : false,
+            //"id":
+            }],
+        "transporte": "Auto",
+        "id": "57c0cfad-b4ce-49b1-b80d-66038e634956"
+    },
+    {
+    "titulo": "Itinerario 2",
+    "descripcion": "Itinerario hecho para 7 dias en Disney...",
+    "cantDias": 5,
+    "actividades": [
+        {
+            "nombre": "Universal Studios",
+            "descripcion": "Parque con atracciones...",
+            "aireLibre": true
+            //id:
+        },
+        {
+            "nombre": "Magic Kingdom",
+            "descripcion": "Parque con atracciones...",
+            "aireLibre": true
+            //id:
+        }
+    ],
+    "transporte": "Auto",
+    "id": "57c0cfad-b4ce-49b1-b80d-66038e634956"
+    }
+    ],
+    "id" : "58h0dfdt-b8cg-15b1-b70f-86078e644922"
+}
+
+
+###
+PATCH http://localhost:3000/api/lugares/558h0dfdt-b8cg-15b1-b70f-86078e644922
+Content-Type: application/json
+
+{
+    "nombreDeUsuario" : "nikitox4",
+    "mail":"escobar.nicolas.isiutnfrro@gmail.com"
+
+}
+
+
+###
+DELETE http://localhost:3000/api/lugares/558h0dfdt-b8cg-15b1-b70f-86078e644922

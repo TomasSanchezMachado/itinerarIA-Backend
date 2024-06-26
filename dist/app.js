@@ -1,9 +1,15 @@
+import 'reflect-metadata';
 import express from 'express';
 import { lugarRouter } from './lugar/lugar.routes.js';
 import { itinerarioRouter } from './itinerario/itinerario.routes.js';
 import { actividadRouter } from './actividad/actividad.routes.js';
+import { orm } from './shared/db/orm.js';
+import { RequestContext } from '@mikro-orm/core';
 const app = express();
 app.use(express.json());
+app.use((req, res, next) => {
+    RequestContext.create(orm.em, next);
+});
 app.use('/api/lugares', lugarRouter);
 app.use('/api/itinerarios', itinerarioRouter);
 app.use('/api/actividades', actividadRouter);

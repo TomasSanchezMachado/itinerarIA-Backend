@@ -18,8 +18,8 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/lugares', lugarRouter);
-app.use('/api/itinerarios',itinerarioRouter);
-app.use('/api/actividades',actividadRouter)
+app.use('/api/itinerarios', itinerarioRouter);
+app.use('/api/actividades', actividadRouter)
 
 app.use((_, res) => {
   res.status(404).send({ message: 'Resource not found' });
@@ -28,4 +28,3 @@ app.use((_, res) => {
 app.listen(3000, () => {
   console.log('Server is running on http://localhost:3000/');
 });
-    

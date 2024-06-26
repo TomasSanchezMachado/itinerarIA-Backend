@@ -1,21 +1,24 @@
 import { Response, Request, NextFunction } from "express";
-import { ItinerarioRepository } from "./itinerario.repository.js";
-import { Itinerario } from "./itinerario.entity.js";
+import { usuarioRepository } from "./usuario.repository.js";
+import { Usuario } from "./usuario.entity.js";
 
 
-const repository = new ItinerarioRepository()
+const repository = new usuarioRepository()
 
-export function sanitizeItinerarioInput(
+export function sanitizeUsuarioInput(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   req.body.sanitizedInput = {
-    titulo: req.body.titulo,
-    descripcion: req.body.descripcion,
-    cantDias: req.body.cantDias,
-    actividades: req.body.actividades,
-    transporte: req.body.transporte
+    nombreDeUsuario: req.body.nombreDeUsuario,
+    nombres: req.body.nombres,
+    apellidos: req.body.apellidos,
+    fechaNacimiento: req.body.fechaNacimiento,
+    mail: req.body.mail,
+    nroTelefono: req.body.nroTelefono,
+    itinerarios: req.body.itinerarios,
+    //opiniones: req.body.opiniones
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -29,58 +32,59 @@ export function sanitizeItinerarioInput(
 
 
 export async function findAll(req: Request, res: Response) {
-  const itinerarios = await repository.findAll();
-  if (!itinerarios) {
-    return res.status(404).send({ data: 'No se encontraron itinerarios' })
+  const usuarios = await repository.findAll();
+  if (!usuarios) {
+    return res.status(404).send({ data: 'No se encontraron usuarios' })
   }
-  res.status(200).json({ data: itinerarios });
+  res.status(200).json({ data: usuarios });
 
 }
 
 export async function findOne(req: Request, res: Response) {
-  const itinerario = await repository.findOne({ id: req.params.id });
-  if (!itinerario) {
-    return res.status(404).send({ message: "Itinerario no encontrado" });
+  const usuario = await repository.findOne({ id: req.params.id });
+  if (!usuario) {
+    return res.status(404).send({ message: "usuario no encontrado" });
   }
-  res.json({ data: itinerario });
+  res.json({ data: usuario });
 }
 
 
 export async function add(req: Request, res: Response) {
   const input = req.body.sanitizedInput
-  const itinerarioInput = new Itinerario(
-    input.titulo,
-    input.descripcion,
-    input.cantDias,
-    input.actividades,
-    input.transporte
-
+  const usuarioInput = new Usuario(
+    input.nombreDeUsuario,
+    input.nombres,
+    input.apellidos,
+    input.fechaNacimiento,
+    input.mail,
+    input.nroTelefono,
+    input.itinerarios,
   );
-  const itinerario = await repository.add(itinerarioInput);
+  const usuario = await repository.add(usuarioInput);
   return res
     .status(201)
-    .send({ message: "Itinerario cargado correctamente", data: itinerario });
+    .send({ message: "usuario cargado correctamente", data: usuario });
 }
 
 export async function update(req: Request, res: Response) {
   req.body.sanitizedInput.id = req.params.id;
   const result = (req.body.sanitizedInput);
 
-  const itinerario = await repository.update(req.body.sanitizedInput);
-  if (!itinerario) {
-    return res.status(404).send({ message: "Itinerario no encontrado" });
+  const usuario = await repository.update(req.body.sanitizedInput);
+  if (!usuario) {
+    return res.status(404).send({ message: "usuario no encontrado" });
   }
 
   res.status(200).send({
-    message: "Itinerario actualizado correctamente",
-    data: itinerario,
+    message: "usuario actualizado correctamente",
+    data: usuario,
   });
 }
 
 export async function remove(req: Request, res: Response) {
-  const itinerario = await repository.delete({ id: req.params.id });
-  if (!itinerario) {
-    return res.status(404).send({ message: "Itinerario no encontrado" });
+  const usuario = await repository.delete({ id: req.params.id });
+  if (!usuario) {
+    return res.status(404).send({ message: "usuario no encontrado" });
   }
-  return res.status(200).json({ message: "Itinerario eliminado correctamente", data: itinerario });
+  return res.status(200).json({ message: "usuario eliminado correctamente", data: usuario });
 }

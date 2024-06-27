@@ -1,5 +1,6 @@
 import { Itinerario } from "./itinerario.entity.js";
 import { orm } from "../shared/db/orm.js";
+import { ObjectId } from "@mikro-orm/mongodb";
 const em = orm.em;
 export function sanitizeItinerarioInput(req, res, next) {
     req.body.sanitizedInput = {
@@ -31,7 +32,8 @@ export async function findAll(req, res) {
 export async function findOne(req, res) {
     try {
         const id = req.params.id;
-        const itinerario = await em.findOneOrFail(Itinerario, { id });
+        const objectId = new ObjectId(id);
+        const itinerario = await em.findOneOrFail(Itinerario, { _id: objectId });
         return res.status(200).json({ data: itinerario });
     }
     catch (error) {
@@ -51,7 +53,8 @@ export async function add(req, res) {
 export async function update(req, res) {
     try {
         const id = req.params.id;
-        const itinerario = em.getReference(Itinerario, id);
+        const objectId = new ObjectId(id);
+        const itinerario = em.getReference(Itinerario, objectId);
         em.assign(itinerario, req.body.sanitizedInput);
         await em.flush();
         return res.status(200).json({ message: "Itinerario actualizado con exito", data: itinerario });
@@ -63,7 +66,8 @@ export async function update(req, res) {
 export async function remove(req, res) {
     try {
         const id = req.params.id;
-        const itinerario = em.getReference(Itinerario, id);
+        const objectId = new ObjectId(id);
+        const itinerario = em.getReference(Itinerario, objectId);
         await em.removeAndFlush(itinerario);
         res.status(200).send({ message: 'Itinerario borrado', data: itinerario });
     }

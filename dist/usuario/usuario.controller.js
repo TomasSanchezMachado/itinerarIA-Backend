@@ -11,7 +11,6 @@ export function sanitizeUsuarioInput(req, res, next) {
         nroTelefono: req.body.nroTelefono,
         itinerarios: req.body.itinerarios,
         //opiniones: req.body.opiniones
-        id: req.body.id
     };
     Object.keys(req.body.sanitizedInput).forEach((key) => {
         if (req.body.sanitizedInput[key] === undefined) {
@@ -36,7 +35,7 @@ export async function findOne(req, res) {
 }
 export async function add(req, res) {
     const input = req.body.sanitizedInput;
-    const usuarioInput = new Usuario(input.nombreDeUsuario, input.nombres, input.apellidos, input.fechaNacimiento, input.mail, input.nroTelefono, input.itinerarios, input.id);
+    const usuarioInput = new Usuario(input.nombreDeUsuario, input.nombres, input.apellidos, input.fechaNacimiento, input.mail, input.nroTelefono, input.itinerarios);
     const usuario = await repository.add(usuarioInput);
     return res
         .status(201)

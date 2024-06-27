@@ -16,7 +16,7 @@ const itinerariosDelUsuario = [new Itinerario('Itinerario 1', 'Itinerario hecho 
         }], 'Auto'),
 ];
 const usuarios = [
-    new Usuario('usuario 1', 'nicolas roberto', 'escobar', fechaNacimiento, 'nicoescobar666@gmail.com', 3416481402, itinerariosDelUsuario, '1111')
+    new Usuario('usuario 1', 'nicolas roberto', 'escobar', fechaNacimiento, 'nicoescobar666@gmail.com', 3416481402, itinerariosDelUsuario)
 ];
 export class usuarioRepository {
     async findAll() {

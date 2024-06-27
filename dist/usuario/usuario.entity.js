@@ -1,9 +1,9 @@
+import crypto from 'node:crypto';
 export class Usuario {
     constructor(nombreDeUsuario, //Hay que crear un tipo para el nombre de usuario
     nombres, apellidos, fechaNacimiento, mail, nroTelefono, itinerarios, 
     //public opiniones: Array<Opinion>,
-    id // crypto.randomUUID()
-    ) {
+    id = crypto.randomUUID()) {
         this.nombreDeUsuario = nombreDeUsuario;
         this.nombres = nombres;
         this.apellidos = apellidos;

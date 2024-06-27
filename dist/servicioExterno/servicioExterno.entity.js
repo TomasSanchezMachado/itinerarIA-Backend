@@ -13,31 +13,31 @@ import { Lugar } from "../lugar/lugar.entity.js";
 let ServicioExterno = class ServicioExterno extends BaseEntity {
 };
 __decorate([
-    Property(),
+    Property({ nullable: false }),
     __metadata("design:type", String)
 ], ServicioExterno.prototype, "tipoServicio", void 0);
 __decorate([
-    Property(),
+    Property({ nullable: false }),
     __metadata("design:type", String)
 ], ServicioExterno.prototype, "nombre", void 0);
 __decorate([
-    Property(),
+    Property({ nullable: false }),
     __metadata("design:type", String)
 ], ServicioExterno.prototype, "descripcion", void 0);
 __decorate([
-    Property(),
+    Property({ nullable: false }),
     __metadata("design:type", String)
 ], ServicioExterno.prototype, "direccion", void 0);
 __decorate([
-    Property(),
+    Property({ nullable: false }),
     __metadata("design:type", String)
 ], ServicioExterno.prototype, "horario", void 0);
 __decorate([
-    Property(),
+    Property({ nullable: false }),
     __metadata("design:type", String)
 ], ServicioExterno.prototype, "sitioWeb", void 0);
 __decorate([
-    Property(),
+    Property({ nullable: false }),
     __metadata("design:type", String)
 ], ServicioExterno.prototype, "telContacto", void 0);
 __decorate([

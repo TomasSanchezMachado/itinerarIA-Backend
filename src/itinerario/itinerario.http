@@ -1,6 +1,6 @@
 GET http://localhost:3000/api/itinerarios
-###
-GET http://localhost:3000/api/itinerarios/57c0cfad-b4ce-49b1-b80d-66038e634956
+
+# @name createItinerario
 ###
 POST http://localhost:3000/api/itinerarios
 Content-Type: application/json
@@ -20,13 +20,14 @@ Content-Type: application/json
             "descripcion": "Parque con atracciones...",
             "aireLibre": true
         }
-    ],
-    "transporte": "Auto"
+    ]
 }
-
+###
+@id = {{createItinerario.response.body.data.id}}
+GET http://localhost:3000/api/itinerarios/{{id}}
 
 ###
-PUT http://localhost:3000/api/lugares/57c0cfad-b4ce-49b1-b80d-66038e634956
+PUT http://localhost:3000/api/lugares/{{id}}
 Content-Type: application/json
 
 {
@@ -48,16 +49,6 @@ Content-Type: application/json
     "transporte": "Auto"
 }
 
-###
-PATCH http://localhost:3000/api/lugares/57c0cfad-b4ce-49b1-b80d-66038e634956
-Content-Type: application/json
-
-{
-    "cantDias" : 8,
-    "transporte":"Colectivo"
-
-}
-
 
 ###
-DELETE http://localhost:3000/api/lugares/57c0cfad-b4ce-49b1-b80d-66038e634956
+DELETE http://localhost:3000/api/lugares/{{id}}

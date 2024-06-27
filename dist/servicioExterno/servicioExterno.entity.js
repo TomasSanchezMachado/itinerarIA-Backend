@@ -42,7 +42,7 @@ __decorate([
 ], ServicioExterno.prototype, "telContacto", void 0);
 __decorate([
     ManyToOne(() => Lugar, { nullable: false }),
-    __metadata("design:type", Lugar)
+    __metadata("design:type", Object)
 ], ServicioExterno.prototype, "lugar", void 0);
 ServicioExterno = __decorate([
     Entity()

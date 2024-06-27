@@ -21,6 +21,9 @@ function sanitizeServicioExternoInput(req, res, next) {
 async function findAll(req, res) {
     try {
         const servicioExterno = await em.find(ServicioExterno, {});
+        if (servicioExterno.length === 0) {
+            return res.status(200).json({ message: 'No se encontraron servicios externos' });
+        }
         res.status(200).json({ message: 'Todos los servicios externos encontrados', data: servicioExterno });
     }
     catch (error) {

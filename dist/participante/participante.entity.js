@@ -22,7 +22,7 @@ __decorate([
 ], Participante.prototype, "discapacidad", void 0);
 __decorate([
     ManyToOne(() => Itinerario, { nullable: false }),
-    __metadata("design:type", Itinerario)
+    __metadata("design:type", Object)
 ], Participante.prototype, "itinerario", void 0);
 Participante = __decorate([
     Entity()

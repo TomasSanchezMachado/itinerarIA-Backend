@@ -1,4 +1,4 @@
-import {Entity,  ManyToOne,  Property } from "@mikro-orm/core";
+import {Entity,  ManyToOne,  Property, Rel } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Lugar } from "../lugar/lugar.entity.js";
 
@@ -27,6 +27,6 @@ export class ServicioExterno extends BaseEntity{
   telContacto!: string;
 
   @ManyToOne(() => Lugar, { nullable: false })
-  lugar!: Lugar;
+  lugar!: Rel<Lugar>;
 
 }

@@ -5,6 +5,7 @@ import { itinerarioRouter } from './itinerario/itinerario.routes.js';
 import { actividadRouter } from './actividad/actividad.routes.js';
 import { orm } from './shared/db/orm.js';
 import { RequestContext } from '@mikro-orm/core';
+import { servicioExternoRouter } from './servicioExterno/servicioExterno.routes.js';
 
 
 
@@ -18,6 +19,8 @@ app.use((req, res, next) => {
 app.use('/api/lugares', lugarRouter);
 app.use('/api/itinerarios', itinerarioRouter);
 app.use('/api/actividades', actividadRouter)
+app.use('/api/serviciosExternos',servicioExternoRouter)
+
 
 app.use((_, res) => {
   res.status(404).send({ message: 'Resource not found' });

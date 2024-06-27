@@ -1,7 +1,8 @@
 GET http://localhost:3000/api/itinerarios
-
-# @name createItinerario
 ###
+# @name createItinerario
+
+
 POST http://localhost:3000/api/itinerarios
 Content-Type: application/json
 
@@ -9,25 +10,14 @@ Content-Type: application/json
     "titulo": "Itinerario 2",
     "descripcion": "Itinerario hecho para 7 dias en Disney...",
     "cantDias": 5,
-    "actividades": [
-        {
-            "nombre": "Universal Studios",
-            "descripcion": "Parque con atracciones...",
-            "aireLibre": true
-        },
-        {
-            "nombre": "Magic Kingdom",
-            "descripcion": "Parque con atracciones...",
-            "aireLibre": true
-        }
-    ]
+    "actividades": ["idActividad"]
 }
 ###
 @id = {{createItinerario.response.body.data.id}}
 GET http://localhost:3000/api/itinerarios/{{id}}
 
 ###
-PUT http://localhost:3000/api/lugares/{{id}}
+PUT http://localhost:3000/api/itinerarios/{{id}}
 Content-Type: application/json
 
 {
@@ -51,4 +41,4 @@ Content-Type: application/json
 
 
 ###
-DELETE http://localhost:3000/api/lugares/{{id}}
+DELETE http://localhost:3000/api/itinerarios/{{id}}

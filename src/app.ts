@@ -19,7 +19,7 @@ app.use((req, res, next) => {
 app.use('/api/lugares', lugarRouter);
 app.use('/api/itinerarios', itinerarioRouter);
 app.use('/api/actividades', actividadRouter)
-app.use('api/servicioaExternos', servicioExternoRouter)
+app.use('/api/serviciosExternos', servicioExternoRouter)
 
 app.use((_, res) => {
   res.status(404).send({ message: 'Resource not found' });

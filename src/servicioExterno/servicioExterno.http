@@ -1,10 +1,11 @@
 ### GET all serviciosExternos
 GET http://localhost:3000/api/serviciosExternos
 
-### Post a new servicioExterno
+### POST servicioExterno
 # @name createServicioExterno
 POST https://localhost:3000/api/serviciosExternos
 Content-Type: application/json
+
 {
   "tipoServicio": "Alquiler de autos",
   "nombre": "Hertz",
@@ -15,3 +16,29 @@ Content-Type: application/json
   "telContacto": "123456789"
 
 }
+
+### ID
+@id = {{createServicioExterno.response.body.id}}
+
+### GET servicioExterno by ID
+
+GET http://localhost:3000/api/serviciosExternos/{{id}}
+
+
+### Update servicioExterno by ID
+# @name updateServicioExterno
+PUT http://localhost:3000/api/serviciosExternos/{{id}}
+Content-Type: application/json
+
+{
+  "tipoServicio": "Alquiler de autos",
+  "nombre": "Hertz",
+  "descripcion": "Alquiler de autos en todo el mundooo",
+  "direccion": "Av. 9 de Julio 1234",
+  "horario": "Lunes a Viernes de 10 a 12hs",
+  "sitioWeb": "www.hertz.com",
+  "telContacto": "12345678910"
+}
+
+### DELETE servicioExterno by ID
+DELETE http://localhost:3000/api/serviciosExternos/{{id}}

@@ -2,19 +2,7 @@ import { Usuario } from "./usuario.entity.js";
 import { Itinerario } from "../itinerario/itinerario.entity.js";
 const fechaNacimientoStr = '2004-04-24';
 const fechaNacimiento = new Date(fechaNacimientoStr);
-const itinerariosDelUsuario = [new Itinerario('Itinerario 1', 'Itinerario hecho para 5 dias en Rosario...', 5, [{
-            nombre: 'Monumento',
-            descripcion: 'Paseo por monumento a la bandera',
-            aireLibre: true,
-            id: crypto.randomUUID()
-        },
-        {
-            nombre: 'City Center',
-            descripcion: 'Casino City Center',
-            aireLibre: false,
-            id: crypto.randomUUID()
-        }], 'Auto'),
-];
+const itinerariosDelUsuario = [new Itinerario()];
 const usuarios = [
     new Usuario('usuario 1', 'nicolas roberto', 'escobar', fechaNacimiento, 'nicoescobar666@gmail.com', 3416481402, itinerariosDelUsuario)
 ];

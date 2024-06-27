@@ -1,0 +1,17 @@
+### GET all serviciosExternos
+GET http://localhost:3000/api/serviciosExternos
+
+### Post a new servicioExterno
+# @name createServicioExterno
+POST https://localhost:3000/api/serviciosExternos
+Content-Type: application/json
+{
+  "tipoServicio": "Alquiler de autos",
+  "nombre": "Hertz",
+  "descripcion": "Alquiler de autos en todo el mundo",
+  "direccion": "Av. 9 de Julio 1234",
+  "horario": "Lunes a Viernes de 9 a 18hs",
+  "sitioWeb": "www.hertz.com",
+  "telContacto": "123456789"
+
+}

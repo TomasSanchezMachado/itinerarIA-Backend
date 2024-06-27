@@ -1,46 +1,37 @@
-import {Entity,  Property, PrimaryKey, SerializedPrimaryKey } from "@mikro-orm/core";
-import { ObjectId } from '@mikro-orm/mongodb';
+import {Entity,  ManyToOne,  Property } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
+import { Lugar } from "../lugar/lugar.entity.js";
 
 @Entity()
 export class ServicioExterno extends BaseEntity{
+<<<<<<< HEAD
  
   @Property()
+=======
+
+  @Property({nullable: false})
+>>>>>>> b8bf670be0ddaf37f7c056c9b2cfc7eacd50528c
   tipoServicio!: string;
 
-  @Property()
+  @Property({nullable: false})
   nombre!: string;
  
-  @Property()
+  @Property({nullable: false})
   descripcion!: string;
 
-  @Property()
-  precio!: number;
-
-  @Property()
+  @Property({nullable: false})
   direccion!: string;
 
-  @Property()
+  @Property({nullable: false})
   horario!: string;
 
-  @Property()
+  @Property({nullable: false})
   sitioWeb!: string;
 
-  @Property()
+  @Property({nullable: false})
   telContacto!: string;
 
-  /*
-
-  @Property({ type: DateTimeType })
-  createdAt? = new Date()
-
-  @Property({
-    type: DateTimeType,
-    onUpdate: () => new Date(),
-  })
-  updatedAt? = new Date()
-
-  */
-
+  @ManyToOne(() => Lugar, { nullable: false })
+  lugar!: Lugar;
 
 }

@@ -10,6 +10,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { PrimaryKey, SerializedPrimaryKey } from "@mikro-orm/core";
 import { ObjectId } from "@mikro-orm/mongodb";
 export class BaseEntity {
+<<<<<<< HEAD
+=======
+    constructor() {
+        this._id = new ObjectId();
+        /*
+    
+      @Property({ type: DateTimeType })
+      createdAt? = new Date()
+    
+      @Property({
+        type: DateTimeType,
+        onUpdate: () => new Date(),
+      })
+      updatedAt? = new Date()
+    
+      */
+    }
+>>>>>>> b8bf670be0ddaf37f7c056c9b2cfc7eacd50528c
 }
 __decorate([
     PrimaryKey(),

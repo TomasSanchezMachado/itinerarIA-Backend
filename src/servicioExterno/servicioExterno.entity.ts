@@ -5,25 +5,25 @@ import { Lugar } from "../lugar/lugar.entity.js";
 @Entity()
 export class ServicioExterno extends BaseEntity{
 
-  @Property()
+  @Property({nullable: false})
   tipoServicio!: string;
 
-  @Property()
+  @Property({nullable: false})
   nombre!: string;
  
-  @Property()
+  @Property({nullable: false})
   descripcion!: string;
 
-  @Property()
+  @Property({nullable: false})
   direccion!: string;
 
-  @Property()
+  @Property({nullable: false})
   horario!: string;
 
-  @Property()
+  @Property({nullable: false})
   sitioWeb!: string;
 
-  @Property()
+  @Property({nullable: false})
   telContacto!: string;
 
   @ManyToOne(() => Lugar, { nullable: false })

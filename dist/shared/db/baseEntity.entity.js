@@ -10,6 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { PrimaryKey, SerializedPrimaryKey } from "@mikro-orm/core";
 import { ObjectId } from "@mikro-orm/mongodb";
 export class BaseEntity {
+<<<<<<< HEAD
+=======
     constructor() {
         this._id = new ObjectId();
         /*
@@ -25,6 +27,7 @@ export class BaseEntity {
     
       */
     }
+>>>>>>> b8bf670be0ddaf37f7c056c9b2cfc7eacd50528c
 }
 __decorate([
     PrimaryKey(),

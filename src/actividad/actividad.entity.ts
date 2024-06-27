@@ -6,6 +6,8 @@ type tipoTransporte = {
 type Etiqueta = {
 
 }
+//type o clase para dia y horario
+
 export class Actividad{
     constructor(
         public nombre : string,
@@ -13,6 +15,7 @@ export class Actividad{
         public aireLibre : boolean,
       //public opniones : Array<Opinion>,
       //public etiquetas : Array<Etiqueta>,
-        public id = crypto.randomUUID()
+        public id = crypto.randomUUID(),
+        
     ){}
 }

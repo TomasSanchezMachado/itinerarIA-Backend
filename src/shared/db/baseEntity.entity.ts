@@ -5,12 +5,6 @@ import { ObjectId } from "@mikro-orm/mongodb";
 export abstract class BaseEntity {
 
   @PrimaryKey()
-<<<<<<< HEAD
-  _id?: ObjectId;
-
-  @SerializedPrimaryKey()
-  id?: string;
-=======
   _id?: ObjectId = new ObjectId();
 
   @SerializedPrimaryKey()
@@ -28,7 +22,6 @@ export abstract class BaseEntity {
   updatedAt? = new Date()
 
   */
->>>>>>> b8bf670be0ddaf37f7c056c9b2cfc7eacd50528c
 
 
 }

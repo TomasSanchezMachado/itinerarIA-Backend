@@ -1,8 +1,6 @@
 import { orm } from "../shared/db/orm.js";
 import { ServicioExterno } from "./servicioExterno.entity.js";
 const em = orm.em;
-<<<<<<< HEAD
-=======
 function sanitizeServicioExternoInput(req, res, next) {
     req.body.sanitizedInput = {
         tipoServicio: req.body.tipoServicio,
@@ -20,18 +18,12 @@ function sanitizeServicioExternoInput(req, res, next) {
     });
     next();
 }
->>>>>>> b8bf670be0ddaf37f7c056c9b2cfc7eacd50528c
 async function findAll(req, res) {
     try {
         const servicioExterno = await em.find(ServicioExterno, {});
         res.status(200).json({ message: 'Todos los servicios externos encontrados', data: servicioExterno });
     }
     catch (error) {
-<<<<<<< HEAD
-        res.status(404).json({ message: 'No se encontraron servicios externos', error: error });
-    }
-}
-=======
         res.status(500).json({ message: error.message });
     }
 }
@@ -79,5 +71,4 @@ async function remove(req, res) {
     }
 }
 export { sanitizeServicioExternoInput, findAll, findOne, add, update, remove };
->>>>>>> b8bf670be0ddaf37f7c056c9b2cfc7eacd50528c
 //# sourceMappingURL=servicioExterno.controller.js.map

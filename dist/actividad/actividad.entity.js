@@ -1,4 +1,5 @@
 import crypto from 'node:crypto';
+//type o clase para dia y horario
 export class Actividad {
     constructor(nombre, descripcion, aireLibre, 
     //public opniones : Array<Opinion>,

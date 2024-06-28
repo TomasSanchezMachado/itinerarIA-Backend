@@ -14,10 +14,10 @@ actividadRouter.get("/", findAll);
 
 actividadRouter.get("/:id", findOne);
 
-actividadRouter.post("/", sanitizeActividadInput, add);
+actividadRouter.post("/", add);
 
-actividadRouter.put("/:id", sanitizeActividadInput, update);
+actividadRouter.put("/:id", update);
 
-actividadRouter.patch("/:id", sanitizeActividadInput, update);
+actividadRouter.patch("/:id", update);
 
 actividadRouter.delete("/:id", remove);

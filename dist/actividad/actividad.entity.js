@@ -7,49 +7,37 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
-import { ObjectId } from '@mikro-orm/mongodb';
-import crypto from 'node:crypto';
-let Actividad = class Actividad {
-    constructor() {
-        this.id = crypto.randomUUID();
-        // @Property()
-        // horario?: string;
-        // @Property()
-        // fecha?: string;
-    }
+import { Entity, Property, ManyToOne } from '@mikro-orm/core';
+import { Lugar } from "../lugar/lugar.entity.js";
+import { BaseEntity } from "../shared/db/baseEntity.entity.js";
+let Actividad = class Actividad extends BaseEntity {
 };
 __decorate([
-    PrimaryKey(),
-    __metadata("design:type", ObjectId)
-], Actividad.prototype, "_id", void 0);
-__decorate([
-    Property(),
+    Property({ nullable: false }),
     __metadata("design:type", String)
 ], Actividad.prototype, "nombre", void 0);
 __decorate([
-    Property(),
+    Property({ nullable: false }),
     __metadata("design:type", String)
 ], Actividad.prototype, "descripcion", void 0);
 __decorate([
-    Property(),
+    Property({ nullable: false }),
     __metadata("design:type", Boolean)
 ], Actividad.prototype, "aireLibre", void 0);
 __decorate([
     Property(),
-    __metadata("design:type", Object)
-], Actividad.prototype, "id", void 0);
-__decorate([
-    Property(),
     __metadata("design:type", String)
 ], Actividad.prototype, "transporte", void 0);
+__decorate([
+    Property({ nullable: false }),
+    __metadata("design:type", String)
+], Actividad.prototype, "horario", void 0);
+__decorate([
+    ManyToOne(() => Lugar, { nullable: false }),
+    __metadata("design:type", Object)
+], Actividad.prototype, "lugar", void 0);
 Actividad = __decorate([
     Entity()
 ], Actividad);
 export { Actividad };
-// -Ver temas etiquetas (puede tener mas de una categoria?)
-// -Ver temas de relaciones 
-// type para la hora
-// type para la fecha
-// type para el transporte
 //# sourceMappingURL=actividad.entity.js.map

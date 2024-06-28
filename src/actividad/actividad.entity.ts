@@ -1,4 +1,5 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+
+import { Entity, Property, OneToMany, ManyToOne, Collection, Cascade, Rel} from '@mikro-orm/core';
 import { Lugar } from "../lugar/lugar.entity.js";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 
@@ -6,36 +7,28 @@ import { ObjectId } from '@mikro-orm/mongodb';
 import crypto from 'node:crypto';
 
 @Entity()
-export class Actividad {
-  
-  @PrimaryKey()
-  _id!: ObjectId;
+export class Actividad extends BaseEntity{
 
-  @Property()
+  @Property({nullable: false})
   nombre!: string;
 
-  @Property()
+  @Property({nullable: false})
   descripcion!: string;
 
-  @Property()
+  @Property({nullable: false})
   aireLibre!: boolean;
-
-  @Property()
-  id = crypto.randomUUID();
 
   @Property()
   transporte?: string;
 
-  // @Property()
-  // horario?: string;
+  @Property({nullable: false})
+  horario!: string;
 
   // @Property()
   // fecha?: string;
 
+  @ManyToOne(() => Lugar, {nullable: false})
+  lugar!: Rel<Lugar>;
+
 }
-// -Ver temas etiquetas (puede tener mas de una categoria?)
-// -Ver temas de relaciones 
-// type para la hora
-// type para la fecha
-// type para el transporte
 

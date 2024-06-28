@@ -1,7 +1,7 @@
 import { Cascade, Collection, Entity, OneToMany, Property } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { ServicioExterno } from "../servicioExterno/servicioExterno.entity.js";
-
+import { Actividad } from "../actividad/actividad.entity.js";
 
 type CoordenadasGeograficas = {
     latitud: number,
@@ -29,5 +29,9 @@ export class Lugar extends BaseEntity{
     @OneToMany(() => ServicioExterno, (servicioExterno) => servicioExterno.lugar,
         { cascade: [Cascade.ALL]})
     serviciosExternos = new Collection<ServicioExterno>(this)
+
+    @OneToMany(() => Actividad, (actividad) => actividad.lugar,
+        { cascade: [Cascade.ALL]})
+    actividades = new Collection<Actividad>(this)
         
 }

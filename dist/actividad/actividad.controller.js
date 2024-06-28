@@ -1,12 +1,16 @@
-import { ActividadRepository } from "./actividad.repository.js";
+import { orm } from "../shared/db/orm.js";
 import { Actividad } from "./actividad.entity.js";
-const repository = new ActividadRepository();
-export function sanitizeActividadInput(req, res, next) {
+const em = orm.em;
+function sanitizeActividadInput(req, res, next) {
     req.body.sanitizedInput = {
         nombre: req.body.nombre,
         descripcion: req.body.descripcion,
-        aireLibre: req.body.aireLibre,
+        airelibre: req.body.airelibre,
+        transporte: req.body.transporte,
+        horario: req.body.horario,
+        lugar: req.body.lugar
     };
+    //more checks here
     Object.keys(req.body.sanitizedInput).forEach((key) => {
         if (req.body.sanitizedInput[key] === undefined) {
             delete req.body.sanitizedInput[key];
@@ -14,45 +18,60 @@ export function sanitizeActividadInput(req, res, next) {
     });
     next();
 }
-export async function findAll(req, res) {
-    const actividades = await repository.findAll();
-    if (!actividades) {
-        return res.status(404).send({ data: 'Actividad no encontrado' });
+async function findAll(req, res) {
+    try {
+        const actividad = await em.find(Actividad, {}, { populate: ['lugar'] });
+        if (actividad.length === 0) {
+            return res.status(200).json({ message: 'No se encontraron actividades' });
+        }
+        res.status(200).json({ message: 'Todos las actividades encontrados', data: actividad });
     }
-    res.status(200).json({ data: actividades });
-}
-export async function findOne(req, res) {
-    const actividad = await repository.findOne({ id: req.params.id });
-    if (!actividad) {
-        return res.status(404).send({ message: "Actividad no encontrada" });
+    catch (error) {
+        res.status(500).json({ message: error.message });
     }
-    res.json({ data: actividad });
 }
-export async function add(req, res) {
-    const input = req.body.sanitizedInput;
-    const actividadInput = new Actividad(input.nombre, input.descripcion, input.aireLibre);
-    const actividad = await repository.add(actividadInput);
-    return res
-        .status(201)
-        .send({ message: "Actividad cargada correctamente", data: actividad });
-}
-export async function update(req, res) {
-    req.body.sanitizedInput.id = req.params.id;
-    const result = (req.body.sanitizedInput);
-    const actividad = await repository.update(req.body.sanitizedInput);
-    if (!actividad) {
-        return res.status(404).send({ message: "Actividad no encontrada" });
+async function findOne(req, res) {
+    try {
+        const id = req.params.id;
+        const actividad = await em.findOneOrFail(Actividad, { id });
+        res.status(200).json({ message: 'Actividad encontrada', data: actividad });
     }
-    res.status(200).send({
-        message: "Actividad actualizada correctamente",
-        data: actividad,
-    });
-}
-export async function remove(req, res) {
-    const actividad = await repository.delete({ id: req.params.id });
-    if (!actividad) {
-        return res.status(404).send({ message: "Actividad no encontrada" });
+    catch (error) {
+        res.status(500).json({ message: error.message });
     }
-    return res.status(200).json({ message: "Actividad eliminada correctamente", data: actividad });
 }
+async function add(req, res) {
+    try {
+        const actividad = em.create(Actividad, req.body.sanitizedInput);
+        await em.flush();
+        res.status(201).json({ message: 'Actvidad creada', data: actividad });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+async function update(req, res) {
+    try {
+        const id = req.params.id;
+        const actividad = em.getReference(Actividad, id);
+        em.assign(actividad, req.body);
+        await em.flush();
+        res.status(200).json({ message: 'Actividad actualizada', data: actividad });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+async function remove(req, res) {
+    try {
+        const id = req.params.id;
+        const actividad = em.getReference(Actividad, id);
+        em.removeAndFlush(actividad);
+        res.status(200).json({ message: 'Actividad eliminada', data: actividad });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+export { sanitizeActividadInput, findAll, findOne, add, update, remove };
 //# sourceMappingURL=actividad.controller.js.map

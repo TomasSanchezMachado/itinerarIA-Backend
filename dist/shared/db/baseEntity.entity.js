@@ -7,7 +7,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { PrimaryKey, SerializedPrimaryKey, ObjectId } from "@mikro-orm/mongodb";
+import { PrimaryKey, SerializedPrimaryKey } from "@mikro-orm/core";
+import { ObjectId } from "@mikro-orm/mongodb";
 export class BaseEntity {
     constructor() {
         this._id = new ObjectId();

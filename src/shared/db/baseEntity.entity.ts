@@ -1,4 +1,5 @@
-import { PrimaryKey, SerializedPrimaryKey, ObjectId } from "@mikro-orm/mongodb";
+import { PrimaryKey, SerializedPrimaryKey } from "@mikro-orm/core";
+import { ObjectId } from "@mikro-orm/mongodb";
 
 
 export abstract class BaseEntity {
@@ -7,7 +8,7 @@ export abstract class BaseEntity {
   _id?: ObjectId = new ObjectId();
 
   @SerializedPrimaryKey()
-  id?: string;
+  id!: string;
 
     /*
 

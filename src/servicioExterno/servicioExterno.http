@@ -3,22 +3,23 @@ GET http://localhost:3000/api/serviciosExternos
 
 ### POST servicioExterno
 # @name createServicioExterno
-POST https://localhost:3000/api/serviciosExternos
+POST http://localhost:3000/api/serviciosExternos
 Content-Type: application/json
 
 {
+  
   "tipoServicio": "Alquiler de autos",
   "nombre": "Hertz",
-  "descripcion": "Alquiler de autos en todo el mundo",
+  "descripcion": "Alquiler de autos en todo el mundooo",
   "direccion": "Av. 9 de Julio 1234",
-  "horario": "Lunes a Viernes de 9 a 18hs",
+  "horario": "Lunes a Viernes de 10 a 12hs",
   "sitioWeb": "www.hertz.com",
   "telContacto": "123456789"
 
 }
 
 ### ID
-@id = {{createServicioExterno.response.body.id}}
+@id = {{createServicioExterno.response.body.data.id}}
 
 ### GET servicioExterno by ID
 

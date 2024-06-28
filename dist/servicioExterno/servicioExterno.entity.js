@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, ManyToOne, Property } from "@mikro-orm/core";
+import { Entity, ManyToOne, Property } from "@mikro-orm/mongodb";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Lugar } from "../lugar/lugar.entity.js";
 let ServicioExterno = class ServicioExterno extends BaseEntity {

@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { orm } from "../shared/db/orm.js";
 import { ServicioExterno } from "./servicioExterno.entity.js";
-import { t } from "@mikro-orm/core"
 
 const em = orm.em
 
@@ -14,6 +13,7 @@ function sanitizeServicioExternoInput(
     tipoServicio: req.body.tipoServicio,
     nombre: req.body.nombre,
     descripcion: req.body.descripcion,
+    direccion: req.body.direccion,
     horario: req.body.horario,
     sitioWeb: req.body.sitioWeb,
     telContacto: req.body.telContacto
@@ -54,7 +54,7 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const servicioExterno = em.create(ServicioExterno, req.body);
+    const servicioExterno = em.create(ServicioExterno, req.body.sanitizedInput);
     await em.flush();
     res.status(201).json({ message: 'Servicio externo creado', data: servicioExterno });
   }

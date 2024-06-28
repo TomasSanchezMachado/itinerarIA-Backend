@@ -6,6 +6,7 @@ function sanitizeServicioExternoInput(req, res, next) {
         tipoServicio: req.body.tipoServicio,
         nombre: req.body.nombre,
         descripcion: req.body.descripcion,
+        direccion: req.body.direccion,
         horario: req.body.horario,
         sitioWeb: req.body.sitioWeb,
         telContacto: req.body.telContacto
@@ -42,7 +43,7 @@ async function findOne(req, res) {
 }
 async function add(req, res) {
     try {
-        const servicioExterno = em.create(ServicioExterno, req.body);
+        const servicioExterno = em.create(ServicioExterno, req.body.sanitizedInput);
         await em.flush();
         res.status(201).json({ message: 'Servicio externo creado', data: servicioExterno });
     }

@@ -37,7 +37,7 @@ __decorate([
     __metadata("design:type", String)
 ], Lugar.prototype, "pais", void 0);
 __decorate([
-    OneToMany(() => ServicioExterno, servicioExterno => servicioExterno.lugar, { cascade: [Cascade.ALL], }),
+    OneToMany(() => ServicioExterno, servicioExterno => servicioExterno.lugar, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)
 ], Lugar.prototype, "serviciosExternos", void 0);
 Lugar = __decorate([

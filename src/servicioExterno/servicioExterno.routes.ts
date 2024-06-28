@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { findAll, remove, sanitizeServicioExternoInput, update } from "./servicioExterno.controller.js";
-import { add } from "../lugar/lugar.controller.js";
+import { findAll,findOne, remove, sanitizeServicioExternoInput, update,add } from "./servicioExterno.controller.js";
+
 
 export const servicioExternoRouter = Router();
 
 servicioExternoRouter.get("/", findAll);
 
-servicioExternoRouter.get("/:id", findAll);
+servicioExternoRouter.get("/:id", findOne);
 
 servicioExternoRouter.post("/", sanitizeServicioExternoInput, add);
 

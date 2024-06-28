@@ -16,7 +16,8 @@ function sanitizeServicioExternoInput(
     direccion: req.body.direccion,
     horario: req.body.horario,
     sitioWeb: req.body.sitioWeb,
-    telContacto: req.body.telContacto
+    telContacto: req.body.telContacto,
+    lugar: req.body.lugar
   }
   //more checks here
 
@@ -30,7 +31,7 @@ function sanitizeServicioExternoInput(
 
 async function findAll(req: Request, res: Response) {
   try {
-    const servicioExterno = await em.find(ServicioExterno, {});
+    const servicioExterno = await em.find(ServicioExterno, {}, { populate: ['lugar'] });
     if(servicioExterno.length === 0){
       return res.status(200).json({message: 'No se encontraron servicios externos'});
     }

@@ -12,11 +12,11 @@ export function sanitizeLugarInput(
   next: NextFunction
 ) {
   req.body.sanitizedInput = {
-    titulo: req.body.titulo,
-    descripcion: req.body.descripcion,
-    cantDias: req.body.cantDias,
-    actividades: new Uint8Array(req.body.actividades),
-    transporte: req.body.transporte
+    nombre: req.body.nombre,
+    ubicacion: req.body.ubicacion,
+    codigoPostal: req.body.codigoPostal,
+    provincia: req.body.provincia,
+    pais: req.body.pais
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -31,7 +31,7 @@ export function sanitizeLugarInput(
 
 export async function findAll(req: Request, res: Response) {
   try{
-    const lugares = await em.find(Lugar,{})
+    const lugares = await em.find(Lugar,{}, { populate: ['serviciosExternos'] })
     if(lugares.length === 0){
       return res.status(200).json({message: "No se encontraron lugares"});
     }

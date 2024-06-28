@@ -3,11 +3,11 @@ import { orm } from "../shared/db/orm.js";
 const em = orm.em;
 export function sanitizeLugarInput(req, res, next) {
     req.body.sanitizedInput = {
-        titulo: req.body.titulo,
-        descripcion: req.body.descripcion,
-        cantDias: req.body.cantDias,
-        actividades: new Uint8Array(req.body.actividades),
-        transporte: req.body.transporte
+        nombre: req.body.nombre,
+        ubicacion: req.body.ubicacion,
+        codigoPostal: req.body.codigoPostal,
+        provincia: req.body.provincia,
+        pais: req.body.pais
     };
     Object.keys(req.body.sanitizedInput).forEach((key) => {
         if (req.body.sanitizedInput[key] === undefined) {
@@ -18,7 +18,7 @@ export function sanitizeLugarInput(req, res, next) {
 }
 export async function findAll(req, res) {
     try {
-        const lugares = await em.find(Lugar, {});
+        const lugares = await em.find(Lugar, {}, { populate: ['serviciosExternos'] });
         if (lugares.length === 0) {
             return res.status(200).json({ message: "No se encontraron lugares" });
         }

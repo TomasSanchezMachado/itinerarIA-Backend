@@ -26,7 +26,7 @@ export class Lugar extends BaseEntity{
     @Property()
     pais!: string
 
-    @OneToMany(() => ServicioExterno, servicioExterno => servicioExterno.lugar,
+    @OneToMany(() => ServicioExterno, (servicioExterno) => servicioExterno.lugar,
         { cascade: [Cascade.ALL]})
     serviciosExternos = new Collection<ServicioExterno>(this)
         

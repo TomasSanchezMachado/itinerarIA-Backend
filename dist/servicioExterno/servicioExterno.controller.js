@@ -9,7 +9,8 @@ function sanitizeServicioExternoInput(req, res, next) {
         direccion: req.body.direccion,
         horario: req.body.horario,
         sitioWeb: req.body.sitioWeb,
-        telContacto: req.body.telContacto
+        telContacto: req.body.telContacto,
+        lugar: req.body.lugar
     };
     //more checks here
     Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -21,7 +22,7 @@ function sanitizeServicioExternoInput(req, res, next) {
 }
 async function findAll(req, res) {
     try {
-        const servicioExterno = await em.find(ServicioExterno, {});
+        const servicioExterno = await em.find(ServicioExterno, {}, { populate: ['lugar'] });
         if (servicioExterno.length === 0) {
             return res.status(200).json({ message: 'No se encontraron servicios externos' });
         }

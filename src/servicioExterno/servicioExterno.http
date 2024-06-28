@@ -14,7 +14,8 @@ Content-Type: application/json
   "direccion": "Av. 9 de Julio 1234",
   "horario": "Lunes a Viernes de 10 a 12hs",
   "sitioWeb": "www.hertz.com",
-  "telContacto": "123456789"
+  "telContacto": "123456789",
+  "lugar": "667e248fd5fe6e6bc049c0dc"
 
 }
 

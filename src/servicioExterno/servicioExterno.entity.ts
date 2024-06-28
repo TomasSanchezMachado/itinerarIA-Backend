@@ -27,6 +27,6 @@ export class ServicioExterno extends BaseEntity{
   telContacto!: string;
 
   @ManyToOne(() => Lugar, { nullable: false })
-  lugar?: Rel<Lugar>;
+  lugar!: Rel<Lugar>;
 
 }

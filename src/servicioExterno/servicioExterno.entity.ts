@@ -1,4 +1,4 @@
-import {Entity,  ManyToOne,  Property, Rel } from "@mikro-orm/mongodb";
+import {Entity,  ManyToOne,  Property, Rel } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Lugar } from "../lugar/lugar.entity.js";
 

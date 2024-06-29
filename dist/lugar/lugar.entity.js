@@ -11,7 +11,7 @@ import { Cascade, Collection, Entity, OneToMany, Property } from "@mikro-orm/cor
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { ServicioExterno } from "../servicioExterno/servicioExterno.entity.js";
 import { Actividad } from "../actividad/actividad.entity.js";
-let Lugar = class Lugar extends BaseEntity {
+export let Lugar = class Lugar extends BaseEntity {
     constructor() {
         super(...arguments);
         this.serviciosExternos = new Collection(this);
@@ -49,5 +49,4 @@ __decorate([
 Lugar = __decorate([
     Entity()
 ], Lugar);
-export { Lugar };
 //# sourceMappingURL=lugar.entity.js.map

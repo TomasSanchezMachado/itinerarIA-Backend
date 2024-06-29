@@ -15,8 +15,8 @@ export function sanitizeItinerarioInput(
     titulo: req.body.titulo,
     descripcion: req.body.descripcion,
     cantDias: req.body.cantDias,
-    actividades: new Uint8Array(req.body.actividades),
-    transporte: req.body.transporte
+    actividades: req.body.actividades,
+    participantes: req.body.participantes
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -31,7 +31,7 @@ export function sanitizeItinerarioInput(
 
 export async function findAll(req: Request, res: Response) {
   try{
-    const itinerarios = await em.find(Itinerario,{})
+    const itinerarios = await em.find(Itinerario,{},{populate: ['actividades','participantes']})
     if(itinerarios.length === 0){
       return res.status(200).json({message: "No se encontraron itinerarios"});
     }
@@ -45,8 +45,8 @@ export async function findAll(req: Request, res: Response) {
 export async function findOne(req: Request, res: Response) {
 try{
   const id = req.params.id;
-  const objectId = new ObjectId(id);
-  const itinerario = await em.findOneOrFail(Itinerario, { _id: objectId });
+  //const objectId = new ObjectId(id);
+  const itinerario = await em.findOneOrFail(Itinerario, { id } );
   return res.status(200).json({data: itinerario});
 }
 catch(error:any){
@@ -72,7 +72,7 @@ export async function update(req: Request, res: Response) {
   try{
     const id = req.params.id;
     const objectId = new ObjectId(id);
-    const itinerario = em.getReference(Itinerario, objectId);
+    const itinerario = em.getReference(Itinerario, id);
     em.assign(itinerario, req.body.sanitizedInput);
     await em.flush();
     return res.status(200).json({message: "Itinerario actualizado con exito", data: itinerario});
@@ -87,7 +87,7 @@ export async function remove(req: Request, res: Response) {
   try{
     const id = req.params.id
     const objectId = new ObjectId(id)
-    const itinerario = em.getReference(Itinerario, objectId)
+    const itinerario = em.getReference(Itinerario, id)
     await em.removeAndFlush(itinerario)
     res.status(200).send({ message: 'Itinerario borrado',data:itinerario })
   } 

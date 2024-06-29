@@ -12,10 +12,11 @@ function sanitizeActividadInput(
   req.body.sanitizedInput = {
     nombre: req.body.nombre,
     descripcion: req.body.descripcion,
-    airelibre: req.body.airelibre,
+    aireLibre: req.body.aireLibre,
     transporte: req.body.transporte,
     horario: req.body.horario,
-    lugar: req.body.lugar
+    lugar: req.body.lugar,
+    itinerario : req.body.itinerario
   }
   //more checks here
 
@@ -29,7 +30,7 @@ function sanitizeActividadInput(
 
 async function findAll(req: Request, res: Response) {
   try {
-    const actividad = await em.find(Actividad, {}, { populate: ['lugar'] });
+    const actividad = await em.find(Actividad, {}, { populate: ['lugar','itinerario'] });
     if(actividad.length === 0){
       return res.status(200).json({message: 'No se encontraron actividades'});
     }
@@ -54,6 +55,7 @@ async function findOne(req: Request, res: Response) {
 async function add(req: Request, res: Response) {
   try {
     const actividad = em.create(Actividad, req.body.sanitizedInput);
+    console.log("Sanitized Input:", actividad);
     await em.flush();
     res.status(201).json({ message: 'Actvidad creada', data: actividad });
   }

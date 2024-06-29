@@ -4,7 +4,7 @@ import { lugarRouter } from './lugar/lugar.routes.js';
 import { itinerarioRouter } from './itinerario/itinerario.routes.js';
 import { actividadRouter } from './actividad/actividad.routes.js';
 import { orm } from './shared/db/orm.js';
-import { RequestContext } from '@mikro-orm/mongodb';
+import { RequestContext } from '@mikro-orm/core';
 import { servicioExternoRouter } from './servicioExterno/servicioExterno.routes.js';
 
 

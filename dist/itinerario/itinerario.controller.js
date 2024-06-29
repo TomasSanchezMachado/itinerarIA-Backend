@@ -7,8 +7,8 @@ export function sanitizeItinerarioInput(req, res, next) {
         titulo: req.body.titulo,
         descripcion: req.body.descripcion,
         cantDias: req.body.cantDias,
-        actividades: new Uint8Array(req.body.actividades),
-        transporte: req.body.transporte
+        actividades: req.body.actividades,
+        participantes: req.body.participantes
     };
     Object.keys(req.body.sanitizedInput).forEach((key) => {
         if (req.body.sanitizedInput[key] === undefined) {
@@ -19,7 +19,7 @@ export function sanitizeItinerarioInput(req, res, next) {
 }
 export async function findAll(req, res) {
     try {
-        const itinerarios = await em.find(Itinerario, {});
+        const itinerarios = await em.find(Itinerario, {}, { populate: ['actividades', 'participantes'] });
         if (itinerarios.length === 0) {
             return res.status(200).json({ message: "No se encontraron itinerarios" });
         }
@@ -32,8 +32,8 @@ export async function findAll(req, res) {
 export async function findOne(req, res) {
     try {
         const id = req.params.id;
-        const objectId = new ObjectId(id);
-        const itinerario = await em.findOneOrFail(Itinerario, { _id: objectId });
+        //const objectId = new ObjectId(id);
+        const itinerario = await em.findOneOrFail(Itinerario, { id });
         return res.status(200).json({ data: itinerario });
     }
     catch (error) {
@@ -54,7 +54,7 @@ export async function update(req, res) {
     try {
         const id = req.params.id;
         const objectId = new ObjectId(id);
-        const itinerario = em.getReference(Itinerario, objectId);
+        const itinerario = em.getReference(Itinerario, id);
         em.assign(itinerario, req.body.sanitizedInput);
         await em.flush();
         return res.status(200).json({ message: "Itinerario actualizado con exito", data: itinerario });
@@ -67,7 +67,7 @@ export async function remove(req, res) {
     try {
         const id = req.params.id;
         const objectId = new ObjectId(id);
-        const itinerario = em.getReference(Itinerario, objectId);
+        const itinerario = em.getReference(Itinerario, id);
         await em.removeAndFlush(itinerario);
         res.status(200).send({ message: 'Itinerario borrado', data: itinerario });
     }

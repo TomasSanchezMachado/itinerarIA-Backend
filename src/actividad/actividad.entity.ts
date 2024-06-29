@@ -3,8 +3,7 @@ import { Entity, Property, OneToMany, ManyToOne, Collection, Cascade, Rel} from 
 import { Lugar } from "../lugar/lugar.entity.js";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 
-import { ObjectId } from '@mikro-orm/mongodb';
-import crypto from 'node:crypto';
+import { Itinerario } from '../itinerario/itinerario.entity.js';
 
 @Entity()
 export class Actividad extends BaseEntity{
@@ -29,6 +28,9 @@ export class Actividad extends BaseEntity{
 
   @ManyToOne(() => Lugar, {nullable: false})
   lugar!: Rel<Lugar>;
+
+  @ManyToOne(() => Itinerario,{nullable:false})
+  itinerario! : Rel<Itinerario>
 
 }
 

@@ -1,6 +1,5 @@
 GET http://localhost:3000/api/actividades
-###
-GET http://localhost:3000/api/actividades/57c0cfad-b4ce-49b1-b80d-66038e634956
+# @name createActividad
 ###
 POST http://localhost:3000/api/actividades
 Content-Type: application/json
@@ -11,12 +10,17 @@ Content-Type: application/json
     "aireLibre": false,
     "transporte": "Auto",
     "horario": "10:00",
-    "lugar": "667e248fd5fe6e6bc049c0dc"
+    "lugar": "667f733b2e2c094f338971ad",
+    "itinerario" : "667f7cd3eb72da59d0b195fb"
 }
-
+###
+@id = {{createActividad.response.body.data.id}}
 
 ###
-PUT http://localhost:3000/api/actividades/57c0cfad-b4ce-49b1-b80d-66038e634956
+GET http://localhost:3000/api/actividades/{{id}}
+
+###
+PUT http://localhost:3000/api/actividades/{{id}}
 Content-Type: application/json
 
 {
@@ -30,13 +34,6 @@ Content-Type: application/json
 
 }
 ###
-PATCH http://localhost:3000/api/actividades/57c0cfad-b4ce-49b1-b80d-66038e634956
-Content-Type: application/json
-
-{
-    "aireLibre" : false
-}
-
 
 ###
-DELETE http://localhost:3000/api/actividades/57c0cfad-b4ce-49b1-b80d-66038e634956
+DELETE http://localhost:3000/api/actividades/{{id}}

@@ -14,9 +14,9 @@ actividadRouter.get("/", findAll);
 
 actividadRouter.get("/:id", findOne);
 
-actividadRouter.post("/", add);
+actividadRouter.post("/",sanitizeActividadInput, add);
 
-actividadRouter.put("/:id", update);
+actividadRouter.put("/:id", sanitizeActividadInput,update);
 
 actividadRouter.patch("/:id", update);
 

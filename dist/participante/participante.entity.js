@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Itinerario } from '../itinerario/itinerario.entity.js';
 import { Property, Entity, ManyToOne } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
-let Participante = class Participante extends BaseEntity {
+export let Participante = class Participante extends BaseEntity {
 };
 __decorate([
     Property({ nullable: false }),
@@ -27,5 +27,4 @@ __decorate([
 Participante = __decorate([
     Entity()
 ], Participante);
-export { Participante };
 //# sourceMappingURL=participante.entity.js.map

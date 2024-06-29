@@ -18,6 +18,4 @@ lugarRouter.post("/", sanitizeLugarInput, add);
 
 lugarRouter.put("/:id", sanitizeLugarInput, update);
 
-lugarRouter.patch("/:id", sanitizeLugarInput, update);
-
 lugarRouter.delete("/:id", remove);

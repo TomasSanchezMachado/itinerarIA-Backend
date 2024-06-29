@@ -11,7 +11,8 @@ Content-Type: application/json
     "aireLibre": false,
     "transporte": "Auto",
     "horario": "10:00",
-    "lugar": "667e248fd5fe6e6bc049c0dc"
+    "lugar": "idLugar",
+    "itinerario": "idItinerario"
 }
 
 
@@ -25,7 +26,7 @@ Content-Type: application/json
     "aireLibre" : false,
     "transporte" : "Auto",
     "horario" : "10:00",
-    "lugar": "667e248fd5fe6e6bc049c0dc"
+    "lugar": "idLugar"
 
 
 }

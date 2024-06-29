@@ -15,8 +15,8 @@ export class Itinerario extends BaseEntity{
         @Property({nullable:false}) 
         cantDias!: number
     
-        // @OneToMany(() => Actividad, (actividades) => actividades.itinerario) 
-        // actividades = new Collection<Actividad>(this)
+         @OneToMany(() => Actividad, (actividades) => actividades.itinerario) 
+        actividades = new Collection<Actividad>(this)
 
         // @ManyToOne(() => Usuario, {nullable : false})
         // usuario! : Usuario

@@ -12,7 +12,5 @@ servicioExternoRouter.post("/", sanitizeServicioExternoInput, add);
 
 servicioExternoRouter.put("/:id", sanitizeServicioExternoInput, update);
 
-servicioExternoRouter.patch("/:id", sanitizeServicioExternoInput, update);
-
 servicioExternoRouter.delete("/:id", remove);
 

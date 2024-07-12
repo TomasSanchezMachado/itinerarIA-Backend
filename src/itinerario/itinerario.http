@@ -10,7 +10,8 @@ Content-Type: application/json
     "titulo": "Itinerario 2",
     "descripcion": "Itinerario hecho para 5 dias en Disney...",
     "cantDias": 5,
-    "actividades": ["idActividad"]
+    "actividades": [],
+    "usuario": "669196ff1c57a0d56baca74d"
 }
 ###
 @id = {{createItinerario.response.body.data.id}}

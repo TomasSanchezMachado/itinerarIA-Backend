@@ -24,7 +24,7 @@ export class Usuario extends BaseEntity {
     nroTelefono!: string
 
     @OneToMany(() => Itinerario, itinerario => itinerario.usuario, { cascade: [Cascade.ALL] }) // OJO!! Es cero o uno a muchos
-    itinerarios = new Collection<Itinerario>(this)
+    itinerarios = new Collection<Itinerario>(this);
 
     /* @OneToMany(() => Opinion, (opinion) => opinion.usuario, {cascade : [Cascade.ALL]})
      opiniones = new Collection <Opinion> (this)*/

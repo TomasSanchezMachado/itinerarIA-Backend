@@ -4,7 +4,7 @@ import { ObjectId } from "@mikro-orm/mongodb";
 const em = orm.em;
 export async function findAll(req, res) {
     try {
-        const usuarios = await em.find(Usuario, {});
+        const usuarios = await em.find(Usuario, {}, { populate: ['itinerarios.actividades'] });
         res.status(200).json({ message: "Usuarios encontrados exitosamente:", data: usuarios });
     }
     catch (error) {
@@ -15,7 +15,7 @@ export async function findOne(req, res) {
     try {
         const id = req.params.id;
         const objectId = new ObjectId(id);
-        const usuario = await em.findOneOrFail(Usuario, { _id: objectId });
+        const usuario = await em.findOneOrFail(Usuario, { _id: objectId }, { populate: ['itinerarios.actividades'] });
         return res
             .status(200)
             .json({ message: "Usuario encontrado exitosamente", data: usuario });
@@ -38,7 +38,7 @@ export async function update(req, res) {
     try {
         const id = req.params.id;
         const objectId = new ObjectId(id);
-        const usuario = em.getReference(Usuario, objectId); //Para traer una referencia del objeto (por _id), no trae todos sus atributos. No necesito cargar todos los atributos del objeto, solo necesito cargar una ref del objeto para modificarlo.
+        const usuario = em.findOneOrFail(Usuario, objectId);
         em.assign(usuario, req.body);
         await em.flush();
         res
@@ -53,7 +53,7 @@ export async function remove(req, res) {
     try {
         const id = req.params.id;
         const objectId = new ObjectId(id);
-        const usuario = em.getReference(Usuario, objectId);
+        const usuario = em.findOneOrFail(Usuario, objectId);
         await em.removeAndFlush(usuario);
         res
             .status(200)

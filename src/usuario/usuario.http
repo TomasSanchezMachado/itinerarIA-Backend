@@ -1,33 +1,33 @@
-### GET ALL //funciona
-GET http://localhost:3000/api/usuarios 
+### GET ALL //funciona. Pero en la data del itinerario muestra los datos del usuario que posee ese itinerario, no muestra los datos del itinerario como titulo, actividades, etc.
+GET http://localhost:3000/api/usuarios
 
 
+### POST
 # @name CreateUsuario
-### //funciona al comentar la linea de @id = {{CreateUsuario.response.body.data.id}}
-    //No valida que el nombre de usuario sea unico
 POST http://localhost:3000/api/usuarios
+//FUNCIONA. (Antes de hacer el POST, comentar la linea de id. Luego del POST, descomentarla y luego funcionan los demas métodos con el {{id}} )
 Content-Type:application/json
 
 {
     "nombreDeUsuario": "usuario 1",
-    "nombres": "dorian",
-    "apellidos": "yates",
+    "nombres": "user 1",
+    "apellidos": "coleman",
     "fechaNacimiento": "2004-04-24",
-    "mail": "fivemore@gmail.com",
-    "nroTelefono": "3415454855",
-    "itinerarios": ["idItinerario"]
+    "mail": "ronnie666@gmail.com",
+    "nroTelefono": "3415456985",
+    "itinerarios": ["6691972f1c57a0d56baca74f"]
 }
 
+@id = {{CreateUsuario.response.body.data.id}}
 
-//@id = {{CreateUsuario.response.body.data.id}}
+### GET ONE
+//FUNCIONA
+GET http://localhost:3000/api/usuarios/{{id}}
 
 
-### //funciona poniendo id manualmente
-GET http://localhost:3000/api/usuarios/6690b479615f6c390f6ec08d
-
-
-### //Aparece un error en la relacion con itinerarios, pero indicando que es de N a M y no lo es.
-PUT http://localhost:3000/api/usuarios/6690b479615f6c390f6ec08d
+###
+PUT http://localhost:3000/api/usuarios/{{id}}
+//FUNCIONA. No permite modificar el campo itinerarios. Solo se puede modificar al usuario desde el itinerario.
 Content-Type:application/json
 
 {
@@ -36,14 +36,13 @@ Content-Type:application/json
     "apellidos": "mentzer",
     "fechaNacimiento": "2004-04-24",
     "mail": "ronnie666@gmail.com",
-    "nroTelefono": "3415456985",
-    "itinerarios": ["idItinerario"]
+    "nroTelefono": "3415456985"
 }
 
 
-
-### //funciona poniendo el id manualmente
-PATCH http://localhost:3000/api/usuarios/6690b479615f6c390f6ec08d
+###
+PATCH http://localhost:3000/api/usuarios/{{id}}
+//FUNCIONA
 Content-Type:application/json
 
 {
@@ -52,24 +51,6 @@ Content-Type:application/json
 
 }
 
-
-### POST Usuario TO DELETE //funciona al comentar la linea de @idTodelete
-# @name createUsuarioToDelete
-POST http://localhost:3000/api/usuarios 
-Content-Type:application/json
-
-{
-    "nombreDeUsuario": "usuario 2",
-    "nombres": "ronnie",
-    "apellidos": "coleman",
-    "fechaNacimiento": "2004-04-24",
-    "mail": "ronnie666@gmail.com",
-    "nroTelefono": "3415456985",
-    "itinerarios": ["idItinerario"]
-}
-
-//@idToDelete = {{createUsuarioToDelete.response.body.data.id}}
-
-
-### DELETE //funciona poniendo id manualmente
-DELETE http://localhost:3000/api/usuarios/6690b513615f6c390f6ec08f
+### DELETE
+//FUNCIONA
+DELETE http://localhost:3000/api/usuarios/{{id}}

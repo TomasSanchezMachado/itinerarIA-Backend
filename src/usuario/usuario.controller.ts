@@ -57,7 +57,7 @@ export async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id;
     const objectId = new ObjectId(id);
-    const usuario = em.findOneOrFail(Usuario, objectId);
+    const usuario = em.getReference(Usuario, objectId);
     await em.removeAndFlush(usuario);
     res
       .status(200)

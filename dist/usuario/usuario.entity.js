@@ -44,8 +44,7 @@ __decorate([
     __metadata("design:type", String)
 ], Usuario.prototype, "nroTelefono", void 0);
 __decorate([
-    OneToMany(() => Itinerario, itinerario => itinerario.usuario, { cascade: [Cascade.ALL] }) // OJO!! Es cero o uno a muchos
-    ,
+    OneToMany(() => Itinerario, itinerario => itinerario.usuario, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)
 ], Usuario.prototype, "itinerarios", void 0);
 Usuario = __decorate([

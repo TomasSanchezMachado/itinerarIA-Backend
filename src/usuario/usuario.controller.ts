@@ -1,90 +1,69 @@
-import { Response, Request, NextFunction } from "express";
-import { usuarioRepository } from "./usuario.repository.js";
+import { Response, Request, } from "express";
 import { Usuario } from "./usuario.entity.js";
+import { orm } from '../shared/db/orm.js'
+import { ObjectId } from "@mikro-orm/mongodb";
 
-
-const repository = new usuarioRepository()
-
-export function sanitizeUsuarioInput(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  req.body.sanitizedInput = {
-    nombreDeUsuario: req.body.nombreDeUsuario,
-    nombres: req.body.nombres,
-    apellidos: req.body.apellidos,
-    fechaNacimiento: req.body.fechaNacimiento,
-    mail: req.body.mail,
-    nroTelefono: req.body.nroTelefono,
-    itinerarios: req.body.itinerarios,
-    //opiniones: req.body.opiniones
-  }
-
-  Object.keys(req.body.sanitizedInput).forEach((key) => {
-    if (req.body.sanitizedInput[key] === undefined) {
-      delete req.body.sanitizedInput[key];
-    }
-  })
-
-  next();
-}
-
+const em = orm.em
 
 export async function findAll(req: Request, res: Response) {
-  const usuarios = await repository.findAll();
-  if (!usuarios) {
-    return res.status(404).send({ data: 'No se encontraron usuarios' })
+  try {
+    const usuarios = await em.find(Usuario, {});
+    res.status(200).json({ message: "Usuarios encontrados exitosamente:", data: usuarios });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
   }
-  res.status(200).json({ data: usuarios });
-
 }
 
 export async function findOne(req: Request, res: Response) {
-  const usuario = await repository.findOne({ id: req.params.id });
-  if (!usuario) {
-    return res.status(404).send({ message: "usuario no encontrado" });
+  try {
+    const id = req.params.id;
+    const objectId = new ObjectId(id);
+    const usuario = await em.findOneOrFail(Usuario, { _id: objectId })
+    return res
+      .status(200)
+      .json({ message: "Usuario encontrado exitosamente", data: usuario });
+  } catch (error: any) {
+    return res.status(500).send({ message: error.message });
   }
-  res.json({ data: usuario });
 }
 
 
 export async function add(req: Request, res: Response) {
-  const input = req.body.sanitizedInput
-  const usuarioInput = new Usuario(
-    input.nombreDeUsuario,
-    input.nombres,
-    input.apellidos,
-    input.fechaNacimiento,
-    input.mail,
-    input.nroTelefono,
-    input.itinerarios,
-  );
-  const usuario = await repository.add(usuarioInput);
-  return res
-    .status(201)
-    .send({ message: "usuario cargado correctamente", data: usuario });
+  try {
+    const usuario = em.create(Usuario, req.body);
+    await em.flush();
+    res.status(201).json({ message: "usuario creado correctamente", data: usuario });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
 }
 
 export async function update(req: Request, res: Response) {
-  req.body.sanitizedInput.id = req.params.id;
-  const result = (req.body.sanitizedInput);
-
-  const usuario = await repository.update(req.body.sanitizedInput);
-  if (!usuario) {
-    return res.status(404).send({ message: "usuario no encontrado" });
+  try {
+    const id = req.params.id;
+    const objectId = new ObjectId(id);
+    const usuario = em.getReference(Usuario, objectId); //Para traer una referencia del objeto (por _id), no trae todos sus atributos. No necesito cargar todos los atributos del objeto, solo necesito cargar una ref del objeto para modificarlo.
+    em.assign(usuario, req.body);
+    await em.flush();
+    res
+      .status(200)
+      .json({ message: "usuario actualizado correctamente", data: usuario });
+  } catch (error: any) {
+    return res.status(500).send({ message: error.message });
   }
-
-  res.status(200).send({
-    message: "usuario actualizado correctamente",
-    data: usuario,
-  });
 }
 
 export async function remove(req: Request, res: Response) {
-  const usuario = await repository.delete({ id: req.params.id });
-  if (!usuario) {
-    return res.status(404).send({ message: "usuario no encontrado" });
+  try {
+    const id = req.params.id;
+    const objectId = new ObjectId(id);
+    const usuario = em.getReference(Usuario, objectId);
+    await em.removeAndFlush(usuario);
+    res
+      .status(200)
+      .send({ message: "usuario eliminado correctamente" });
+  } catch (error: any) {
+    return res.status(500).send({ message: error.message });
   }
-  return res.status(200).json({ message: "usuario eliminado correctamente", data: usuario });
 }
+

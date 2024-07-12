@@ -7,8 +7,9 @@ export function sanitizeItinerarioInput(req, res, next) {
         titulo: req.body.titulo,
         descripcion: req.body.descripcion,
         cantDias: req.body.cantDias,
-        actividades: new Uint8Array(req.body.actividades),
-        transporte: req.body.transporte
+        actividades: req.body.actividades,
+        participantes: req.body.participantes,
+        usuario: req.body.usuario
     };
     Object.keys(req.body.sanitizedInput).forEach((key) => {
         if (req.body.sanitizedInput[key] === undefined) {
@@ -19,7 +20,7 @@ export function sanitizeItinerarioInput(req, res, next) {
 }
 export async function findAll(req, res) {
     try {
-        const itinerarios = await em.find(Itinerario, {});
+        const itinerarios = await em.find(Itinerario, {}, { populate: ['actividades', 'participantes'] });
         if (itinerarios.length === 0) {
             return res.status(200).json({ message: "No se encontraron itinerarios" });
         }

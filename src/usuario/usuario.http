@@ -1,123 +1,50 @@
-GET http://localhost:3000/api/usuarios
-###
-GET http://localhost:3000/api/usuarios/58h0dfdt-b8cg-15b1-b70f-86078e644911
-###
+### GET ALL //funciona
+GET http://localhost:3000/api/usuarios 
+
+
+# @name CreateUsuario
+### //funciona al comentar la linea de @id = {{CreateUsuario.response.body.data.id}}
+    //No valida que el nombre de usuario sea unico
 POST http://localhost:3000/api/usuarios
-Content-Type: application/json
+Content-Type:application/json
 
 {
-    "nombreDeUsuario": "usuario 2",
-    "nombres": "ronnie",
-    "apellidos": "coleman",
-    "fechaNacimiento": 2004-04-24,
-    "mail" : "ronnie666@gmail.com",
-    "nroTelefono" : 3415456985,
-    "itinerarios": [
-    {
-        "titulo":"Itinerario 1",
-        "descripcion": "Itinerario hecho para 5 dias en Rosario...",
-        "cantDias":5,
-        "actividades": [{
-            "nombre" : "Monumento",
-            "descripcion" : "Paseo por monumento a la bandera",
-            "aireLibre" : true,
-            // "id": falta id
-            },  
-            {
-            "nombre" : "City Center",
-            "descripcion" : "Casino City Center",
-            "aireLibre" : false,
-            //"id":
-            }],
-        "transporte": "Auto",
-        "id": "57c0cfad-b4ce-49b1-b80d-66038e634956"
-    },
-    {
-    "titulo": "Itinerario 2",
-    "descripcion": "Itinerario hecho para 7 dias en Disney...",
-    "cantDias": 5,
-    "actividades": [
-        {
-            "nombre": "Universal Studios",
-            "descripcion": "Parque con atracciones...",
-            "aireLibre": true
-            //id:
-        },
-        {
-            "nombre": "Magic Kingdom",
-            "descripcion": "Parque con atracciones...",
-            "aireLibre": true
-            //id:
-        }
-    ],
-    "transporte": "Auto",
-    "id": "57c0cfad-b4ce-49b1-b80d-66038e634956" //es el mismo id que el del itinerario 1
-    }
-    ],
-    "id" : "58h0dfdt-b8cg-15b1-b70f-86078e644922" //del usuario 2 (inventado)
+    "nombreDeUsuario": "usuario 1",
+    "nombres": "dorian",
+    "apellidos": "yates",
+    "fechaNacimiento": "2004-04-24",
+    "mail": "fivemore@gmail.com",
+    "nroTelefono": "3415454855",
+    "itinerarios": ["idItinerario"]
 }
 
 
-###
-PUT http://localhost:3000/api/usuarios/58h0dfdt-b8cg-15b1-b70f-86078e644911
-Content-Type: application/json
+//@id = {{CreateUsuario.response.body.data.id}}
+
+
+### //funciona poniendo id manualmente
+GET http://localhost:3000/api/usuarios/6690b479615f6c390f6ec08d
+
+
+### //Aparece un error en la relacion con itinerarios, pero indicando que es de N a M y no lo es.
+PUT http://localhost:3000/api/usuarios/6690b479615f6c390f6ec08d
+Content-Type:application/json
 
 {
     "nombreDeUsuario": "usuario 2",
-    "nombres": "ronnie",
-    "apellidos": "coleman",
-    "fechaNacimiento": 2004-04-24,
-    "mail" : "ronnie666@gmail.com",
-    "nroTelefono" : 3415456985,
-    "itinerarios": [
-    {
-        "titulo":"Itinerario 1",
-        "descripcion": "Itinerario hecho para 5 dias en Rosario...",
-        "cantDias":5,
-        "actividades": [{
-            "nombre" : "Monumento",
-            "descripcion" : "Paseo por monumento a la bandera",
-            "aireLibre" : true,
-            // "id": falta id
-            },  
-            {
-            "nombre" : "City Center",
-            "descripcion" : "Casino City Center",
-            "aireLibre" : false,
-            //"id":
-            }],
-        "transporte": "Auto",
-        "id": "57c0cfad-b4ce-49b1-b80d-66038e634956"
-    },
-    {
-    "titulo": "Itinerario 2",
-    "descripcion": "Itinerario hecho para 7 dias en Disney...",
-    "cantDias": 5,
-    "actividades": [
-        {
-            "nombre": "Universal Studios",
-            "descripcion": "Parque con atracciones...",
-            "aireLibre": true
-            //id:
-        },
-        {
-            "nombre": "Magic Kingdom",
-            "descripcion": "Parque con atracciones...",
-            "aireLibre": true
-            //id:
-        }
-    ],
-    "transporte": "Auto",
-    "id": "57c0cfad-b4ce-49b1-b80d-66038e634956"
-    }
-    ],
-    "id" : "58h0dfdt-b8cg-15b1-b70f-86078e644922"
+    "nombres": "mike",
+    "apellidos": "mentzer",
+    "fechaNacimiento": "2004-04-24",
+    "mail": "ronnie666@gmail.com",
+    "nroTelefono": "3415456985",
+    "itinerarios": ["idItinerario"]
 }
 
 
-###
-PATCH http://localhost:3000/api/lugares/558h0dfdt-b8cg-15b1-b70f-86078e644922
-Content-Type: application/json
+
+### //funciona poniendo el id manualmente
+PATCH http://localhost:3000/api/usuarios/6690b479615f6c390f6ec08d
+Content-Type:application/json
 
 {
     "nombreDeUsuario" : "nikitox4",
@@ -126,5 +53,23 @@ Content-Type: application/json
 }
 
 
-###
-DELETE http://localhost:3000/api/lugares/558h0dfdt-b8cg-15b1-b70f-86078e644922
+### POST Usuario TO DELETE //funciona al comentar la linea de @idTodelete
+# @name createUsuarioToDelete
+POST http://localhost:3000/api/usuarios 
+Content-Type:application/json
+
+{
+    "nombreDeUsuario": "usuario 2",
+    "nombres": "ronnie",
+    "apellidos": "coleman",
+    "fechaNacimiento": "2004-04-24",
+    "mail": "ronnie666@gmail.com",
+    "nroTelefono": "3415456985",
+    "itinerarios": ["idItinerario"]
+}
+
+//@idToDelete = {{createUsuarioToDelete.response.body.data.id}}
+
+
+### DELETE //funciona poniendo id manualmente
+DELETE http://localhost:3000/api/usuarios/6690b513615f6c390f6ec08f

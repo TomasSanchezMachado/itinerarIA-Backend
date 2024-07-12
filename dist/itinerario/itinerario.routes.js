@@ -5,6 +5,5 @@ itinerarioRouter.get("/", findAll);
 itinerarioRouter.get("/:id", findOne);
 itinerarioRouter.post("/", sanitizeItinerarioInput, add);
 itinerarioRouter.put("/:id", sanitizeItinerarioInput, update);
-itinerarioRouter.patch("/:id", sanitizeItinerarioInput, update);
 itinerarioRouter.delete("/:id", remove);
 //# sourceMappingURL=itinerario.routes.js.map

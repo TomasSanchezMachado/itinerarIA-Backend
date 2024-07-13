@@ -1,0 +1,28 @@
+GET http://localhost:3000/api/participantes
+###
+# @name createParticipante
+
+
+POST http://localhost:3000/api/participantes
+Content-Type: application/json
+
+{
+    "edad":20,
+    "discapacidad":false,
+    "itinerario":"idItinerario"
+}
+###
+@id = {{createParticipante.response.body.data.id}}
+GET http://localhost:3000/api/participantes/{{id}}
+
+###
+PUT http://localhost:3000/api/participantes/{{id}}
+Content-Type: application/json
+
+{
+    "edad" : 21
+}
+
+
+###
+DELETE http://localhost:3000/api/participantes/{{id}}

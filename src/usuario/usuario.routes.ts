@@ -1,6 +1,5 @@
 import { Router } from "express";
 import {
-  sanitizeUsuarioInput,
   findAll,
   findOne,
   add,
@@ -14,10 +13,10 @@ usuarioRouter.get("/", findAll);
 
 usuarioRouter.get("/:id", findOne);
 
-usuarioRouter.post("/", sanitizeUsuarioInput, add);
+usuarioRouter.post("/", add);
 
-usuarioRouter.put("/:id", sanitizeUsuarioInput, update);
+usuarioRouter.put("/:id", update);
 
-usuarioRouter.patch("/:id", sanitizeUsuarioInput, update);
+usuarioRouter.patch("/:id", update);
 
 usuarioRouter.delete("/:id", remove);

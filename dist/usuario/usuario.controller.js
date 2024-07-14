@@ -1,63 +1,66 @@
-import { usuarioRepository } from "./usuario.repository.js";
 import { Usuario } from "./usuario.entity.js";
-const repository = new usuarioRepository();
-export function sanitizeUsuarioInput(req, res, next) {
-    req.body.sanitizedInput = {
-        nombreDeUsuario: req.body.nombreDeUsuario,
-        nombres: req.body.nombres,
-        apellidos: req.body.apellidos,
-        fechaNacimiento: req.body.fechaNacimiento,
-        mail: req.body.mail,
-        nroTelefono: req.body.nroTelefono,
-        itinerarios: req.body.itinerarios,
-        //opiniones: req.body.opiniones
-    };
-    Object.keys(req.body.sanitizedInput).forEach((key) => {
-        if (req.body.sanitizedInput[key] === undefined) {
-            delete req.body.sanitizedInput[key];
-        }
-    });
-    next();
-}
+import { orm } from '../shared/db/orm.js';
+import { ObjectId } from "@mikro-orm/mongodb";
+const em = orm.em;
 export async function findAll(req, res) {
-    const usuarios = await repository.findAll();
-    if (!usuarios) {
-        return res.status(404).send({ data: 'No se encontraron usuarios' });
+    try {
+        const usuarios = await em.find(Usuario, {}, { populate: ['itinerarios.actividades'] });
+        res.status(200).json({ message: "Usuarios encontrados exitosamente:", data: usuarios });
     }
-    res.status(200).json({ data: usuarios });
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
 }
 export async function findOne(req, res) {
-    const usuario = await repository.findOne({ id: req.params.id });
-    if (!usuario) {
-        return res.status(404).send({ message: "usuario no encontrado" });
+    try {
+        const id = req.params.id;
+        const objectId = new ObjectId(id);
+        const usuario = await em.findOneOrFail(Usuario, { _id: objectId }, { populate: ['itinerarios.actividades'] });
+        return res
+            .status(200)
+            .json({ message: "Usuario encontrado exitosamente", data: usuario });
     }
-    res.json({ data: usuario });
+    catch (error) {
+        return res.status(500).send({ message: error.message });
+    }
 }
 export async function add(req, res) {
-    const input = req.body.sanitizedInput;
-    const usuarioInput = new Usuario(input.nombreDeUsuario, input.nombres, input.apellidos, input.fechaNacimiento, input.mail, input.nroTelefono, input.itinerarios);
-    const usuario = await repository.add(usuarioInput);
-    return res
-        .status(201)
-        .send({ message: "usuario cargado correctamente", data: usuario });
+    try {
+        const usuario = em.create(Usuario, req.body);
+        await em.flush();
+        res.status(201).json({ message: "usuario creado correctamente", data: usuario });
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
 }
 export async function update(req, res) {
-    req.body.sanitizedInput.id = req.params.id;
-    const result = (req.body.sanitizedInput);
-    const usuario = await repository.update(req.body.sanitizedInput);
-    if (!usuario) {
-        return res.status(404).send({ message: "usuario no encontrado" });
+    try {
+        const id = req.params.id;
+        const objectId = new ObjectId(id);
+        const usuario = em.findOneOrFail(Usuario, objectId);
+        em.assign(usuario, req.body);
+        await em.flush();
+        res
+            .status(200)
+            .json({ message: "usuario actualizado correctamente", data: usuario });
     }
-    res.status(200).send({
-        message: "usuario actualizado correctamente",
-        data: usuario,
-    });
+    catch (error) {
+        return res.status(500).send({ message: error.message });
+    }
 }
 export async function remove(req, res) {
-    const usuario = await repository.delete({ id: req.params.id });
-    if (!usuario) {
-        return res.status(404).send({ message: "usuario no encontrado" });
+    try {
+        const id = req.params.id;
+        const objectId = new ObjectId(id);
+        const usuario = em.getReference(Usuario, objectId);
+        await em.removeAndFlush(usuario);
+        res
+            .status(200)
+            .send({ message: "usuario eliminado correctamente" });
     }
-    return res.status(200).json({ message: "usuario eliminado correctamente", data: usuario });
+    catch (error) {
+        return res.status(500).send({ message: error.message });
+    }
 }
 //# sourceMappingURL=usuario.controller.js.map

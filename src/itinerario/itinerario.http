@@ -7,11 +7,11 @@ POST http://localhost:3000/api/itinerarios
 Content-Type: application/json
 
 {
-    "titulo": "Itinerario 2",
+    "titulo": "Itinerario 3",
     "descripcion": "Itinerario hecho para 5 dias en Disney...",
     "cantDias": 5,
     "actividades": [],
-    "usuario": "669196ff1c57a0d56baca74d"
+    "usuario": "6691f054294339169d28a7a8"
 }
 ###
 @id = {{createItinerario.response.body.data.id}}

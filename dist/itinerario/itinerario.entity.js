@@ -37,7 +37,7 @@ __decorate([
 ], Itinerario.prototype, "actividades", void 0);
 __decorate([
     ManyToOne(() => Usuario, { nullable: false }),
-    __metadata("design:type", Usuario)
+    __metadata("design:type", Object)
 ], Itinerario.prototype, "usuario", void 0);
 __decorate([
     OneToMany(() => Participante, (participante) => participante.itinerario, { cascade: [Cascade.ALL] }),

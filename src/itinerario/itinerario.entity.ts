@@ -1,6 +1,6 @@
 import { Actividad } from '../actividad/actividad.entity.js'
 import { Usuario } from '../usuario/usuario.entity.js'
-import { Property, OneToMany, Collection, Entity, ManyToOne, Cascade } from '@mikro-orm/core'
+import { Property, OneToMany, Collection, Entity, ManyToOne, Cascade, Rel } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Participante } from '../participante/participante.entity.js'
 

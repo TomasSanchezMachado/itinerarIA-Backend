@@ -54,3 +54,4 @@ Content-Type:application/json
 ### DELETE
 //FUNCIONA
 DELETE http://localhost:3000/api/usuarios/{{id}}
+

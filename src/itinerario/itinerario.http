@@ -9,7 +9,8 @@ Content-Type: application/json
 {
     "titulo": "Itinerario 2",
     "descripcion": "Itinerario hecho para 7 dias en Disney...",
-    "cantDias": 5
+    "cantDias": 5,
+    "usuario":"6692ddc25002b227799227a4"
 }
 
 ###

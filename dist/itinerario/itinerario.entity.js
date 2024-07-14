@@ -8,15 +8,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Actividad } from '../actividad/actividad.entity.js';
-import { Property, OneToMany, Collection, Entity, Cascade } from '@mikro-orm/core';
+import { Usuario } from '../usuario/usuario.entity.js';
+import { Property, OneToMany, Collection, Entity, ManyToOne, Cascade } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 import { Participante } from '../participante/participante.entity.js';
 export let Itinerario = class Itinerario extends BaseEntity {
     constructor() {
         super(...arguments);
         this.actividades = new Collection(this);
-        // @ManyToOne(() => Usuario, {nullable : false})
-        // usuario! : Usuario
         this.participantes = new Collection(this);
     }
 };
@@ -36,6 +35,10 @@ __decorate([
     OneToMany(() => Actividad, (actividad) => actividad.itinerario, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)
 ], Itinerario.prototype, "actividades", void 0);
+__decorate([
+    ManyToOne(() => Usuario, { nullable: false }),
+    __metadata("design:type", Usuario)
+], Itinerario.prototype, "usuario", void 0);
 __decorate([
     OneToMany(() => Participante, (participante) => participante.itinerario, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)

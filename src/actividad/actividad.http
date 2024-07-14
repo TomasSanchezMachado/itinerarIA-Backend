@@ -12,7 +12,7 @@ Content-Type: application/json
     "transporte": "Auto",
     "horario": "10:00",
     "lugar": "idLugar",
-    "itinerario": "idItinerario"
+    "itinerario": "6691972f1c57a0d56baca74f"
 }
 
 

@@ -20,7 +20,7 @@ export function sanitizeItinerarioInput(req, res, next) {
 }
 export async function findAll(req, res) {
     try {
-        const itinerarios = await em.find(Itinerario, {}, { populate: ['actividades', 'participantes'] });
+        const itinerarios = await em.find(Itinerario, {}, { populate: ['actividades', 'participantes', 'usuario'] });
         if (itinerarios.length === 0) {
             return res.status(200).json({ message: "No se encontraron itinerarios" });
         }

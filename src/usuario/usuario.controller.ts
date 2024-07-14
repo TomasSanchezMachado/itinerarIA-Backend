@@ -1,9 +1,37 @@
-import { Response, Request, } from "express";
+import { Response, Request, NextFunction } from "express";
 import { Usuario } from "./usuario.entity.js";
 import { orm } from '../shared/db/orm.js'
 import { ObjectId } from "@mikro-orm/mongodb";
 
 const em = orm.em
+
+export function sanitizeUsuarioInput(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  req.body.sanitizedInput = {
+    nombreDeUsuario: req.body.nombreDeUsuario,
+    nombres: req.body.nombres,
+    apellidos: req.body.apellidos,
+    fechaNacimiento: req.body.fechaNacimiento,
+    mail: req.body.mail,
+    nroTelefono: req.body.nroTelefono,
+    itinerarios: req.body.itinerarios,
+    //opiniones: req.body.opiniones
+  }
+  Object.keys(req.body.sanitizedInput).forEach((key) => {
+    if (req.body.sanitizedInput[key] === undefined) {
+      delete req.body.sanitizedInput[key];
+    }
+  })
+
+  next();
+}
+
+
+
+
 
 export async function findAll(req: Request, res: Response) {
   try {
@@ -30,7 +58,7 @@ export async function findOne(req: Request, res: Response) {
 
 export async function add(req: Request, res: Response) {
   try {
-    const usuario = em.create(Usuario, req.body);
+    const usuario = em.create(Usuario, req.body.sanitizedInput);
     await em.flush();
     res.status(201).json({ message: "usuario creado correctamente", data: usuario });
   } catch (error: any) {
@@ -43,7 +71,7 @@ export async function update(req: Request, res: Response) {
     const id = req.params.id;
     const objectId = new ObjectId(id);
     const usuario = em.findOneOrFail(Usuario, objectId);
-    em.assign(usuario, req.body);
+    em.assign(usuario, req.body.sanitizedInput);
     await em.flush();
     res
       .status(200)

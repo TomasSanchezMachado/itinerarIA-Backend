@@ -4,7 +4,7 @@ import { ObjectId } from "@mikro-orm/mongodb";
 const em = orm.em;
 export async function findAll(req, res) {
     try {
-        const usuarios = await em.find(Usuario, {}, { populate: ['itinerarios.actividades'] });
+        const usuarios = await em.find(Usuario, {}, { populate: ['itinerarios'] });
         res.status(200).json({ message: "Usuarios encontrados exitosamente:", data: usuarios });
     }
     catch (error) {
@@ -15,7 +15,7 @@ export async function findOne(req, res) {
     try {
         const id = req.params.id;
         const objectId = new ObjectId(id);
-        const usuario = await em.findOneOrFail(Usuario, { _id: objectId }, { populate: ['itinerarios.actividades'] });
+        const usuario = await em.findOneOrFail(Usuario, { _id: objectId }, { populate: ['itinerarios'] });
         return res
             .status(200)
             .json({ message: "Usuario encontrado exitosamente", data: usuario });

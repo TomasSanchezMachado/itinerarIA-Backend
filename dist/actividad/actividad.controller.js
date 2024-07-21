@@ -9,7 +9,8 @@ function sanitizeActividadInput(req, res, next) {
         transporte: req.body.transporte,
         horario: req.body.horario,
         lugar: req.body.lugar,
-        itinerario: req.body.itinerario
+        itinerario: req.body.itinerario,
+        opiniones: req.body.opiniones
     };
     //more checks here
     Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -21,7 +22,7 @@ function sanitizeActividadInput(req, res, next) {
 }
 async function findAll(req, res) {
     try {
-        const actividad = await em.find(Actividad, {}, { populate: ['lugar', 'itinerario'] });
+        const actividad = await em.find(Actividad, {}, { populate: ['lugar', 'itinerario', 'opiniones'] });
         if (actividad.length === 0) {
             return res.status(200).json({ message: 'No se encontraron actividades' });
         }

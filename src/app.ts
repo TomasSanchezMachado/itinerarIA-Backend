@@ -7,6 +7,7 @@ import { orm } from './shared/db/orm.js';
 import { RequestContext } from '@mikro-orm/core';
 import { servicioExternoRouter } from './servicioExterno/servicioExterno.routes.js';
 import { usuarioRouter } from './usuario/usuario.routes.js';
+import { opinionRouter } from './opinion/opinion.routes.js';
 
 
 
@@ -21,7 +22,8 @@ app.use('/api/lugares', lugarRouter);
 app.use('/api/itinerarios', itinerarioRouter);
 app.use('/api/serviciosExternos', servicioExternoRouter);
 app.use('/api/actividades', actividadRouter)
-app.use('/api/usuarios',usuarioRouter)
+app.use('/api/usuarios', usuarioRouter)
+app.use('/api/opiniones', opinionRouter);
 
 
 

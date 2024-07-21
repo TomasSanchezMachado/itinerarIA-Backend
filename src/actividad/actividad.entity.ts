@@ -4,6 +4,7 @@ import { Lugar } from "../lugar/lugar.entity.js";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 
 import { Itinerario } from '../itinerario/itinerario.entity.js';
+import { Opinion } from '../opinion/opinion.entity.js';
 
 @Entity()
 export class Actividad extends BaseEntity{
@@ -30,7 +31,10 @@ export class Actividad extends BaseEntity{
   lugar!: Rel<Lugar>;
 
   @ManyToOne(() => Itinerario,{nullable:false})
-  itinerario! : Rel<Itinerario>
+  itinerario!: Rel<Itinerario>
+  
+  @OneToMany(() => Opinion, opiniones => opiniones.actividad, {cascade: [Cascade.ALL]})
+  opiniones?: Opinion;
 
 }
 

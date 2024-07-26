@@ -36,6 +36,7 @@ export async function findAll(req: Request, res: Response) {
     if(itinerarios.length === 0){
       return res.status(200).json({message: "No se encontraron itinerarios"});
     }
+    res.header('Access-Control-Allow-Origin', '*');
     res.status(200).json({data: itinerarios});
   }
   catch (error:any){

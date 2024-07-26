@@ -5,6 +5,7 @@ const em = orm.em;
 export async function findAll(req, res) {
     try {
         const usuarios = await em.find(Usuario, {}, { populate: ['itinerarios.actividades'] });
+        res.header('Access-Control-Allow-Origin', '*');
         res.status(200).json({ message: "Usuarios encontrados exitosamente:", data: usuarios });
     }
     catch (error) {

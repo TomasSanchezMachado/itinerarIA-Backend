@@ -45,6 +45,11 @@ async function findOne(req, res) {
 }
 async function add(req, res) {
     try {
+        //Validacion que la actividad no exista
+        const actividadExistente = await em.findOne(Actividad, { nombre: req.body.nombre, lugar: req.body.lugar });
+        if (actividadExistente) {
+            return res.status(400).json({ message: 'Actividad ya existente' });
+        }
         const actividad = em.create(Actividad, req.body.sanitizedInput);
         console.log("Sanitized Input:", actividad);
         await em.flush();

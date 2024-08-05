@@ -56,6 +56,11 @@ catch(error:any){
 
 export async function add(req: Request, res: Response) {
   try{
+    //Validacion que el lugar no exista
+    const lugarExistente = await em.findOne(Lugar, { nombre: req.body.nombre });
+    if (lugarExistente) {
+      return res.status(400).json({message: "El lugar ya existe"});
+    }
     const lugar = em.create(Lugar,req.body.sanitizedInput);
     await em.flush();
     return res.status(201).json({message:"Lugar creado con exito",data: lugar});

@@ -2,6 +2,22 @@ import { Usuario } from "./usuario.entity.js";
 import { orm } from '../shared/db/orm.js';
 import { ObjectId } from "@mikro-orm/mongodb";
 const em = orm.em;
+export function sanitizeUsuarioInput(req, res, next) {
+    req.body.sanitizedInput = {
+        nombreDeUsuario: req.body.nombreDeUsuario,
+        nombres: req.body.nombres,
+        apellidos: req.body.apellidos,
+        fechaNacimiento: req.body.fechaNacimiento,
+        mail: req.body.mail,
+        nroTelefono: req.body.nroTelefono
+    };
+    Object.keys(req.body.sanitizedInput).forEach((key) => {
+        if (req.body.sanitizedInput[key] === undefined) {
+            delete req.body.sanitizedInput[key];
+        }
+    });
+    next();
+}
 export async function findAll(req, res) {
     try {
         const usuarios = await em.find(Usuario, {}, { populate: ['itinerarios.actividades'] });
@@ -27,6 +43,11 @@ export async function findOne(req, res) {
 }
 export async function add(req, res) {
     try {
+        //Validacion de que no exista un usuario con el mismo nombre de usuario
+        const usuarioExistente = await em.findOne(Usuario, { nombreDeUsuario: req.body.nombreDeUsuario });
+        if (usuarioExistente) {
+            return res.status(400).json({ message: "Ya existe un usuario con ese nombre de usuario" });
+        }
         const usuario = em.create(Usuario, req.body);
         await em.flush();
         res.status(201).json({ message: "usuario creado correctamente", data: usuario });

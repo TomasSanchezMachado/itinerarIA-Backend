@@ -9,7 +9,7 @@ POST http://localhost:3000/api/usuarios
 Content-Type:application/json
 
 {
-    "nombreDeUsuario": "usuario 1",
+    "nombreDeUsuario": "usuario 2",
     "nombres": "user 1",
     "apellidos": "coleman",
     "fechaNacimiento": "2004-04-24",

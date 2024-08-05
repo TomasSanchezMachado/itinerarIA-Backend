@@ -1,9 +1,33 @@
-import { Response, Request, } from "express";
+import { Response, Request, NextFunction, } from "express";
 import { Usuario } from "./usuario.entity.js";
 import { orm } from '../shared/db/orm.js'
 import { ObjectId } from "@mikro-orm/mongodb";
 
 const em = orm.em
+
+export function sanitizeUsuarioInput(
+  req: Request,
+  res: Response,
+  next: NextFunction
+
+) {
+  req.body.sanitizedInput = {
+    nombreDeUsuario: req.body.nombreDeUsuario,
+    nombres: req.body.nombres,
+    apellidos: req.body.apellidos,
+    fechaNacimiento: req.body.fechaNacimiento,
+    mail: req.body.mail,
+    nroTelefono: req.body.nroTelefono
+  }
+
+  Object.keys(req.body.sanitizedInput).forEach((key) => {
+    if (req.body.sanitizedInput[key] === undefined) {
+      delete req.body.sanitizedInput[key];
+    }
+  })
+
+  next();
+}
 
 export async function findAll(req: Request, res: Response) {
   try {
@@ -31,6 +55,11 @@ export async function findOne(req: Request, res: Response) {
 
 export async function add(req: Request, res: Response) {
   try {
+    //Validacion de que no exista un usuario con el mismo nombre de usuario
+    const usuarioExistente = await em.findOne(Usuario, { nombreDeUsuario: req.body.nombreDeUsuario });
+    if (usuarioExistente) {
+      return res.status(400).json({ message: "Ya existe un usuario con ese nombre de usuario" });
+    }
     const usuario = em.create(Usuario, req.body);
     await em.flush();
     res.status(201).json({ message: "usuario creado correctamente", data: usuario });

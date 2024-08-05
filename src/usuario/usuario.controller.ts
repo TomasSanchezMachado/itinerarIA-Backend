@@ -17,7 +17,9 @@ export function sanitizeUsuarioInput(
     apellidos: req.body.apellidos,
     fechaNacimiento: req.body.fechaNacimiento,
     mail: req.body.mail,
-    nroTelefono: req.body.nroTelefono
+    nroTelefono: req.body.nroTelefono,
+    itinerarios: req.body.itinerarios,
+    opiniones: req.body.opiniones
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {

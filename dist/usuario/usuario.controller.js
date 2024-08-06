@@ -1,15 +1,19 @@
 import { Usuario } from "./usuario.entity.js";
 import { orm } from '../shared/db/orm.js';
 import { ObjectId } from "@mikro-orm/mongodb";
+import bcrypt from 'bcrypt';
 const em = orm.em;
 export function sanitizeUsuarioInput(req, res, next) {
     req.body.sanitizedInput = {
         nombreDeUsuario: req.body.nombreDeUsuario,
+        password: req.body.password,
         nombres: req.body.nombres,
         apellidos: req.body.apellidos,
         fechaNacimiento: req.body.fechaNacimiento,
         mail: req.body.mail,
-        nroTelefono: req.body.nroTelefono
+        nroTelefono: req.body.nroTelefono,
+        itinerarios: req.body.itinerarios,
+        opiniones: req.body.opiniones
     };
     Object.keys(req.body.sanitizedInput).forEach((key) => {
         if (req.body.sanitizedInput[key] === undefined) {
@@ -48,7 +52,10 @@ export async function add(req, res) {
         if (usuarioExistente) {
             return res.status(400).json({ message: "Ya existe un usuario con ese nombre de usuario" });
         }
-        const usuario = em.create(Usuario, req.body);
+        // hash de la contraseña
+        req.body.sanitizedInput.password = bcrypt.hashSync(req.body.sanitizedInput.password, 10);
+        console.log(req.body.sanitizedInput.password);
+        const usuario = em.create(Usuario, req.body.sanitizedInput);
         await em.flush();
         res.status(201).json({ message: "usuario creado correctamente", data: usuario });
     }

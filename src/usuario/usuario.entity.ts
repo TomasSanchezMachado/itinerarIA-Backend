@@ -9,6 +9,9 @@ export class Usuario extends BaseEntity {
     nombreDeUsuario!: string
 
     @Property({ nullable: false })
+    password!:string
+
+    @Property({ nullable: false })
     nombres!: string
 
     @Property({ nullable: false })

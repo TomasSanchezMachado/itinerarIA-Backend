@@ -2,6 +2,8 @@ import { Response, Request, NextFunction, } from "express";
 import { Usuario } from "./usuario.entity.js";
 import { orm } from '../shared/db/orm.js'
 import { ObjectId } from "@mikro-orm/mongodb";
+import bcrypt from 'bcrypt'
+
 
 const em = orm.em
 
@@ -9,10 +11,10 @@ export function sanitizeUsuarioInput(
   req: Request,
   res: Response,
   next: NextFunction
-
 ) {
   req.body.sanitizedInput = {
     nombreDeUsuario: req.body.nombreDeUsuario,
+    password : req.body.password,
     nombres: req.body.nombres,
     apellidos: req.body.apellidos,
     fechaNacimiento: req.body.fechaNacimiento,
@@ -62,7 +64,10 @@ export async function add(req: Request, res: Response) {
     if (usuarioExistente) {
       return res.status(400).json({ message: "Ya existe un usuario con ese nombre de usuario" });
     }
-    const usuario = em.create(Usuario, req.body);
+    // hash de la contraseña
+    req.body.sanitizedInput.password = bcrypt.hashSync(req.body.sanitizedInput.password, 10);
+    console.log(req.body.sanitizedInput.password);
+    const usuario = em.create(Usuario, req.body.sanitizedInput);
     await em.flush();
     res.status(201).json({ message: "usuario creado correctamente", data: usuario });
   } catch (error: any) {

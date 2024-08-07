@@ -2,7 +2,8 @@ import { Usuario } from "./usuario.entity.js";
 import { orm } from '../shared/db/orm.js';
 import { ObjectId } from "@mikro-orm/mongodb";
 import bcrypt from 'bcrypt';
-import { z } from 'zod';
+import { usuarioSchema } from "../schemas/usuario.js";
+import z from 'zod';
 const em = orm.em;
 export function sanitizeUsuarioInput(req, res, next) {
     req.body.sanitizedInput = {
@@ -89,6 +90,11 @@ export async function add(req, res) {
                 message: "El apellido es inválido",
                 error: resultApellido.error.format()
             });
+        }
+        //Valido los datos con zod
+        const result = usuarioSchema.safeParse(req.body.sanitizedInput);
+        if (!result.success) {
+            return res.status(400).json({ message: "Datos inválidos", error: result.error.format() });
         }
         //Validacion de que no exista un usuario con el mismo nombre de usuario
         const usuarioExistente = await em.findOne(Usuario, { nombreDeUsuario: req.body.nombreDeUsuario });

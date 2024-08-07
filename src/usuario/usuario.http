@@ -8,12 +8,12 @@ POST http://localhost:3000/api/usuarios
 Content-Type:application/json
 
 {
-    "nombreDeUsuario": "nicolasEscobar523",
+    "nombreDeUsuario": "nicoaslasEscobar523",
     "password": "123456Nicolas",
     "nombres": "nicolas roberto",
     "apellidos": "coleman levrone",
-    "fechaNacimiento": "2004-04-24",
-    "mail": "ronnie666@gmail.com",
+    "fechaNacimiento": "2024-04-24",
+    "mail": "ronnie666@mdasdasdasd@ail.com",
     "nroTelefono": "3415456985"
 }
 

@@ -3,6 +3,7 @@ import { Usuario } from "./usuario.entity.js";
 import { orm } from '../shared/db/orm.js'
 import { ObjectId } from "@mikro-orm/mongodb";
 import bcrypt from 'bcrypt'
+import { z } from 'zod'
 
 
 const em = orm.em
@@ -14,7 +15,7 @@ export function sanitizeUsuarioInput(
 ) {
   req.body.sanitizedInput = {
     nombreDeUsuario: req.body.nombreDeUsuario,
-    password : req.body.password,
+    password: req.body.password,
     nombres: req.body.nombres,
     apellidos: req.body.apellidos,
     fechaNacimiento: req.body.fechaNacimiento,
@@ -59,6 +60,56 @@ export async function findOne(req: Request, res: Response) {
 
 export async function add(req: Request, res: Response) {
   try {
+    //Validacion de que los datos sean válidos
+    const nombreUsuarioRegex = /^[a-zA-Z0-9_-]{3,30}$/;
+    const contraseñaRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
+    const mailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    const nombreRegex = /^[A-Za-z ]+$/; //Se usa + porque no se indica una longitud máxima
+    const apellidoRegex = /^[A-Za-z ]+$/;
+
+    const nombreUsuarioSchema = z.string().regex(nombreUsuarioRegex, { message: "El nombre de usuario debe tener entre 3 y 30 caracteres y solo puede contener letras, números, guiones bajos y guiones medios" });
+    const contraseñaSchema = z.string().regex(contraseñaRegex, { message: "La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un número" });
+    const mailSchema = z.string().regex(mailRegex, { message: "El email debe tener un formato válido" });
+    const nombresSchema = z.string().regex(nombreRegex, { message: "El nombre debe contener solo letras" });
+    const apellidoSchema = z.string().regex(apellidoRegex, { message: "El apellido debe contener solo letras" });
+
+    let resultNombreUsuario = nombreUsuarioSchema.safeParse(req.body.nombreDeUsuario);
+    let resultContraseña = contraseñaSchema.safeParse(req.body.password);
+    let resultMail = mailSchema.safeParse(req.body.mail);
+    let resultNombres = nombresSchema.safeParse(req.body.nombres);
+    let resultApellido = apellidoSchema.safeParse(req.body.apellidos);
+
+    if (!resultNombreUsuario.success) {
+      return res.status(400).json({
+        message: "Nombre de usuario inválido", error: resultNombreUsuario.error.format()
+      });
+    }
+
+    if (!resultContraseña.success) {
+      return res.status(400).json({
+        message: "Contraseña inválida", error: resultContraseña.error.format()
+      });
+    }
+
+    if (!resultMail.success) {
+      return res.status(400).json({
+        message: "El mail es invalido", error: resultMail.error.format()
+      });
+    }
+
+    if (!resultNombres.success) {
+      return res.status(400).json({
+        message: "El nombre es inválido", error: resultNombres.error.format()
+      })
+    }
+
+    if (!resultApellido.success) {
+      return res.status(400).json({
+        message: "El apellido es inválido",
+        error: resultApellido.error.format()
+      })
+    }
+
     //Validacion de que no exista un usuario con el mismo nombre de usuario
     const usuarioExistente = await em.findOne(Usuario, { nombreDeUsuario: req.body.nombreDeUsuario });
     if (usuarioExistente) {

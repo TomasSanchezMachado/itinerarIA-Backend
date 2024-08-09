@@ -1,0 +1,27 @@
+GET http://localhost:3000/api/preferencia
+###
+# @name createPreferencia
+
+
+POST http://localhost:3000/api/preferencia
+Content-Type: application/json
+
+{
+    "nombre": "nombre de la preferencia",
+    "descripcion": "descripcion de la preferencia"
+}
+###
+@id = {{createPreferencia.response.body.data.id}}
+GET http://localhost:3000/api/preferencia/{{id}}
+
+###
+PUT http://localhost:3000/api/preferencia/{{id}}
+Content-Type: application/json
+
+{
+    "nombre" : "nombre de la preferencia cambiado",
+}
+
+
+###
+DELETE http://localhost:3000/api/preferencia/{{id}}

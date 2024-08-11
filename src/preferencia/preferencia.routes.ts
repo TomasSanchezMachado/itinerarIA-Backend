@@ -1,12 +1,12 @@
 import { Router } from "express";
 import {
-  sanitizeParticipanteInput,
+  sanitizePreferenciaInput,
   findAll,
   findOne,
   add,
   update,
   remove,
-} from "./preferencia.controller.s";
+} from "./preferencia.controller.js";
 
 export const preferenciaRouter = Router();
 
@@ -14,8 +14,8 @@ preferenciaRouter.get("/", findAll);
 
 preferenciaRouter.get("/:id", findOne);
 
-preferenciaRouter.post("/", sanitizeParticipanteInput, add);
+preferenciaRouter.post("/", sanitizePreferenciaInput, add);
 
-preferenciaRouter.put("/:id", sanitizeParticipanteInput, update);
+preferenciaRouter.put("/:id", sanitizePreferenciaInput, update);
 
 preferenciaRouter.delete("/:id", remove);

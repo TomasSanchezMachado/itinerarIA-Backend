@@ -19,7 +19,7 @@ PUT http://localhost:3000/api/preferencia/{{id}}
 Content-Type: application/json
 
 {
-    "nombre" : "nombre de la preferencia cambiado",
+    "nombre" : "nombre de la preferencia ",
 }
 
 

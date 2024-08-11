@@ -6,7 +6,7 @@ import { Participante } from "../participante/participante.entity.js";
 @Entity()
 export class Preferencia extends BaseEntity{
 
-    @Property({ nullable: false })
+  @Property({ nullable: false })
   nombre!: string;
 
   @Property({ nullable: false })

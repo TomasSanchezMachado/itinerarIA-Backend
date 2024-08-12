@@ -6,7 +6,7 @@ import {
   update,
   remove,
   sanitizeUsuarioInput,
-} from "./usuario.controller.js";
+} from "../usuario/usuario.controller.js";
 
 export const usuarioRouter = Router();
 

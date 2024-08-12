@@ -2,7 +2,7 @@
 import z from 'zod';
 
 export const usuarioSchema = z.object({
-    nombreDeUsuario: z.string({
+    username: z.string({
         invalid_type_error: 'El nombre de usuario debe ser un string',
         required_error: 'El nombre de usuario es requerido',
     }).regex(/^[a-zA-Z0-9_-]{3,30}$/,'El nombre de usuario debe tener entre 3 y 30 caracteres y solo puede contener letras, números, guiones bajos y guiones medios'),

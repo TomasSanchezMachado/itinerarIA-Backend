@@ -1,4 +1,4 @@
-FROM node:18
+FROM node:21.7.1
 
 RUN mkdir -p /home/app
 

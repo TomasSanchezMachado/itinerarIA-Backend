@@ -6,7 +6,7 @@ import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 @Entity()
 export class Usuario extends BaseEntity {
     @Property({ nullable: false, unique: true })
-    nombreDeUsuario!: string
+    username!: string
 
     @Property({ nullable: false })
     password!:string

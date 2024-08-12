@@ -1,0 +1,14 @@
+### Register
+
+POST http://localhost:3000/api/auth/register
+Content-Type: 'application/json'
+
+{
+    "username": "usuario",
+    "password": "password",
+    "nombres": "Ronnie Alberto",
+    "apellidos": "Coleman",
+    "fechaNacimiento": "1964-05-13",
+    "mail" : "ronniecol@gmail.com",
+    "nroTelefono": "3415698475"
+}

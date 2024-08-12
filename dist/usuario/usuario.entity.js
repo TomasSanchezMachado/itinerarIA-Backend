@@ -21,7 +21,7 @@ export let Usuario = class Usuario extends BaseEntity {
 __decorate([
     Property({ nullable: false, unique: true }),
     __metadata("design:type", String)
-], Usuario.prototype, "nombreDeUsuario", void 0);
+], Usuario.prototype, "username", void 0);
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)

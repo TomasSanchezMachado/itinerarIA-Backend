@@ -5,7 +5,7 @@ import { ObjectId } from "@mikro-orm/mongodb";
 import bcrypt from 'bcrypt'
 import { usuarioSchema } from "../schemas/usuario.js";
 import z from 'zod';
-
+import { createAccessToken } from "../libs/jwt.js";
 
 const em = orm.em
 
@@ -58,8 +58,36 @@ export async function findOne(req: Request, res: Response) {
   }
 }
 
+export async function findOneByUserName(req: Request, res: Response) {
+  try {
+    const nombreDeUsuario = req.params.nombreDeUsuario;
+    const usuario = await em.findOneOrFail(Usuario, { nombreDeUsuario: nombreDeUsuario });
 
-export async function add(req: Request, res: Response) {
+    const isMatch = await bcrypt.compare(req.body.password, usuario.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Contraseña incorrecta" });
+    }
+    const token = await createAccessToken({
+      id: usuario._id,
+      username: usuario.nombreDeUsuario,
+    });
+    return res.json(usuario);
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+}
+
+export async function findOneByPassword(req: Request, res: Response) {
+  try {
+    const password = req.params.password;
+    const usuario = await em.findOneOrFail(Usuario, { password: password });
+    return res.json(usuario);
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+}
+
+async function add(req: Request, res: Response) {
   try {
     //Validacion de que los datos sean válidos
     const nombreUsuarioRegex = /^[a-zA-Z0-9_-]{3,30}$/;
@@ -126,11 +154,17 @@ export async function add(req: Request, res: Response) {
     console.log(req.body.sanitizedInput.password);
     const usuario = em.create(Usuario, req.body.sanitizedInput);
     await em.flush();
+
+    //Creo el token
+    const token = await createAccessToken({ id: usuario._id });
+
     res.status(201).json({ message: "usuario creado correctamente", data: usuario });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }
 }
+
+export default add;
 
 export async function update(req: Request, res: Response) {
   try {

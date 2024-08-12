@@ -30,7 +30,8 @@ interface RegisterRequest extends Request {
 }
 
 export async function register(req : RegisterRequest,res : Response){
-    try{
+    try {
+        console.log(req.body)
     const result = usuarioSchema.safeParse(req.body.sanitizedInput);
     if (!result.success) {
       return res.status(400).json({ message: "Datos inválidos", error: result.error.format() });

@@ -1,14 +1,27 @@
-### Register
-
+###REGISTER
 POST http://localhost:3000/api/auth/register
-Content-Type: 'application/json'
+Content-Type:application/json
 
 {
-    "username": "usuario",
-    "password": "password",
+    "username": "ronnieColeman",
+    "password": "1234Ronnie",
     "nombres": "Ronnie Alberto",
     "apellidos": "Coleman",
     "fechaNacimiento": "1964-05-13",
-    "mail" : "ronniecol@gmail.com",
-    "nroTelefono": "3415698475"
+    "mail": "ronnie666@gmail.com",
+    "nroTelefono": "3415456985"
 }
+
+###LOGIN
+POST http://localhost:3000/api/auth/login
+Content-Type:application/json
+
+{
+    "username": "ronnieColeman22",
+    "password": "1234Ronnie"
+}
+
+###LOGOUT
+POST http://localhost:3000/api/auth/logout
+###PROFILE
+POST http://localhost:3000/api/auth/profile

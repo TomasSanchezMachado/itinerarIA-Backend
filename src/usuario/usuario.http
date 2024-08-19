@@ -46,10 +46,11 @@ PATCH http://localhost:3000/api/usuarios/{{id}}
 Content-Type:application/json
 
 {
-    "nombreDeUsuario" : "nikitox4",
+    "nombreDeUsuario" : "nikitox55",
     "mail":"escobar.nicolas.isiutnfrro@gmail.com"
 
 }
+
 
 ### DELETE
 //FUNCIONA

@@ -59,6 +59,17 @@ export async function add(req, res) {
         return res.status(500).json({ message: error.message });
     }
 }
+export async function findOneByPassword(req, res) {
+    try {
+        const password = req.params.password;
+        const usuario = await em.findOneOrFail(Usuario, { password: password });
+        return res.json(usuario);
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+export default add;
 export async function update(req, res) {
     try {
         const id = req.params.id;

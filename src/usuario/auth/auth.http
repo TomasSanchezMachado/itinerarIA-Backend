@@ -3,12 +3,12 @@ POST http://localhost:3000/api/auth/register
 Content-Type:application/json
 
 {
-    "username": "ronnieColeman",
-    "password": "1234Ronnie",
-    "nombres": "Ronnie Alberto",
-    "apellidos": "Coleman",
-    "fechaNacimiento": "1964-05-13",
-    "mail": "ronnie666@gmail.com",
+    "username": "nikitox55",
+    "password": "Nico1234",
+    "nombres": "nicolas roberto",
+    "apellidos": "escobar",
+    "fechaNacimiento": "2004-04-24",
+    "mail": "nico555@gmail.com",
     "nroTelefono": "3415456985"
 }
 
@@ -17,8 +17,8 @@ POST http://localhost:3000/api/auth/login
 Content-Type:application/json
 
 {
-    "username": "ronnieColeman22",
-    "password": "1234Ronnie"
+    "username": "nikitox55",
+    "password": "Nico1234"
 }
 
 ###LOGOUT

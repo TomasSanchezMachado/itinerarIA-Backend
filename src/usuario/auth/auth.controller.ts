@@ -3,7 +3,7 @@ import { Usuario } from "../usuario.entity.js";
 import { orm } from "../../shared/db/orm.js";
 import bcrypt from "bcrypt";
 import createAccessToken from "../../libs/jwt.js";
-import { usuarioSchema } from "../../schemas/usuario.js";
+import { registerSchema } from "../../schemas/auth.js";
 import jwt from "jsonwebtoken";
 import { add } from "../usuario.controller.js";
 
@@ -33,7 +33,7 @@ interface RegisterRequest extends Request {
 
 export async function register(req: RegisterRequest, res: Response) {
   try {
-    const result = usuarioSchema.safeParse(req.body.sanitizedInput);
+    const result = registerSchema.safeParse(req.body.sanitizedInput);
     if (!result.success) {
       return res
         .status(400)
@@ -65,7 +65,7 @@ export async function login(req: Request, res: Response) {
       res.cookie("token", token);
       return res
         .status(200)
-        .json({ message: "Usuario logueado", data: {id:usuario._id,username:usuario.username} });
+        .json({ message: "Usuario logueado", data: { id: usuario._id, username: usuario.username } });
     } else {
       return res.status(400).json({ message: "Contraseña incorrecta" });
     }

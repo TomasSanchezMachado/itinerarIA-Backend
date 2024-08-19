@@ -87,18 +87,6 @@ export async function findOneByPassword(req: Request, res: Response) {
     return res.status(500).json({ message: error.message });
   }
 }
-
-async function add(req: Request, res: Response) {
-  try {
-
-    const usuario = em.create(Usuario, req.body.sanitizedInput);
-    await em.flush();
-    res.status(201).json({ message: "usuario creado correctamente", data: usuario });
-  } catch (error: any) {
-    return res.status(500).json({ message: error.message });
-  }
-}
-
 export default add;
 
 export async function update(req: Request, res: Response) {

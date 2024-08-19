@@ -2,7 +2,7 @@ import { Usuario } from "../usuario.entity.js";
 import { orm } from "../../shared/db/orm.js";
 import bcrypt from "bcrypt";
 import createAccessToken from "../../libs/jwt.js";
-import { usuarioSchema } from "../../schemas/usuario.js";
+import { registerSchema } from "../../schemas/auth.js";
 import jwt from "jsonwebtoken";
 import { add } from "../usuario.controller.js";
 const em = orm.em;
@@ -24,7 +24,7 @@ export function validateToken(req, res, next) {
 }
 export async function register(req, res) {
     try {
-        const result = usuarioSchema.safeParse(req.body.sanitizedInput);
+        const result = registerSchema.safeParse(req.body.sanitizedInput);
         if (!result.success) {
             return res
                 .status(400)

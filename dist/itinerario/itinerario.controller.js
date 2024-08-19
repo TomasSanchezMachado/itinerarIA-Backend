@@ -1,6 +1,6 @@
 import { Itinerario } from "./itinerario.entity.js";
 import { orm } from "../shared/db/orm.js";
-import { ObjectId } from "@mikro-orm/mongodb";
+import { itinerarioSchema } from "../schemas/itinerario.js";
 const em = orm.em;
 export function sanitizeItinerarioInput(req, res, next) {
     req.body.sanitizedInput = {
@@ -44,6 +44,16 @@ export async function findOne(req, res) {
 }
 export async function add(req, res) {
     try {
+        //Valido el body
+        const result = itinerarioSchema.safeParse(req.body.sanitizedInput);
+        if (!result.success) {
+            return res.status(400).json({ message: "Datos invalidos", error: result.error.format() });
+        }
+        //Valido que el usuario ingresado exista
+        const usuario = await em.findOne('Usuario', { id: req.body.sanitizedInput.usuario });
+        if (!usuario) {
+            return res.status(400).json({ message: "El usuario ingresado no existe" });
+        }
         const itinerario = em.create(Itinerario, req.body.sanitizedInput);
         await em.flush();
         return res.status(201).json({ message: "Itinerario creado con exito", data: itinerario });
@@ -55,7 +65,18 @@ export async function add(req, res) {
 export async function update(req, res) {
     try {
         const id = req.params.id;
-        const objectId = new ObjectId(id);
+        //Valido los datos
+        const result = itinerarioSchema.safeParse(req.body.sanitizedInput);
+        if (!result.success) {
+            return res.status(400).json({ message: "Datos invalidos", error: result.error.format() });
+        }
+        //Valido que, en caso de quererse cambiar el usuario,exista
+        if (req.body.sanitizedInput.usuario) {
+            const usuario = await em.findOne('Usuario', { id: req.body.sanitizedInput.usuario });
+            if (!usuario) {
+                return res.status(400).json({ message: "El usuario ingresado no existe" });
+            }
+        }
         const itinerario = em.getReference(Itinerario, id);
         em.assign(itinerario, req.body.sanitizedInput);
         await em.flush();
@@ -68,7 +89,6 @@ export async function update(req, res) {
 export async function remove(req, res) {
     try {
         const id = req.params.id;
-        const objectId = new ObjectId(id);
         const itinerario = em.getReference(Itinerario, id);
         await em.removeAndFlush(itinerario);
         res.status(200).send({ message: 'Itinerario borrado', data: itinerario });

@@ -2,6 +2,8 @@ import { Response,Request,NextFunction } from "express";
 import { Itinerario } from "./itinerario.entity.js";
 import { orm } from "../shared/db/orm.js";
 import { ObjectId } from "@mikro-orm/mongodb";
+import { itinerarioSchema } from "../schemas/itinerario.js";
+import { error } from "console";
 
 const em = orm.em;
 
@@ -59,6 +61,16 @@ catch(error:any){
 
 export async function add(req: Request, res: Response) {
   try{
+    //Valido el body
+    const result = itinerarioSchema.safeParse(req.body.sanitizedInput);
+    if(!result.success){
+      return res.status(400).json({message: "Datos invalidos",error: result.error.format()});
+    }
+    //Valido que el usuario ingresado exista
+    const usuario = await em.findOne('Usuario', {id: req.body.sanitizedInput.usuario});
+    if(!usuario){
+      return res.status(400).json({message: "El usuario ingresado no existe"});
+    }
     const itinerario = em.create(Itinerario,req.body.sanitizedInput);
     await em.flush();
     return res.status(201).json({message:"Itinerario creado con exito",data: itinerario});
@@ -73,7 +85,18 @@ export async function add(req: Request, res: Response) {
 export async function update(req: Request, res: Response) {
   try{
     const id = req.params.id;
-    const objectId = new ObjectId(id);
+    //Valido los datos
+    const result = itinerarioSchema.safeParse(req.body.sanitizedInput);
+    if(!result.success){
+      return res.status(400).json({message: "Datos invalidos",error: result.error.format()});
+    }
+    //Valido que, en caso de quererse cambiar el usuario,exista
+    if(req.body.sanitizedInput.usuario){
+      const usuario = await em.findOne('Usuario', {id: req.body.sanitizedInput.usuario});
+      if(!usuario){
+        return res.status(400).json({message: "El usuario ingresado no existe"});
+      }
+    }
     const itinerario = em.getReference(Itinerario, id);
     em.assign(itinerario, req.body.sanitizedInput);
     await em.flush();
@@ -88,7 +111,6 @@ export async function update(req: Request, res: Response) {
 export async function remove(req: Request, res: Response) {
   try{
     const id = req.params.id
-    const objectId = new ObjectId(id)
     const itinerario = em.getReference(Itinerario, id)
     await em.removeAndFlush(itinerario)
     res.status(200).send({ message: 'Itinerario borrado',data:itinerario })

@@ -9,7 +9,7 @@ Content-Type: application/json
 {
   
   "tipoServicio": "Alquiler de autos",
-  "nombre": "Hertz",
+  "nombre": 3,
   "descripcion": "Alquiler de autos en todo el mundooo",
   "direccion": "Av. 9 de Julio 1234",
   "horario": "Lunes a Viernes de 10 a 12hs",

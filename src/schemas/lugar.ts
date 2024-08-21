@@ -1,8 +1,6 @@
 import { number, z } from 'zod';
 import { Lugar } from '../lugar/lugar.entity.js';
 
-type CoordenadasGeograficas = {latitud: number, longitud: number};
-
 const UbicacionValidator = z.object({
   latitud: z.number(
     {

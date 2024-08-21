@@ -18,13 +18,13 @@ export class ServicioExterno extends BaseEntity{
   direccion!: string;
 
   @Property({nullable: false})
-  horario!: string;
+  horario?: string;
 
   @Property({nullable: false})
-  sitioWeb!: string;
+  sitioWeb?: string;
 
   @Property({nullable: false})
-  telContacto!: string;
+  telContacto?: string;
 
   @ManyToOne(() => Lugar, { nullable: false })
   lugar!: Rel<Lugar>;

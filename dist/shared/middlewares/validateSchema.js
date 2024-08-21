@@ -1,6 +1,6 @@
 export const validateSchema = (schema) => (req, res, next) => {
     try {
-        schema.parse(req.body);
+        schema.parse(req.body.sanitizedInput);
         next();
     }
     catch (error) {

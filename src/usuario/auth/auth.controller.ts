@@ -33,12 +33,6 @@ interface RegisterRequest extends Request {
 
 export async function register(req: RegisterRequest, res: Response) {
   try {
-    const result = registerSchema.safeParse(req.body.sanitizedInput);
-    if (!result.success) {
-      return res
-        .status(400)
-        .json({ message: "Datos inválidos", error: result.error.format() });
-    }
     const { username, password } = req.body.sanitizedInput;
     //Valido que el username no exista
     const usuario = await em.findOne(Usuario, { username: username });

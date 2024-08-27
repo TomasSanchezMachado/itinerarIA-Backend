@@ -10,9 +10,12 @@ import { usuarioRouter } from './usuario/usuario.routes.js';
 import { opinionRouter } from './opinion/opinion.routes.js';
 import { authRouter } from "./usuario/auth/auth.routes.js";
 import cookieParser from 'cookie-parser';
+import { corsMiddleware } from './shared/middlewares/corsMiddleware.js';
 const app = express();
+app.use(corsMiddleware());
 app.use(express.json());
 app.use(cookieParser());
+app.disable('x-powered-by');
 app.use((req, res, next) => {
     RequestContext.create(orm.em, next);
 });

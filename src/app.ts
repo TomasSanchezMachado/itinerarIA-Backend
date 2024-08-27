@@ -16,9 +16,9 @@ import { corsMiddleware } from './shared/middlewares/corsMiddleware.js';
 
 const app = express();
 
+app.use(corsMiddleware());
 app.use(express.json());
 app.use(cookieParser());
-app.use(corsMiddleware());
 
 app.disable('x-powered-by')
 

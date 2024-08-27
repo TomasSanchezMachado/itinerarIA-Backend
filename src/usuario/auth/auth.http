@@ -3,11 +3,11 @@ POST http://localhost:3000/api/auth/register
 Content-Type:application/json
 
 {
-    "username": "nikitox55",
+    "username": "nikitox44",
     "password": "Nico1234",
     "nombres": "nicolas roberto",
     "apellidos": "escobar",
-    "fechaNacimiento": "2004-04-24",
+    "fechaNacimiento": "2004/04/24",
     "mail": "nico555@gmail.com",
     "nroTelefono": "3415456985"
 }

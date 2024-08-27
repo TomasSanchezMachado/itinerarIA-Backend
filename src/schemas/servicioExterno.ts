@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { ServicioExterno } from '../servicioExterno/servicioExterno.entity.js';
 
 const horarioRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 const horarioSchema = z.string().regex(horarioRegex, 'Formato de horario inválido');

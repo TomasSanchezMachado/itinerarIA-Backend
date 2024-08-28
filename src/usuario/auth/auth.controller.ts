@@ -97,3 +97,20 @@ export async function profile(req: Request, res: Response) {
       .json({ message: "No se pudo obtener el perfil del usuario", data: err });
   }
 }
+export async function verify(req:Request,res:Response){
+  const { token } = req.cookies;
+  if (!token) return res.send(false);
+
+  jwt.verify(token, 'secret', async (err: any, user: any) => {
+    if (err) return res.sendStatus(401);
+
+    const userFound = await em.findOne(Usuario,{ username: user.username });
+    if (!userFound) return res.sendStatus(401);
+
+    return res.json({
+      id: userFound._id,
+      username: userFound.username,
+      mail: userFound.mail,
+    });
+  });
+};

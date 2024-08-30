@@ -10,13 +10,9 @@ import { usuarioRouter } from './usuario/usuario.routes.js';
 import { opinionRouter } from './opinion/opinion.routes.js';
 import { authRouter } from "./usuario/auth/auth.routes.js";
 import cookieParser from 'cookie-parser';
-import cors from 'cors';
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+import { corsMiddleware } from './shared/middlewares/corsMiddleware.js';
 const app = express();
-app.use(cors({
-    credentials: true,
-    origin: FRONTEND_URL,
-}));
+app.use(corsMiddleware());
 app.use(express.json());
 app.use(cookieParser());
 app.disable('x-powered-by');

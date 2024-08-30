@@ -35,7 +35,7 @@ export async function register(req: RegisterRequest, res: Response) {
   try {
     const { username, password } = req.body.sanitizedInput;
     //Valido que el username no exista
-    const usuario = await em.findOne(Usuario, { username: username });
+    const usuario = await em.findOne(Usuario, { username });
     if (usuario) {
       return res.status(400).json({ message: "Usuario ya existe" });
     }

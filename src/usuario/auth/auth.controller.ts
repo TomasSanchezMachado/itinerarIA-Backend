@@ -39,8 +39,9 @@ export async function register(req: RegisterRequest, res: Response) {
     if (usuario) {
       return res.status(400).json({ message: "Usuario ya existe" });
     }
-
+    
     const passwordHash = await bcrypt.hash(password, 10);
+
     req.body.sanitizedInput.password = passwordHash;
     add(req, res);
   } catch (err) {

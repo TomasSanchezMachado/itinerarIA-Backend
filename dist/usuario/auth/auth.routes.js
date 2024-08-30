@@ -8,5 +8,5 @@ authRouter.post('/login', sanitizeUsuarioInput, validateSchema(loginSchema), log
 authRouter.post('/register', sanitizeUsuarioInput, validateSchema(registerSchema), register);
 authRouter.post('/logout', logout);
 authRouter.post('/profile', validateToken, profile);
-authRouter.post('/verify', verify);
+authRouter.get('/verify', verify);
 //# sourceMappingURL=auth.routes.js.map

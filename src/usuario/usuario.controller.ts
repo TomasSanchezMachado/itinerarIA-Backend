@@ -68,11 +68,11 @@ export async function findOne(req: Request, res: Response) {
 
 export async function add(req: Request, res: Response) {
   try {
-    const usuario = em.create(Usuario, req.body.sanitizedInput);
-    await em.flush();
-    const token = await createAccessToken({ username: usuario.username })
+    const usuarioCreado = em.create(Usuario, req.body.sanitizedInput);
+    const token = await createAccessToken({ username: usuarioCreado.username })
     res.cookie('token', token);
-    res.status(201).json({ message: "Usuario creado correctamente", usuario: { id: usuario._id, username: usuario.username } });
+    await em.flush();
+    res.status(201).json({ message: "Usuario creado correctamente"});
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }

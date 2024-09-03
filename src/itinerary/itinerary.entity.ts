@@ -5,22 +5,22 @@ import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Participante } from '../participante/participante.entity.js'
 
 @Entity()
-export class Itinerario extends BaseEntity{
+export class Itinerary extends BaseEntity{
         @Property({nullable:false}) 
-        titulo!: string
+        title!: string
         
         @Property({nullable:false}) 
-        descripcion!: string
+        description!: string
         
         @Property({nullable:false}) 
-        cantDias!: number
+        duration!: number
     
-        @OneToMany(() => Actividad, (actividad) => actividad.itinerario, {cascade: [Cascade.ALL]}) 
-        actividades = new Collection<Actividad>(this)
+        @OneToMany(() => Actividad, (activity) => activity.itinerario, {cascade: [Cascade.ALL]}) 
+        activities = new Collection<Actividad>(this)
 
         @ManyToOne(() => Usuario, {nullable : false})
-        usuario! : Usuario
+        user! : Usuario
 
-        @OneToMany(() => Participante, (participante) => participante.itinerario, {cascade: [Cascade.ALL]})
-        participantes = new Collection<Participante>(this)
+        @OneToMany(() => Participante, (participant) => participant.itinerario, {cascade: [Cascade.ALL]})
+        participants = new Collection<Participante>(this)
 }

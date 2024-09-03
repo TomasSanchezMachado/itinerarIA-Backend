@@ -1,4 +1,4 @@
-import { Itinerario } from '../itinerario/itinerario.entity.js'
+import { Itinerary } from '../itinerary/itinerary.entity.js'
 import { Property, Entity, ManyToOne, Rel } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 
@@ -10,6 +10,6 @@ export class Participante extends BaseEntity{
         @Property({nullable:false})
         discapacidad! : boolean
 
-        @ManyToOne(() => Itinerario,{nullable: false})
-        itinerario! : Rel<Itinerario>
+        @ManyToOne(() => Itinerary,{nullable: false})
+        itinerario! : Rel<Itinerary>
 }

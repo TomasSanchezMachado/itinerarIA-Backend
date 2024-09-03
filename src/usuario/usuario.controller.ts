@@ -38,7 +38,7 @@ export async function findAll(req: Request, res: Response) {
     const usuarios = await em.find(
       Usuario,
       {},
-      { populate: ["itinerarios.actividades"] }
+      { populate: ["itineraries.activities"] }
     );
     res.header("Access-Control-Allow-Origin", "*");
     res
@@ -56,7 +56,7 @@ export async function findOne(req: Request, res: Response) {
     const usuario = await em.findOneOrFail(
       Usuario,
       { _id: objectId },
-      { populate: ["itinerarios.actividades"] }
+      { populate: ["itineraries.activities"] }
     );
     return res
       .status(200)

@@ -9,7 +9,7 @@ Content-Type: application/json
     "titulo": "Itinerario 1",
     "descripcion": "Itinerario hecho para 7 dias en Disney...",
     "cantDias": 5,
-    "usuario":"66ba9c9d9f6358c300a50e50"
+    "usuario":"66d12591f495b56ba354a1ef"
 }
 
 ###
@@ -23,8 +23,15 @@ Content-Type: application/json
 {
     "titulo": "Itinerario 2",
     "descripcion": "Itinerario hecho para 7 dias en Disney...",
-    "cantDias": 13
+    "cantDias": 5
 
+}
+###
+PATCH http://localhost:3000/api/itinerarios/{{id}}
+Content-Type: application/json
+
+{
+    "cantDias": 7
 }
 
 

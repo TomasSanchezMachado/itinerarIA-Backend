@@ -1,4 +1,4 @@
-import { Itinerario } from '../itinerario/itinerario.entity.js'
+import { Itinerary } from '../itinerary/itinerary.entity.js'
 import { Opinion } from '../opinion/opinion.entity.js'
 import { Entity, OneToMany, Property, Cascade, Collection, } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
@@ -26,8 +26,8 @@ export class Usuario extends BaseEntity {
     @Property({ nullable: false })
     nroTelefono!: string
 
-    @OneToMany(() => Itinerario, itinerario => itinerario.usuario, { cascade: [Cascade.ALL] })
-    itinerarios = new Collection<Itinerario>(this);
+    @OneToMany(() => Itinerary, itinerary => itinerary.user, { cascade: [Cascade.ALL] })
+    itineraries = new Collection<Itinerary>(this);
 
     @OneToMany(() => Opinion, (opinion) => opinion.usuario, { cascade: [Cascade.ALL] })
     opiniones = new Collection<Opinion>(this)

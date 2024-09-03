@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import express from 'express';
 import { lugarRouter } from './lugar/lugar.routes.js';
-import { itinerarioRouter } from './itinerario/itinerario.routes.js';
+import { itineraryRouter } from './itinerary/itinerary.routes.js';
 import { actividadRouter } from './actividad/actividad.routes.js';
 import { orm } from './shared/db/orm.js';
 import { RequestContext } from '@mikro-orm/core';
@@ -20,7 +20,7 @@ app.use((req, res, next) => {
     RequestContext.create(orm.em, next);
 });
 app.use('/api/lugares', lugarRouter);
-app.use('/api/itinerarios', itinerarioRouter);
+app.use('/api/itinerarios', itineraryRouter);
 app.use('/api/serviciosExternos', servicioExternoRouter);
 app.use('/api/actividades', actividadRouter);
 app.use('/api/usuarios', usuarioRouter);

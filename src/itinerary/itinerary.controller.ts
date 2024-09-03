@@ -1,25 +1,23 @@
 import { Response,Request,NextFunction } from "express";
-import { Itinerario } from "./itinerario.entity.js";
+import { Itinerary } from "./itinerary.entity.js";
 import { orm } from "../shared/db/orm.js";
-import { ObjectId } from "@mikro-orm/mongodb";
-import { itinerarioSchema } from "../schemas/itinerario.js";
-import { error } from "console";
+import { Usuario } from "../usuario/usuario.entity.js";
 
 const em = orm.em;
 
 
-export function sanitizeItinerarioInput(
+export function sanitizeItineraryInput(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   req.body.sanitizedInput = {
-    titulo: req.body.titulo,
-    descripcion: req.body.descripcion,
-    cantDias: req.body.cantDias,
-    actividades: req.body.actividades,
-    participantes: req.body.participantes,
-    usuario: req.body.usuario
+    title: req.body.title,
+    description: req.body.description,
+    duration: req.body.duration,
+    activities: req.body.activities,
+    participants: req.body.participants,
+    user: req.body.user
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -34,12 +32,12 @@ export function sanitizeItinerarioInput(
 
 export async function findAll(req: Request, res: Response) {
   try{
-    const itinerarios = await em.find(Itinerario,{},{populate: ['actividades','participantes','usuario']})
-    if(itinerarios.length === 0){
+    const itineraries = await em.find(Itinerary,{},{populate: ['activities','participants','user']})
+    if(itineraries.length === 0){
       return res.status(200).json({message: "No se encontraron itinerarios"});
     }
     res.header('Access-Control-Allow-Origin', '*');
-    res.status(200).json({data: itinerarios});
+    res.status(200).json({data: itineraries});
   }
   catch (error:any){
     return res.status(500).json({message: error.message});
@@ -50,8 +48,8 @@ export async function findOne(req: Request, res: Response) {
 try{
   const id = req.params.id;
   //const objectId = new ObjectId(id);
-  const itinerario = await em.findOneOrFail(Itinerario, { id } );
-  return res.status(200).json({data: itinerario});
+  const itinerary = await em.findOneOrFail(Itinerary, { id } );
+  return res.status(200).json({data: itinerary});
 }
 catch(error:any){
   return res.status(500).json({message: error.message});
@@ -61,19 +59,14 @@ catch(error:any){
 
 export async function add(req: Request, res: Response) {
   try{
-    //Valido el body
-    const result = itinerarioSchema.safeParse(req.body.sanitizedInput);
-    if(!result.success){
-      return res.status(400).json({message: "Datos invalidos",error: result.error.format()});
-    }
     //Valido que el usuario ingresado exista
-    const usuario = await em.findOne('Usuario', {id: req.body.sanitizedInput.usuario});
-    if(!usuario){
+    const user = await em.findOne(Usuario, {id: req.body.sanitizedInput.user});
+    if(!user){
       return res.status(400).json({message: "El usuario ingresado no existe"});
     }
-    const itinerario = em.create(Itinerario,req.body.sanitizedInput);
+    const itinerary = em.create(Itinerary,req.body.sanitizedInput);
     await em.flush();
-    return res.status(201).json({message:"Itinerario creado con exito",data: itinerario});
+    return res.status(201).json({message:"Itinerario creado con exito",data: itinerary});
   
   } 
   catch(error:any){
@@ -85,11 +78,6 @@ export async function add(req: Request, res: Response) {
 export async function update(req: Request, res: Response) {
   try{
     const id = req.params.id;
-    //Valido los datos
-    const result = itinerarioSchema.safeParse(req.body.sanitizedInput);
-    if(!result.success){
-      return res.status(400).json({message: "Datos invalidos",error: result.error.format()});
-    }
     //Valido que, en caso de quererse cambiar el usuario,exista
     if(req.body.sanitizedInput.usuario){
       const usuario = await em.findOne('Usuario', {id: req.body.sanitizedInput.usuario});
@@ -97,10 +85,10 @@ export async function update(req: Request, res: Response) {
         return res.status(400).json({message: "El usuario ingresado no existe"});
       }
     }
-    const itinerario = em.getReference(Itinerario, id);
-    em.assign(itinerario, req.body.sanitizedInput);
+    const itinerary = em.getReference(Itinerary, id);
+    em.assign(itinerary, req.body.sanitizedInput);
     await em.flush();
-    return res.status(200).json({message: "Itinerario actualizado con exito", data: itinerario});
+    return res.status(200).json({message: "Itinerario actualizado con exito", data: itinerary});
   }
   catch(error:any){
     return res.status(500).json({message: error.message});  
@@ -111,9 +99,9 @@ export async function update(req: Request, res: Response) {
 export async function remove(req: Request, res: Response) {
   try{
     const id = req.params.id
-    const itinerario = em.getReference(Itinerario, id)
-    await em.removeAndFlush(itinerario)
-    res.status(200).send({ message: 'Itinerario borrado',data:itinerario })
+    const itinerary = em.getReference(Itinerary, id)
+    await em.removeAndFlush(itinerary)
+    res.status(200).send({ message: 'Itinerario borrado',data:itinerary })
   } 
   catch (error: any) {
     res.status(500).json({ message: error.message })

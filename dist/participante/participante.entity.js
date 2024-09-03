@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Itinerario } from '../itinerario/itinerario.entity.js';
+import { Itinerary } from '../itinerary/itinerary.entity.js';
 import { Property, Entity, ManyToOne } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 export let Participante = class Participante extends BaseEntity {
@@ -21,7 +21,7 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Participante.prototype, "discapacidad", void 0);
 __decorate([
-    ManyToOne(() => Itinerario, { nullable: false }),
+    ManyToOne(() => Itinerary, { nullable: false }),
     __metadata("design:type", Object)
 ], Participante.prototype, "itinerario", void 0);
 Participante = __decorate([

@@ -12,38 +12,38 @@ import { Usuario } from '../usuario/usuario.entity.js';
 import { Property, OneToMany, Collection, Entity, ManyToOne, Cascade } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 import { Participante } from '../participante/participante.entity.js';
-export let Itinerario = class Itinerario extends BaseEntity {
+export let Itinerary = class Itinerary extends BaseEntity {
     constructor() {
         super(...arguments);
-        this.actividades = new Collection(this);
-        this.participantes = new Collection(this);
+        this.activities = new Collection(this);
+        this.participants = new Collection(this);
     }
 };
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)
-], Itinerario.prototype, "titulo", void 0);
+], Itinerary.prototype, "title", void 0);
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)
-], Itinerario.prototype, "descripcion", void 0);
+], Itinerary.prototype, "description", void 0);
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", Number)
-], Itinerario.prototype, "cantDias", void 0);
+], Itinerary.prototype, "duration", void 0);
 __decorate([
-    OneToMany(() => Actividad, (actividad) => actividad.itinerario, { cascade: [Cascade.ALL] }),
+    OneToMany(() => Actividad, (activity) => activity.itinerario, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)
-], Itinerario.prototype, "actividades", void 0);
+], Itinerary.prototype, "activities", void 0);
 __decorate([
     ManyToOne(() => Usuario, { nullable: false }),
     __metadata("design:type", Usuario)
-], Itinerario.prototype, "usuario", void 0);
+], Itinerary.prototype, "user", void 0);
 __decorate([
-    OneToMany(() => Participante, (participante) => participante.itinerario, { cascade: [Cascade.ALL] }),
+    OneToMany(() => Participante, (participant) => participant.itinerario, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)
-], Itinerario.prototype, "participantes", void 0);
-Itinerario = __decorate([
+], Itinerary.prototype, "participants", void 0);
+Itinerary = __decorate([
     Entity()
-], Itinerario);
-//# sourceMappingURL=itinerario.entity.js.map
+], Itinerary);
+//# sourceMappingURL=itinerary.entity.js.map

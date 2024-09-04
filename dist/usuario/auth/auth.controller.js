@@ -39,16 +39,17 @@ export async function register(req, res) {
 }
 export async function login(req, res) {
     try {
-        const usuario = await em.findOne(Usuario, { username: req.body.username });
+        const usuario = await em.findOne(Usuario, { username: req.body.username }, { populate: ["itineraries.activities"] });
         if (!usuario) {
             return res.status(400).json({ message: "Usuario no encontrado" });
         }
         if (bcrypt.compareSync(req.body.password, usuario.password)) {
             const token = await createAccessToken({ username: usuario.username });
             res.cookie("token", token);
+            console.log(usuario);
             return res
                 .status(200)
-                .json({ message: "Usuario logueado", data: { id: usuario._id, username: usuario.username } });
+                .json({ message: "Usuario logueado", data: { usuario } });
         }
         else {
             return res.status(400).json({ message: "Contraseña incorrecta" });
@@ -94,14 +95,12 @@ export async function verify(req, res) {
     jwt.verify(token, 'secret', async (err, user) => {
         if (err)
             return res.sendStatus(401);
-        const userFound = await em.findOne(Usuario, { username: user.username });
+        const userFound = await em.findOne(Usuario, { username: user.username }, { populate: ["itineraries.activities"] });
         if (!userFound)
             return res.sendStatus(401);
-        return res.json({
-            id: userFound._id,
-            username: userFound.username,
-            mail: userFound.mail,
-        });
+        return res
+            .status(200)
+            .json({ message: "Usuario logueado", data: { usuario: userFound } });
     });
 }
 ;

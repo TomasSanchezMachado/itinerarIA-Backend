@@ -6,10 +6,10 @@ POST http://localhost:3000/api/itinerarios
 Content-Type: application/json
 
 {
-    "titulo": "Itinerario 1",
-    "descripcion": "Itinerario hecho para 7 dias en Disney...",
-    "cantDias": 5,
-    "usuario":"66d12591f495b56ba354a1ef"
+    "title": "Itinerario 1",
+    "description": "Itinerario hecho para 7 dias en Disney...",
+    "duration": 5,
+    "user":"66d12591f495b56ba354a1ef"
 }
 
 ###

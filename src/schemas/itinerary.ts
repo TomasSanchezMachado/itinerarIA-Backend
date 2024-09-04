@@ -12,9 +12,8 @@ export const itinerarySchema = z.object({
         required_error: 'La descripción es requerida'
     }).min(10,'La descripcion debe tener como minimo 10 caracteres').max(100),
     duration: z.number({
-        invalid_type_error: 'La duración debe ser un número',
         required_error: 'La duración es requerida'
-    }).min(1,'El itinerario debe durar como minimo 1 día').max(30, 'El itinerario no puede durar más de 14 días'),
+    }).min(1,'El itinerario debe durar como minimo 1 día').max(30, 'El itinerario no puede durar más de 30 días')
 });
 
 export const patchItinerarySchema = z.object({

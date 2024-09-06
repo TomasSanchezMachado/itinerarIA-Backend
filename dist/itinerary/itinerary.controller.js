@@ -81,7 +81,7 @@ export async function remove(req, res) {
         const id = req.params.id;
         const itinerary = em.getReference(Itinerary, id);
         await em.removeAndFlush(itinerary);
-        res.status(200).send({ message: 'Itinerario borrado', data: itinerary });
+        res.status(204).send({ message: 'Itinerario borrado', data: itinerary });
     }
     catch (error) {
         res.status(500).json({ message: error.message });

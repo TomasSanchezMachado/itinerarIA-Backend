@@ -53,7 +53,7 @@ export async function add(req, res) {
         const token = await createAccessToken({ username: usuarioCreado.username });
         res.cookie('token', token);
         await em.flush();
-        res.status(201).json({ message: "Usuario creado correctamente" });
+        res.status(201).json({ message: "Usuario creado correctamente", data: usuarioCreado });
     }
     catch (error) {
         return res.status(500).json({ message: error.message });

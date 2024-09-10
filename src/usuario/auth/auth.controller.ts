@@ -37,7 +37,7 @@ export async function register(req: RegisterRequest, res: Response) {
     //Valido que el username no exista
     const usuario = await em.findOne(Usuario, { username });
     if (usuario) {
-      return res.status(400).json({ message: "Usuario ya existe" });
+      return res.status(400).json({ message: ["Usuario ya existe"] });
     }
     
     const passwordHash = await bcrypt.hash(password, 10);
@@ -54,7 +54,7 @@ export async function login(req: Request, res: Response) {
     const usuario = await em.findOne(Usuario, { username: req.body.username },
       { populate: ["itineraries.activities"] });
     if (!usuario) {
-      return res.status(400).json({ message: "Usuario no encontrado" });
+      return res.status(400).json({ message: ["Usuario no encontrado"] });//Deberia decir datos incorrectos nomas
     }
     if (bcrypt.compareSync(req.body.password, usuario.password)) {
       const token = await createAccessToken({ username: usuario.username });
@@ -64,7 +64,7 @@ export async function login(req: Request, res: Response) {
         .status(200)
         .json({ message: "Usuario logueado", data: { usuario } });
     } else {
-      return res.status(400).json({ message: "Contraseña incorrecta" });
+      return res.status(400).json({ message: ["Contraseña incorrecta"] });//Deberia decir datos incorrectos nomas
     }
   } catch (err) {
     res

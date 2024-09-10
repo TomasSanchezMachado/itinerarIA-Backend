@@ -17,8 +17,8 @@ POST http://localhost:3000/api/auth/login
 Content-Type:application/json
 
 {
-    "username": "nikitox44",
-    "password": "Nico1234"
+    "username": "facu",
+    "password": "1234Facu"
 }
 
 ###LOGOUT

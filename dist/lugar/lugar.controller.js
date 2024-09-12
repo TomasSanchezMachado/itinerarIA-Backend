@@ -4,7 +4,8 @@ const em = orm.em;
 export function sanitizeLugarInput(req, res, next) {
     req.body.sanitizedInput = {
         nombre: req.body.nombre,
-        ubicacion: req.body.ubicacion,
+        ubicacion_latitud: req.body.ubicacion_latitud,
+        ubicacion_longitud: req.body.ubicacion_longitud,
         codigoPostal: req.body.codigoPostal,
         provincia: req.body.provincia,
         pais: req.body.pais
@@ -62,7 +63,8 @@ export async function update(req, res) {
         return res.status(200).json({ message: "Lugar actualizado con exito", data: lugar });
     }
     catch (error) {
-        return res.status(500).json({ message: error.message });
+        console.error("Error actualizando el lugar:", error);
+        res.status(500).json({ message: "Error actualizando el lugar", error: error.message });
     }
 }
 export async function remove(req, res) {

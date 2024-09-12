@@ -24,8 +24,12 @@ __decorate([
 ], Lugar.prototype, "nombre", void 0);
 __decorate([
     Property(),
-    __metadata("design:type", Object)
-], Lugar.prototype, "ubicacion", void 0);
+    __metadata("design:type", Number)
+], Lugar.prototype, "ubicacion_latitud", void 0);
+__decorate([
+    Property(),
+    __metadata("design:type", Number)
+], Lugar.prototype, "ubicacion_longitud", void 0);
 __decorate([
     Property(),
     __metadata("design:type", String)

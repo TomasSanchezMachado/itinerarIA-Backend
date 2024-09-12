@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 });
 app.use('/api/lugares', lugarRouter);
 app.use('/api/itinerarios', itineraryRouter);
-app.use('/api/serviciosExternos', servicioExternoRouter);
+app.use('/api/externalServices', servicioExternoRouter);
 app.use('/api/actividades', actividadRouter);
 app.use('/api/usuarios', usuarioRouter);
 app.use('/api/opiniones', opinionRouter);

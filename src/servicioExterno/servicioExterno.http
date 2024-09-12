@@ -1,20 +1,20 @@
-### GET all serviciosExternos
-GET http://localhost:3000/api/serviciosExternos
+### GET all externalServices
+GET http://localhost:3000/api/externalServices
 
 ### POST servicioExterno
 # @name createServicioExterno
-POST http://localhost:3000/api/serviciosExternos
+POST http://localhost:3000/api/externalServices
 Content-Type: application/json
 
 {
   
   "tipoServicio": "Alquiler de autos",
-  "nombre": 3,
+  "nombre": "Hertz",
   "descripcion": "Alquiler de autos en todo el mundooo",
   "direccion": "Av. 9 de Julio 1234",
   "horario": "Lunes a Viernes de 10 a 12hs",
-  "sitioWeb": "www.hertz.com",
-  "telContacto": "123456789",
+  "sitioWeb": "https://www.hertz.com",
+  "telContacto": "3413531061",
   "lugar": "667f733b2e2c094f338971ad"
 
 }
@@ -24,12 +24,12 @@ Content-Type: application/json
 
 ### GET servicioExterno by ID
 
-GET http://localhost:3000/api/serviciosExternos/{{id}}
+GET http://localhost:3000/api/externalServices/{{id}}
 
 
 ### Update servicioExterno by ID
 # @name updateServicioExterno
-PUT http://localhost:3000/api/serviciosExternos/{{id}}
+PUT http://localhost:3000/api/externalServices/{{id}}
 Content-Type: application/json
 
 {
@@ -43,4 +43,4 @@ Content-Type: application/json
 }
 
 ### DELETE servicioExterno by ID
-DELETE http://localhost:3000/api/serviciosExternos/{{id}}
+DELETE http://localhost:3000/api/externalServices/{{id}}

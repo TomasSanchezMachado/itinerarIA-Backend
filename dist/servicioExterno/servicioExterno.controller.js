@@ -44,9 +44,13 @@ async function findOne(req, res) {
 }
 async function add(req, res) {
     try {
-        const servicioExterno = em.create(ServicioExterno, req.body.sanitizedInput);
+        const servicioExterno = await em.findOneOrFail(ServicioExterno, { nombre: req.body.nombre });
+        if (servicioExterno) {
+            return res.status(409).json({ message: 'El servicio externo ya existe' });
+        }
+        const NewServicioExterno = em.create(ServicioExterno, req.body.sanitizedInput);
         await em.flush();
-        res.status(201).json({ message: 'Servicio externo creado', data: servicioExterno });
+        res.status(201).json({ message: 'Servicio externo creado', data: NewServicioExterno });
     }
     catch (error) {
         res.status(500).json({ message: error.message });

@@ -26,7 +26,8 @@ export class ServicioExterno extends BaseEntity{
   @Property({nullable: false})
   telContacto?: string;
 
-  @ManyToOne(() => Lugar, { nullable: false })
-  lugar!: Rel<Lugar>;
+  //CAMBIAR CUANDO ESTE EL CRUD DE LUGAR
+  @ManyToOne(() => Lugar, { nullable: true })
+  lugar?: Rel<Lugar>;
 
 }

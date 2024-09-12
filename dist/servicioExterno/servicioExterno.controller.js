@@ -35,7 +35,7 @@ async function findAll(req, res) {
 async function findOne(req, res) {
     try {
         const id = req.params.id;
-        const servicioExterno = await em.findOneOrFail(ServicioExterno, { id });
+        const servicioExterno = await em.findOneOrFail(ServicioExterno, { id }, { populate: ['lugar'] });
         res.status(200).json({ message: 'Servicio externo encontrado', data: servicioExterno });
     }
     catch (error) {
@@ -44,7 +44,11 @@ async function findOne(req, res) {
 }
 async function add(req, res) {
     try {
-        const servicioExterno = await em.findOneOrFail(ServicioExterno, { nombre: req.body.nombre });
+        const lugar = await em.findOne('Lugar', { id: req.body.lugar });
+        if (!lugar) {
+            return res.status(404).json({ message: 'No se encontró el lugar con ese id' });
+        }
+        const servicioExterno = await em.findOne(ServicioExterno, { nombre: req.body.nombre });
         if (servicioExterno) {
             return res.status(409).json({ message: 'El servicio externo ya existe' });
         }

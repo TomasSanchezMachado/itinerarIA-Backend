@@ -27,7 +27,7 @@ export class ServicioExterno extends BaseEntity{
   telContacto?: string;
 
   //CAMBIAR CUANDO ESTE EL CRUD DE LUGAR
-  @ManyToOne(() => Lugar, { nullable: true })
-  lugar?: Rel<Lugar>;
+  @ManyToOne(() => Lugar, { nullable: false })
+  lugar!: Rel<Lugar>;
 
 }

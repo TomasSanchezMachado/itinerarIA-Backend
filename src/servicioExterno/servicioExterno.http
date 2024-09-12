@@ -8,14 +8,14 @@ Content-Type: application/json
 
 {
   
-  "tipoServicio": "Alquiler de autos",
-  "nombre": "Hertz",
-  "descripcion": "Alquiler de autos en todo el mundooo",
+  "tipoServicio": "Alquiler de bicis",
+  "nombre": "MiBiciTuBici",
+  "descripcion": "Alquiler de bicis en todo el mundooo",
   "direccion": "Av. 9 de Julio 1234",
   "horario": "Lunes a Viernes de 10 a 12hs",
-  "sitioWeb": "https://www.hertz.com",
+  "sitioWeb": "www.mibicitubici.com",
   "telContacto": "3413531061",
-  "lugar": "667f733b2e2c094f338971ad"
+  "lugar": "667ebe879b52c622400b1065"
 
 }
 

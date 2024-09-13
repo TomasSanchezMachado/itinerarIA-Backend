@@ -8,7 +8,7 @@ export class ServicioExterno extends BaseEntity{
   @Property({nullable: false})
   tipoServicio!: string;
 
-  @Property({nullable: false})
+  @Property({nullable: false, unique: true})
   nombre!: string;
  
   @Property({nullable: false})

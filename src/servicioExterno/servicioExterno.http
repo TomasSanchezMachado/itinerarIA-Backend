@@ -20,16 +20,17 @@ Content-Type: application/json
 }
 
 ### ID
+# 
 @id = {{createServicioExterno.response.body.data.id}}
 
 ### GET servicioExterno by ID
 
-GET http://localhost:3000/api/externalServices/{{id}}
+GET http://localhost:3000/api/externalServices/66e37760aaf541a2d11e0da5
 
 
 ### Update servicioExterno by ID
 # @name updateServicioExterno
-PUT http://localhost:3000/api/externalServices/{{id}}
+PUT http://localhost:3000/api/externalServices/66e37760aaf541a2d11e0da5
 Content-Type: application/json
 
 {
@@ -39,7 +40,9 @@ Content-Type: application/json
   "direccion": "Av. 9 de Julio 1234",
   "horario": "Lunes a Viernes de 10 a 12hs",
   "sitioWeb": "www.hertz.com",
-  "telContacto": "12345678910"
+  "telContacto": "1234567891",
+  "lugar": "66e37bd0aaf541a2d11e0da6"
+
 }
 
 ### DELETE servicioExterno by ID

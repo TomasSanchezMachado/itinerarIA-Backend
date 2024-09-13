@@ -64,7 +64,7 @@ async function update(req, res) {
     try {
         const id = req.params.id;
         const servicioExterno = em.getReference(ServicioExterno, id);
-        em.assign(servicioExterno, req.body);
+        em.assign(servicioExterno, req.body.sanitizedInput);
         await em.flush();
         res.status(200).json({ message: 'Servicio externo actualizado', data: servicioExterno });
     }

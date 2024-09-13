@@ -33,11 +33,11 @@ __decorate([
     __metadata("design:type", String)
 ], ServicioExterno.prototype, "horario", void 0);
 __decorate([
-    Property({ nullable: false }),
+    Property({ nullable: true }),
     __metadata("design:type", String)
 ], ServicioExterno.prototype, "sitioWeb", void 0);
 __decorate([
-    Property({ nullable: false }),
+    Property({ nullable: true }),
     __metadata("design:type", String)
 ], ServicioExterno.prototype, "telContacto", void 0);
 __decorate([

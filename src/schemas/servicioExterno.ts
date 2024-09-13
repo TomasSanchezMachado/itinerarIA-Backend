@@ -3,10 +3,10 @@ import { z } from 'zod';
 const horarioRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 const horarioSchema = z.string().regex(horarioRegex, 'Formato de horario inválido');
 
-const sitioWebRegex = /^www\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
+const sitioWebRegex = /^www\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/ || "";
 const sitioWebSchema = z.string().regex(sitioWebRegex, 'Formato de sitio web inválido');
 
-const telRegex = /^\d{10}$/;
+const telRegex = /^\d{10}$/ || "";
 const telSchema = z.string().regex(telRegex, 'Formato de teléfono inválido');
 
 export const postSchema = z.object({

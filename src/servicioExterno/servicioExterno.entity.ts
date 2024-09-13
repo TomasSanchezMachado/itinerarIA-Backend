@@ -20,10 +20,10 @@ export class ServicioExterno extends BaseEntity{
   @Property({nullable: false})
   horario?: string;
 
-  @Property({nullable: false})
+  @Property({nullable: true})
   sitioWeb?: string;
 
-  @Property({nullable: false})
+  @Property({nullable: true})
   telContacto?: string;
 
   @ManyToOne(() => Lugar, { nullable: false })

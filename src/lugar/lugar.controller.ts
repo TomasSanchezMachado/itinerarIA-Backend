@@ -31,50 +31,50 @@ export function sanitizeLugarInput(
 
 
 export async function findAll(req: Request, res: Response) {
-  try{
-    const lugares = await em.find(Lugar,{}, { populate: ['serviciosExternos'] })
-    if(lugares.length === 0){
-      return res.status(200).json({message: "No se encontraron lugares"});
+  try {
+    const lugares = await em.find(Lugar, {}, { populate: ['serviciosExternos'] })
+    if (lugares.length === 0) {
+      return res.status(200).json({ message: "No se encontraron lugares", data: lugares });
     }
-    res.status(200).json({data: lugares});
+    res.status(200).json({ data: lugares });
   }
-  catch (error:any){
-    return res.status(500).json({message: error.message});
+  catch (error: any) {
+    return res.status(500).json({ message: error.message });
   }
-  
+
 }
 export async function findOne(req: Request, res: Response) {
-try{
-  const id = req.params.id;
-  const lugar = await em.findOneOrFail(Lugar, { id });
-  return res.status(200).json({data: lugar});
-}
-catch(error:any){
-  return res.status(500).json({message: error.message});
-}
+  try {
+    const id = req.params.id;
+    const lugar = await em.findOneOrFail(Lugar, { id });
+    return res.status(200).json({ data: lugar });
+  }
+  catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
 }
 
 
 export async function add(req: Request, res: Response) {
-  try{
+  try {
     //Validacion que el lugar no exista
     const lugarExistente = await em.findOne(Lugar, { nombre: req.body.nombre });
     if (lugarExistente) {
-      return res.status(400).json({message: "El lugar ya existe"});
+      return res.status(400).json({ message: "El lugar ya existe" });
     }
-    const lugar = em.create(Lugar,req.body.sanitizedInput);
+    const lugar = em.create(Lugar, req.body.sanitizedInput);
     await em.flush();
-    return res.status(201).json({message:"Lugar creado con exito",data: lugar});
-  
-  } 
-  catch(error:any){
-    return res.status(500).json({message: error.message});
+    return res.status(201).json({ message: "Lugar creado con exito", data: lugar });
+
+  }
+  catch (error: any) {
+    return res.status(500).json({ message: error.message });
 
   }
 }
 
 export async function update(req: Request, res: Response) {
-  try{
+  try {
     const id = req.params.id;
     const lugar = em.getReference(Lugar, id);
     em.assign(lugar, req.body.sanitizedInput);
@@ -88,14 +88,14 @@ export async function update(req: Request, res: Response) {
 
 
 export async function remove(req: Request, res: Response) {
-  try{
+  try {
     const id = req.params.id
-        const lugar = em.getReference(Lugar, id)
-        await em.removeAndFlush(lugar)
-        res.status(200).send({ message: 'Lugar borrado',data:lugar })
-      } 
-      catch (error: any) {
-        res.status(500).json({ message: error.message })
-      }
-    }
+    const lugar = em.getReference(Lugar, id)
+    await em.removeAndFlush(lugar)
+    res.status(200).send({ message: 'Lugar borrado', data: lugar })
+  }
+  catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
 

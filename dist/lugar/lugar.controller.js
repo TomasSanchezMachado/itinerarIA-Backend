@@ -21,7 +21,7 @@ export async function findAll(req, res) {
     try {
         const lugares = await em.find(Lugar, {}, { populate: ['serviciosExternos'] });
         if (lugares.length === 0) {
-            return res.status(200).json({ message: "No se encontraron lugares" });
+            return res.status(200).json({ message: "No se encontraron lugares", data: lugares });
         }
         res.status(200).json({ data: lugares });
     }

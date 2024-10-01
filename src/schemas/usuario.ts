@@ -8,7 +8,6 @@ export const putSchema = z.object({
     }).regex(/^[a-zA-Z0-9_-]{3,30}$/, 'El nombre de usuario debe tener entre 3 y 30 caracteres y solo puede contener letras, números, guiones bajos y guiones medios'),
     password: z.string({
         invalid_type_error: 'La contraseña debe ser un string',
-        required_error: 'La contraseña es requerida',
     }).regex(/^(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/, 'La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un número'),
     nombres: z.string({
         invalid_type_error: 'El nombre debe ser un string',

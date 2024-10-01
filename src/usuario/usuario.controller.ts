@@ -3,6 +3,7 @@ import { Usuario } from "./usuario.entity.js";
 import { orm } from "../shared/db/orm.js";
 import { ObjectId } from "@mikro-orm/mongodb";
 import createAccessToken from "../libs/jwt.js";
+import jwt from "jsonwebtoken";
 
 
 const em = orm.em;
@@ -87,22 +88,27 @@ export async function findOneByPassword(req: Request, res: Response) {
     return res.status(500).json({ message: error.message });
   }
 }
-export default add;
+
 
 export async function update(req: Request, res: Response) {
   try {
-    const id = req.params.id;
-    const objectId = new ObjectId(id);
-    const usuario = em.findOneOrFail(Usuario, objectId);
-    em.assign(usuario, req.body);
+    console.log(req.body.sanitizedInput, req.params.id);
+    const usuario = em.getReference(Usuario, req.params.id);
+    const nuevoUsuario = em.assign(usuario, req.body.sanitizedInput);
+    console.log(nuevoUsuario);
     await em.flush();
+    jwt.sign({ username: nuevoUsuario.username }, 'secret', {
+      expiresIn: "7d",
+    });
     res
       .status(200)
       .json({ message: "usuario actualizado correctamente", data: usuario });
   } catch (error: any) {
+    console.log("Error actualizando el usuario:", error);
     return res.status(500).send({ message: error.message });
   }
 }
+
 
 export async function remove(req: Request, res: Response) {
   try {

@@ -95,9 +95,10 @@ export async function verify(req, res) {
     jwt.verify(token, 'secret', async (err, user) => {
         if (err)
             return res.sendStatus(401);
+        console.log('llegue');
         const userFound = await em.findOne(Usuario, { username: user.username }, { populate: ["itineraries.activities"] });
         if (!userFound)
-            return res.sendStatus(401);
+            return res.status(401).json({ message: "Usuario no encontrado" });
         return res
             .status(200)
             .json({ message: "Usuario logueado", data: { usuario: userFound } });

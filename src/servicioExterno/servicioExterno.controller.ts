@@ -76,13 +76,24 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const servicioExterno = em.getReference(ServicioExterno, id);
-    em.assign(servicioExterno, {...req.body.sanitizedInput, lugar: req.body.sanitizedInput.lugar.id});
+    const { nombre } = req.body.sanitizedInput;
+
+    // Verifica si ya existe un servicio con el mismo nombre, excluyendo el que se está actualizando
+    const existingService = await em.findOne(ServicioExterno, { nombre });
+    
+    if (existingService && existingService.id !== id) {
+      return res.status(409).json({ message: ['El nombre del servicio externo ya existe'] });
+    }
+
+    // Procede con la actualización si no hay conflicto
+    const servicioExterno = await em.getReference(ServicioExterno, id);
+    em.assign(servicioExterno, { ...req.body.sanitizedInput, lugar: req.body.sanitizedInput.lugar.id });
     await em.flush();
+
     res.status(200).json({ message: 'Servicio externo actualizado', data: servicioExterno });
   }
   catch (error: any) {
-    res.status(500).json({message: error.message});
+    res.status(500).json({ message: error.message });
   }
 }
 

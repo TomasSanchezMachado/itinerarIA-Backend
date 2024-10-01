@@ -8,7 +8,7 @@ POST http://localhost:3000/api/usuarios
 Content-Type:application/json
 
 {
-    "nombreDeUsuario": "nicoaslasEscobar523",
+    "username": "nicoaslasEscobar523",
     "password": "123456Nicolas",
     "nombres": "nicolas roberto",
     "apellidos": "coleman levrone",
@@ -22,7 +22,7 @@ Content-Type:application/json
 
 ### GET ONE
 //FUNCIONA
-GET http://localhost:3000/api/usuarios/{{id}}
+GET http://localhost:3000/api/usuarios/669d9a3503f535edd5c7aabe
 
 
 ###
@@ -31,7 +31,7 @@ PUT http://localhost:3000/api/usuarios/{{id}}
 Content-Type:application/json
 
 {
-    "nombreDeUsuario": "usuario 2",
+    "username": "usuario2",
     "nombres": "mike",
     "apellidos": "mentzer",
     "fechaNacimiento": "2004-04-24",
@@ -41,13 +41,13 @@ Content-Type:application/json
 
 
 ###
-PATCH http://localhost:3000/api/usuarios/{{id}}
+PATCH http://localhost:3000/api/usuarios/669d9a3503f535edd5c7aabe
 //FUNCIONA
 Content-Type:application/json
 
 {
-    "nombreDeUsuario" : "nikitox55",
-    "mail":"escobar.nicolas.isiutnfrro@gmail.com"
+    "username" : "nikitox555",
+    "mail":"escobarisiutnfrro@gmail.com"
 
 }
 

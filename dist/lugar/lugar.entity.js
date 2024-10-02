@@ -11,11 +11,13 @@ import { Cascade, Collection, Entity, OneToMany, Property } from "@mikro-orm/cor
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { ServicioExterno } from "../servicioExterno/servicioExterno.entity.js";
 import { Actividad } from "../actividad/actividad.entity.js";
+import { Itinerary } from "../itinerary/itinerary.entity.js";
 export let Lugar = class Lugar extends BaseEntity {
     constructor() {
         super(...arguments);
         this.serviciosExternos = new Collection(this);
         this.actividades = new Collection(this);
+        this.itinerarios = new Collection(this);
     }
 };
 __decorate([
@@ -50,6 +52,10 @@ __decorate([
     OneToMany(() => Actividad, (actividad) => actividad.lugar, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)
 ], Lugar.prototype, "actividades", void 0);
+__decorate([
+    OneToMany(() => Itinerary, (itinerario) => itinerario.place, { cascade: [Cascade.ALL] }),
+    __metadata("design:type", Object)
+], Lugar.prototype, "itinerarios", void 0);
 Lugar = __decorate([
     Entity()
 ], Lugar);

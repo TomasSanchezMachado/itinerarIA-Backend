@@ -17,7 +17,9 @@ export function sanitizeItineraryInput(
     duration: req.body.duration,
     activities: req.body.activities,
     participants: req.body.participants,
-    user: req.body.user
+    user: req.body.user,
+    place: req.body.place,
+    preferences: req.body.preferences
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -32,7 +34,7 @@ export function sanitizeItineraryInput(
 
 export async function findAll(req: Request, res: Response) {
   try{
-    const itineraries = await em.find(Itinerary,{},{populate: ['activities','participants','user']})
+    const itineraries = await em.find(Itinerary,{},{populate: ['activities','participants','user','place']});
     if(itineraries.length === 0){
       return res.status(200).json({message: "No se encontraron itinerarios"});
     }
@@ -78,13 +80,13 @@ export async function add(req: Request, res: Response) {
 export async function update(req: Request, res: Response) {
   try{
     const id = req.params.id;
-    //Valido que, en caso de quererse cambiar el usuario,exista
-    if(req.body.sanitizedInput.usuario){
-      const usuario = await em.findOne('Usuario', {id: req.body.sanitizedInput.usuario});
-      if(!usuario){
-        return res.status(400).json({message: "El usuario ingresado no existe"});
-      }
-    }
+    // //Valido que, en caso de quererse cambiar el usuario,exista
+    // if(req.body.sanitizedInput.usuario){
+    //   const usuario = await em.findOne('Usuario', {id: req.body.sanitizedInput.usuario});
+    //   if(!usuario){
+    //     return res.status(400).json({message: "El usuario ingresado no existe"});
+    //   }
+    // }
     const itinerary = em.getReference(Itinerary, id);
     em.assign(itinerary, req.body.sanitizedInput);
     await em.flush();

@@ -2,6 +2,7 @@ import { Cascade, Collection, Entity, OneToMany, Property } from "@mikro-orm/cor
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { ServicioExterno } from "../servicioExterno/servicioExterno.entity.js";
 import { Actividad } from "../actividad/actividad.entity.js";
+import { Itinerary } from "../itinerary/itinerary.entity.js";
 
 
 @Entity()
@@ -32,5 +33,9 @@ export class Lugar extends BaseEntity {
     @OneToMany(() => Actividad, (actividad) => actividad.lugar,
         { cascade: [Cascade.ALL] })
     actividades = new Collection<Actividad>(this)
+
+    @OneToMany(() => Itinerary, (itinerario) => itinerario.place,
+        { cascade: [Cascade.ALL] }) 
+    itinerarios = new Collection<Itinerary>(this)
 
 }

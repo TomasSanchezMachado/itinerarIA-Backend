@@ -1,8 +1,10 @@
 import { Actividad } from '../actividad/actividad.entity.js'
 import { Usuario } from '../usuario/usuario.entity.js'
-import { Property,OneToMany, Collection, Entity, ManyToOne, Cascade } from '@mikro-orm/core'
+import { Property,OneToMany, Collection, Entity, ManyToOne, Cascade, Rel, ManyToMany } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Participante } from '../participante/participante.entity.js'
+import { Lugar } from '../lugar/lugar.entity.js'
+import { Preferencia } from '../preferencia/preferencia.entity.js'
 
 @Entity()
 export class Itinerary extends BaseEntity{
@@ -23,4 +25,11 @@ export class Itinerary extends BaseEntity{
 
         @OneToMany(() => Participante, (participant) => participant.itinerario, {cascade: [Cascade.ALL]})
         participants = new Collection<Participante>(this)
+        
+        @ManyToOne(() => Lugar, {nullable : false})
+        place! : Rel<Lugar>
+
+        @Property({nullable:false})
+        preferences!: string
+
 }

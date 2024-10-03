@@ -11,7 +11,7 @@ import { Actividad } from '../actividad/actividad.entity.js';
 import { Usuario } from '../usuario/usuario.entity.js';
 import { Property, OneToMany, Collection, Entity, ManyToOne, Cascade } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
-import { Participante } from '../participante/participante.entity.js';
+import { Participant } from '../participant/participant.entity.js';
 import { Lugar } from '../lugar/lugar.entity.js';
 export let Itinerary = class Itinerary extends BaseEntity {
     constructor() {
@@ -41,7 +41,7 @@ __decorate([
     __metadata("design:type", Usuario)
 ], Itinerary.prototype, "user", void 0);
 __decorate([
-    OneToMany(() => Participante, (participant) => participant.itinerario, { cascade: [Cascade.ALL] }),
+    OneToMany(() => Participant, (participant) => participant.itinerary, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)
 ], Itinerary.prototype, "participants", void 0);
 __decorate([

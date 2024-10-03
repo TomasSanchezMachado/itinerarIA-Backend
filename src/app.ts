@@ -8,10 +8,10 @@ import { RequestContext } from '@mikro-orm/core';
 import { servicioExternoRouter } from './servicioExterno/servicioExterno.routes.js';
 import { usuarioRouter } from './usuario/usuario.routes.js';
 import { opinionRouter } from './opinion/opinion.routes.js';
-import {authRouter} from "./usuario/auth/auth.routes.js"
-import cookieParser from 'cookie-parser'; 
+import { authRouter } from "./usuario/auth/auth.routes.js"
+import cookieParser from 'cookie-parser';
 import { corsMiddleware } from './shared/middlewares/corsMiddleware.js';
-
+import { participantRouter } from './participant/participant.routes.js';
 
 
 const app = express();
@@ -32,8 +32,8 @@ app.use('/api/externalServices', servicioExternoRouter);
 app.use('/api/actividades', actividadRouter)
 app.use('/api/usuarios', usuarioRouter)
 app.use('/api/opiniones', opinionRouter);
-app.use('/api/auth',authRouter)
-
+app.use('/api/auth', authRouter)
+app.use('/api/participants', participantRouter);
 
 
 app.use((_, res) => {

@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Entity, Property, ManyToMany } from '@mikro-orm/core';
-import { Participante } from "../participante/participante.entity.js";
+import { Participant } from "../participant/participant.entity.js";
 export let Preferencia = class Preferencia extends BaseEntity {
 };
 __decorate([
@@ -21,7 +21,7 @@ __decorate([
     __metadata("design:type", String)
 ], Preferencia.prototype, "descripcion", void 0);
 __decorate([
-    ManyToMany(() => Participante),
+    ManyToMany(() => Participant),
     __metadata("design:type", Object)
 ], Preferencia.prototype, "participante", void 0);
 Preferencia = __decorate([

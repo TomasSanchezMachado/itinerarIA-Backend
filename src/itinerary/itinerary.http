@@ -14,7 +14,7 @@ Content-Type: application/json
 
 ###
 @id = {{createItinerario.response.body.data.id}}
-GET http://localhost:3000/api/itinerarios/{{id}}
+GET http://localhost:3000/api/itinerarios/66e320d4e04fa74c2b5154cf
 
 ###
 PUT http://localhost:3000/api/itinerarios/{{id}}

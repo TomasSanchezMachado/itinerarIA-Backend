@@ -1,0 +1,41 @@
+GET http://localhost:3000/api/participants
+###
+# @name createParticipant
+POST http://localhost:3000/api/participants
+Content-Type: application/json
+
+{
+    "name": "Participant 1",
+    "age": 20,
+    "disability": true,
+    "itinerary": "66e320d4e04fa74c2b5154cf"
+
+}
+###
+
+@id = {{createParticipant.response.body.data.id}}
+
+###
+GET http://localhost:3000/api/participants/66ff22aece8bda39a2e5be6c
+###
+PUT http://localhost:3000/api/participants/66ff22aece8bda39a2e5be6c
+Content-Type: application/json
+
+{
+    "name": "Nicolás",
+    "age": 20,
+    "disability": false,
+    "itinerary": "66e320d4e04fa74c2b5154cf"
+
+}
+###
+PATCH http://localhost:3000/api/participants/66ff22aece8bda39a2e5be6c
+Content-Type: application/json
+
+{
+    "name" : "Nicolás Escobar"
+}
+
+
+###
+DELETE http://localhost:3000/api/participants/66ff22aece8bda39a2e5be6c

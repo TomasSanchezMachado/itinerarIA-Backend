@@ -37,7 +37,7 @@ export async function findOne(req, res) {
     try {
         const id = req.params.id;
         //const objectId = new ObjectId(id);
-        const itinerary = await em.findOneOrFail(Itinerary, { id });
+        const itinerary = await em.findOneOrFail(Itinerary, { id }, { populate: ['activities', 'participants', 'user', 'place'] });
         return res.status(200).json({ data: itinerary });
     }
     catch (error) {

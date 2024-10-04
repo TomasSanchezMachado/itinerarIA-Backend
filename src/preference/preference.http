@@ -1,0 +1,40 @@
+###GET ALL
+GET http://localhost:3000/api/preferences
+###
+# @name createPreference
+###
+POST http://localhost:3000/api/preferences
+Content-Type: application/json
+
+{
+    "name": "Diversion",
+    "description" : "Juegos para niñosa"
+}
+###
+#
+@id = {{createPreference.response.body.data.id}}
+
+###
+GET http://localhost:3000/api/preferences/66ff22aece8bda39a2e5be6c
+###
+PUT http://localhost:3000/api/preferences/66ff22aece8bda39a2e5be6c
+Content-Type: application/json
+
+{
+    "name": "Nicolás",
+    "age": 20,
+    "disability": false,
+    "itinerary": "66e320d4e04fa74c2b5154cf"
+
+}
+###
+PATCH http://localhost:3000/api/preferences/66ff22aece8bda39a2e5be6c
+Content-Type: application/json
+
+{
+    "name" : "Nicolás Escobar"
+}
+
+
+###
+DELETE http://localhost:3000/api/preferences/66ff22aece8bda39a2e5be6c

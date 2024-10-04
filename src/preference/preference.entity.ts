@@ -4,14 +4,17 @@ import { Participant } from "../participant/participant.entity.js";
 import { Itinerary } from "../itinerary/itinerary.entity.js";
 
 @Entity()
-export class Preferencia extends BaseEntity {
+export class Preference extends BaseEntity {
 
   @Property({ nullable: false })
-  nombre!: string;
+  name!: string;
 
   @Property({ nullable: false })
-  descripcion!: string;
+  description!: string;
 
-  @ManyToMany(() => Participant,)
-  participante!: Rel<Participant>;
+  // @ManyToMany(() => Participant,)
+  // participante!: Rel<Participant>;
+  
+  @ManyToMany(() => Itinerary, (itinerary) => itinerary.preferences)
+  itineraries = new Collection<Itinerary>(this);//para mi la preferencia va en itinerarios, no en participantes.
 }

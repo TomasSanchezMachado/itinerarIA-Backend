@@ -9,15 +9,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Actividad } from '../actividad/actividad.entity.js';
 import { Usuario } from '../usuario/usuario.entity.js';
-import { Property, OneToMany, Collection, Entity, ManyToOne, Cascade } from '@mikro-orm/core';
+import { Property, OneToMany, Collection, Entity, ManyToOne, Cascade, ManyToMany } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 import { Participant } from '../participant/participant.entity.js';
 import { Lugar } from '../lugar/lugar.entity.js';
+import { Preference } from '../preference/preference.entity.js';
 export let Itinerary = class Itinerary extends BaseEntity {
     constructor() {
         super(...arguments);
         this.activities = new Collection(this);
         this.participants = new Collection(this);
+        this.preferences = new Collection(this);
     }
 };
 __decorate([
@@ -49,8 +51,8 @@ __decorate([
     __metadata("design:type", Object)
 ], Itinerary.prototype, "place", void 0);
 __decorate([
-    Property({ nullable: false }),
-    __metadata("design:type", String)
+    ManyToMany(() => Preference, (preference) => preference.itineraries, { owner: true }),
+    __metadata("design:type", Object)
 ], Itinerary.prototype, "preferences", void 0);
 Itinerary = __decorate([
     Entity()

@@ -59,7 +59,7 @@ export async function add(req: Request, res: Response) {
     // No verifico si el participante ya existe porque no hay un campo que lo identifique unicamente, ademas del id. Pueden existir dos personas que se llamen igual dentro del mismo itinerario.
     const participant = em.create(Participant, req.body.sanitizedInput);
     await em.flush();
-    return res.status(201).json({ message: "Participant created successfully", data: Participant });
+    return res.status(201).json({ message: "Participant created successfully", data: participant });
 
   }
   catch (error: any) {

@@ -22,7 +22,7 @@ export function sanitizeItineraryInput(req, res, next) {
 }
 export async function findAll(req, res) {
     try {
-        const itineraries = await em.find(Itinerary, {}, { populate: ['activities', 'participants', 'user', 'place'] });
+        const itineraries = await em.find(Itinerary, {}, { populate: ['activities', 'participants', 'user', 'place', 'preferences.name'] });
         if (itineraries.length === 0) {
             return res.status(200).json({ message: "No se encontraron itinerarios" });
         }
@@ -37,7 +37,7 @@ export async function findOne(req, res) {
     try {
         const id = req.params.id;
         //const objectId = new ObjectId(id);
-        const itinerary = await em.findOneOrFail(Itinerary, { id }, { populate: ['activities', 'participants', 'user', 'place'] });
+        const itinerary = await em.findOneOrFail(Itinerary, { id }, { populate: ['activities', 'participants', 'user', 'place', 'preferences.name'] });
         return res.status(200).json({ data: itinerary });
     }
     catch (error) {

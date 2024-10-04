@@ -4,7 +4,7 @@ import { Property, OneToMany, Collection, Entity, ManyToOne, Cascade, Rel, ManyT
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Participant } from '../participant/participant.entity.js'
 import { Lugar } from '../lugar/lugar.entity.js'
-import { Preferencia } from '../preferencia/preferencia.entity.js'
+import { Preference } from '../preference/preference.entity.js'
 
 @Entity()
 export class Itinerary extends BaseEntity {
@@ -29,7 +29,8 @@ export class Itinerary extends BaseEntity {
         @ManyToOne(() => Lugar, { nullable: false })
         place!: Rel<Lugar>
 
-        @Property({ nullable: false })
-        preferences!: string
+
+        @ManyToMany(() => Preference, (preference) => preference.itineraries,{owner: true})
+        preferences = new Collection<Preference>(this);
 
 }

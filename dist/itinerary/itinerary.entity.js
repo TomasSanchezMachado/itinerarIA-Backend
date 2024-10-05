@@ -51,7 +51,7 @@ __decorate([
     __metadata("design:type", Object)
 ], Itinerary.prototype, "place", void 0);
 __decorate([
-    ManyToMany(() => Preference, (preference) => preference.itineraries, { owner: true }),
+    ManyToMany(() => Preference, (preference) => preference.itineraries, { owner: true, cascade: [Cascade.CANCEL_ORPHAN_REMOVAL] }),
     __metadata("design:type", Object)
 ], Itinerary.prototype, "preferences", void 0);
 Itinerary = __decorate([

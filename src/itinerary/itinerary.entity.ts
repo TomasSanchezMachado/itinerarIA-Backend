@@ -30,7 +30,7 @@ export class Itinerary extends BaseEntity {
         place!: Rel<Lugar>
 
 
-        @ManyToMany(() => Preference, (preference) => preference.itineraries,{owner: true})
+        @ManyToMany(() => Preference, (preference) => preference.itineraries,{owner:true,cascade:[Cascade.CANCEL_ORPHAN_REMOVAL]})
         preferences = new Collection<Preference>(this);
 
 }

@@ -1,5 +1,5 @@
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
-import { Entity, Property, ManyToMany, Rel, OneToMany, Collection } from '@mikro-orm/core';
+import { Entity, Property, ManyToMany, Rel, OneToMany, Collection, Cascade } from '@mikro-orm/core';
 import { Participant } from "../participant/participant.entity.js";
 import { Itinerary } from "../itinerary/itinerary.entity.js";
 
@@ -15,6 +15,6 @@ export class Preference extends BaseEntity {
   // @ManyToMany(() => Participant,)
   // participante!: Rel<Participant>;
   
-  @ManyToMany(() => Itinerary, (itinerary) => itinerary.preferences)
+  @ManyToMany(() => Itinerary, (itinerary) => itinerary.preferences,)
   itineraries = new Collection<Itinerary>(this);//para mi la preferencia va en itinerarios, no en participantes.
 }

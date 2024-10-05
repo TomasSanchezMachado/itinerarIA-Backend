@@ -37,4 +37,4 @@ Content-Type: application/json
 
 
 ###
-DELETE http://localhost:3000/api/preferences/66ff22aece8bda39a2e5be6c
+DELETE http://localhost:3000/api/preferences/670037ed836f65b3ad2dd21e

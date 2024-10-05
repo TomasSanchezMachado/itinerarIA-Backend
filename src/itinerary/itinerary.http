@@ -11,7 +11,7 @@ Content-Type: application/json
     "duration": 5,
     "user":"66d12591f495b56ba354a1ef",
     "place":"66fd97cb2e28ca23b47f2058",
-    "preferences":["670037d5836f65b3ad2dd21d","670037ed836f65b3ad2dd21e"]
+    "preferences":["670037ed836f65b3ad2dd21e"]
 }
 
 ###

@@ -13,13 +13,11 @@ import { Property, OneToMany, Collection, Entity, ManyToOne, Cascade, ManyToMany
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 import { Participant } from '../participant/participant.entity.js';
 import { Lugar } from '../lugar/lugar.entity.js';
-import { Preference } from '../preference/preference.entity.js';
 export let Itinerary = class Itinerary extends BaseEntity {
     constructor() {
         super(...arguments);
         this.activities = new Collection(this);
         this.participants = new Collection(this);
-        this.preferences = new Collection(this);
     }
 };
 __decorate([
@@ -43,17 +41,13 @@ __decorate([
     __metadata("design:type", Usuario)
 ], Itinerary.prototype, "user", void 0);
 __decorate([
-    OneToMany(() => Participant, (participant) => participant.itinerary, { cascade: [Cascade.ALL] }),
+    ManyToMany(() => Participant, (participant) => participant.itineraries, { owner: true, cascade: [Cascade.CANCEL_ORPHAN_REMOVAL], nullable: false }),
     __metadata("design:type", Object)
 ], Itinerary.prototype, "participants", void 0);
 __decorate([
     ManyToOne(() => Lugar, { nullable: false }),
     __metadata("design:type", Object)
 ], Itinerary.prototype, "place", void 0);
-__decorate([
-    ManyToMany(() => Preference, (preference) => preference.itineraries, { owner: true, cascade: [Cascade.CANCEL_ORPHAN_REMOVAL] }),
-    __metadata("design:type", Object)
-], Itinerary.prototype, "preferences", void 0);
 Itinerary = __decorate([
     Entity()
 ], Itinerary);

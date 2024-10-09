@@ -30,7 +30,7 @@ export function sanitizeParticipantInput(
 
 export async function findAll(req: Request, res: Response) {
   try {
-    const participants = await em.find(Participant, {}, { populate: ['itinerary'] }) //ver si esta bien poblarlo con itinerary
+    const participants = await em.find(Participant, {}, { populate: ["itineraries"] });
     if (participants.length === 0) {
       return res.status(200).json({ message: "Participants not found", data: participants });
     }

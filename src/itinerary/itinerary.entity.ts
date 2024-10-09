@@ -23,14 +23,10 @@ export class Itinerary extends BaseEntity {
         @ManyToOne(() => Usuario, { nullable: false })
         user!: Usuario
 
-        @OneToMany(() => Participant, (participant) => participant.itinerary, { cascade: [Cascade.ALL] })
+        @ManyToMany(() => Participant, (participant) => participant.itineraries,{owner:true,cascade:[Cascade.CANCEL_ORPHAN_REMOVAL], nullable: false})
         participants = new Collection<Participant>(this)
 
         @ManyToOne(() => Lugar, { nullable: false })
         place!: Rel<Lugar>
-
-
-        @ManyToMany(() => Preference, (preference) => preference.itineraries,{owner:true,cascade:[Cascade.CANCEL_ORPHAN_REMOVAL]})
-        preferences = new Collection<Preference>(this);
 
 }

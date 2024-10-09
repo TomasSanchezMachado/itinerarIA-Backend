@@ -12,9 +12,9 @@ export class Preference extends BaseEntity {
   @Property({ nullable: false })
   description!: string;
 
-  // @ManyToMany(() => Participant,)
-  // participante!: Rel<Participant>;
+  @ManyToMany(() => Participant, (participant) => participant.preferences, { owner: true })
+  participants = new Collection<Participant>(this);
   
-  @ManyToMany(() => Itinerary, (itinerary) => itinerary.preferences,)
-  itineraries = new Collection<Itinerary>(this);//para mi la preferencia va en itinerarios, no en participantes.
+  //@ManyToMany(() => Itinerary, (itinerary) => itinerary.preferences,)
+  //itineraries = new Collection<Itinerary>(this);//para mi la preferencia va en itinerarios, no en participantes.
 }

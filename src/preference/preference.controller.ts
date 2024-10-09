@@ -29,7 +29,7 @@ export function sanitizePreferenceInput(
 
 export async function findAll(req: Request, res: Response) {
   try{
-    const preferencias = await em.find(Preference,{},{populate:['itineraries']})
+    const preferencias = await em.find(Preference,{},{populate:['participants']});
     if(preferencias.length === 0){
       return res.status(200).json({message: "No se encontraron preferencias"});
     }
@@ -43,7 +43,7 @@ export async function findAll(req: Request, res: Response) {
 export async function findOne(req: Request, res: Response) {
 try{
   const id = req.params.id;
-  const preferencia = await em.findOneOrFail(Preference, { id: id }, { populate: ['itineraries'] });
+  const preferencia = await em.findOneOrFail(Preference, { id: id });
   return res.status(200).json({data: preferencia});
 }
 catch(error:any){

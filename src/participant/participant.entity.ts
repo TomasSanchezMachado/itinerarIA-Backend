@@ -1,6 +1,7 @@
 import { Itinerary } from '../itinerary/itinerary.entity.js'
-import { Property, Entity, ManyToOne, Rel } from '@mikro-orm/core'
+import { Property, Entity, ManyToOne, Rel, ManyToMany, Collection } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
+import { Preference } from '../preference/preference.entity.js'
 
 @Entity()
 export class Participant extends BaseEntity {
@@ -13,6 +14,9 @@ export class Participant extends BaseEntity {
         @Property({ nullable: false })
         disability!: boolean
 
-        @ManyToOne(() => Itinerary, { nullable: false })
-        itinerary!: Rel<Itinerary>
+        @ManyToMany(() => Itinerary, (itinerary) => itinerary.participants, { nullable: false })
+        itineraries = new Collection<Itinerary>(this)
+
+        @ManyToMany(() => Preference, (preference) => preference.participants, { nullable: false })
+        preferences = new Collection<Preference>(this)
 }

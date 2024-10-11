@@ -28,7 +28,7 @@ __decorate([
 ], Actividad.prototype, "aireLibre", void 0);
 __decorate([
     Property(),
-    __metadata("design:type", String)
+    __metadata("design:type", Boolean)
 ], Actividad.prototype, "transporte", void 0);
 __decorate([
     Property({ nullable: false }),

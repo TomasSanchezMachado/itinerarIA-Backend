@@ -19,10 +19,10 @@ export class Actividad extends BaseEntity{
   aireLibre!: boolean;
 
   @Property()
-  transporte?: string;
+  transporte?: boolean;
 
   @Property({nullable: false})
-  horario!: string;
+  horario?: string;
 
   // @Property()
   // fecha?: string;

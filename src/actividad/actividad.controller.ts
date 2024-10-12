@@ -35,7 +35,6 @@ async function findAll(req: Request, res: Response) {
     if(actividad.length === 0){
       return res.status(200).json({message: 'No se encontraron actividades'});
     }
-    res.header('Access-Control-Allow-Origin', '*');
     res.status(200).json({message: 'Todos las actividades encontrados', data: actividad});
   }
   catch (error: any) {
@@ -62,7 +61,6 @@ async function add(req: Request, res: Response) {
       return res.status(400).json({ message: 'Actividad ya existente' });
     }
     const actividad = em.create(Actividad, req.body.sanitizedInput);
-    console.log("Sanitized Input:", actividad);
     await em.flush();
     res.status(201).json({ message: 'Actvidad creada', data: actividad });
   }

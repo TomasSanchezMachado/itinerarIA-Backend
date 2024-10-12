@@ -17,35 +17,35 @@ export let Actividad = class Actividad extends BaseEntity {
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)
-], Actividad.prototype, "nombre", void 0);
+], Actividad.prototype, "name", void 0);
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)
-], Actividad.prototype, "descripcion", void 0);
+], Actividad.prototype, "description", void 0);
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", Boolean)
-], Actividad.prototype, "aireLibre", void 0);
+], Actividad.prototype, "outdoor", void 0);
 __decorate([
     Property(),
     __metadata("design:type", Boolean)
-], Actividad.prototype, "transporte", void 0);
+], Actividad.prototype, "transport", void 0);
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)
-], Actividad.prototype, "horario", void 0);
+], Actividad.prototype, "schedule", void 0);
 __decorate([
     ManyToOne(() => Lugar, { nullable: false }),
     __metadata("design:type", Object)
-], Actividad.prototype, "lugar", void 0);
+], Actividad.prototype, "place", void 0);
 __decorate([
     ManyToOne(() => Itinerary, { nullable: false }),
     __metadata("design:type", Object)
-], Actividad.prototype, "itinerario", void 0);
+], Actividad.prototype, "itinerary", void 0);
 __decorate([
     OneToMany(() => Opinion, opiniones => opiniones.actividad, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Opinion)
-], Actividad.prototype, "opiniones", void 0);
+], Actividad.prototype, "opinions", void 0);
 Actividad = __decorate([
     Entity()
 ], Actividad);

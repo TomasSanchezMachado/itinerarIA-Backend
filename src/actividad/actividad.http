@@ -11,7 +11,7 @@ Content-Type: application/json
     "transporte": "Auto",
     "horario": "10:00",
     "lugar": "66d8801a79afc1938eea8fc6",
-    "itinerario" : "6692de31d86a75c6a6fb4c10"
+    "itinerario" : "670725e7828ae619e943cd8c"
 }
 ###
 @id = {{createActividad.response.body.data.id}}

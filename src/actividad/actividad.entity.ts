@@ -10,31 +10,31 @@ import { Opinion } from '../opinion/opinion.entity.js';
 export class Actividad extends BaseEntity{
 
   @Property({nullable: false})
-  nombre!: string;
+  name!: string;
 
   @Property({nullable: false})
-  descripcion!: string;
+  description!: string;
 
   @Property({nullable: false})
-  aireLibre!: boolean;
+  outdoor!: boolean;
 
   @Property()
-  transporte?: boolean;
+  transport?: boolean;
 
   @Property({nullable: false})
-  horario?: string;
+  schedule!: string;
 
   // @Property()
   // fecha?: string;
 
   @ManyToOne(() => Lugar, {nullable: false})
-  lugar!: Rel<Lugar>;
+  place!: Rel<Lugar>;
 
   @ManyToOne(() => Itinerary,{nullable:false})
-  itinerario!: Rel<Itinerary>
+  itinerary!: Rel<Itinerary>
   
   @OneToMany(() => Opinion, opiniones => opiniones.actividad, {cascade: [Cascade.ALL]})
-  opiniones?: Opinion;
+  opinions?: Opinion;
 
 }
 

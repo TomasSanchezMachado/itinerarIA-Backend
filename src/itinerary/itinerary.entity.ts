@@ -17,7 +17,7 @@ export class Itinerary extends BaseEntity {
         @Property({ nullable: false })
         duration!: number
 
-        @OneToMany(() => Actividad, (activity) => activity.itinerario, { cascade: [Cascade.ALL] })
+        @OneToMany(() => Actividad, (activity) => activity.itinerary, { cascade: [Cascade.ALL] })
         activities = new Collection<Actividad>(this)
 
         @ManyToOne(() => Usuario, { nullable: false })

@@ -33,7 +33,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Itinerary.prototype, "duration", void 0);
 __decorate([
-    OneToMany(() => Actividad, (activity) => activity.itinerario, { cascade: [Cascade.ALL] }),
+    OneToMany(() => Actividad, (activity) => activity.itinerary, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)
 ], Itinerary.prototype, "activities", void 0);
 __decorate([

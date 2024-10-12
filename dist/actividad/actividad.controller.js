@@ -3,14 +3,14 @@ import { Actividad } from "./actividad.entity.js";
 const em = orm.em;
 function sanitizeActividadInput(req, res, next) {
     req.body.sanitizedInput = {
-        nombre: req.body.nombre,
-        descripcion: req.body.descripcion,
-        aireLibre: req.body.aireLibre,
-        transporte: req.body.transporte,
-        horario: req.body.horario,
-        lugar: req.body.lugar,
-        itinerario: req.body.itinerario,
-        opiniones: req.body.opiniones
+        name: req.body.name,
+        description: req.body.description,
+        outdoor: req.body.outdoor,
+        transport: req.body.transport,
+        schedule: req.body.schedule,
+        place: req.body.place,
+        itinerary: req.body.itinerary,
+        opinions: req.body.opinions
     };
     //more checks here
     Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -22,7 +22,7 @@ function sanitizeActividadInput(req, res, next) {
 }
 async function findAll(req, res) {
     try {
-        const actividad = await em.find(Actividad, {}, { populate: ['lugar', 'itinerario', 'opiniones'] });
+        const actividad = await em.find(Actividad, {}, { populate: ['place', 'itinerary', 'opinions'] });
         if (actividad.length === 0) {
             return res.status(200).json({ message: 'No se encontraron actividades' });
         }
@@ -45,7 +45,7 @@ async function findOne(req, res) {
 async function add(req, res) {
     try {
         //Validacion que la actividad no exista
-        const actividadExistente = await em.findOne(Actividad, { nombre: req.body.nombre, lugar: req.body.lugar });
+        const actividadExistente = await em.findOne(Actividad, { name: req.body.name, place: req.body.place });
         if (actividadExistente) {
             return res.status(400).json({ message: 'Actividad ya existente' });
         }

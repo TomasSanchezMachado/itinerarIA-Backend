@@ -30,7 +30,7 @@ export class Lugar extends BaseEntity {
         { cascade: [Cascade.ALL] })
     serviciosExternos = new Collection<ServicioExterno>(this)
 
-    @OneToMany(() => Actividad, (actividad) => actividad.lugar,
+    @OneToMany(() => Actividad, (actividad) => actividad.place,
         { cascade: [Cascade.ALL] })
     actividades = new Collection<Actividad>(this)
 

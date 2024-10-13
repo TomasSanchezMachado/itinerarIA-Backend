@@ -5,13 +5,12 @@ POST http://localhost:3000/api/actividades
 Content-Type: application/json
 
 {
-    "nombre": "Museo Messi",
-    "descripcion": "Visita guiada al museo de Lionel Messi",
-    "aireLibre": false,
-    "transporte": "Auto",
-    "horario": "10:00",
-    "lugar": "66d8801a79afc1938eea8fc6",
-    "itinerario" : "6692de31d86a75c6a6fb4c10"
+    "name": "Museo Messii",
+    "description": "Visita guiada al museo de Lionel Messi",
+    "outdoor": false,
+    "transport": true,
+    "schedule": "10:00",
+    "place": "66d8801a79afc1938eea8fc6"
 }
 ###
 @id = {{createActividad.response.body.data.id}}

@@ -22,7 +22,7 @@ Content-Type:application/json
 
 ### GET ONE
 //FUNCIONA
-GET http://localhost:3000/api/usuarios/669d9a3503f535edd5c7aabe
+GET http://localhost:3000/api/usuarios/66fc4785f2b5cf4ef633816a
 
 
 ###

@@ -11,10 +11,12 @@ import { Itinerary } from '../itinerary/itinerary.entity.js';
 import { Opinion } from '../opinion/opinion.entity.js';
 import { Entity, OneToMany, Property, Cascade, Collection, } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
+import { Participant } from '../participant/participant.entity.js';
 export let Usuario = class Usuario extends BaseEntity {
     constructor() {
         super(...arguments);
         this.itineraries = new Collection(this);
+        this.participants = new Collection(this);
         this.opiniones = new Collection(this);
     }
 };
@@ -50,6 +52,10 @@ __decorate([
     OneToMany(() => Itinerary, itinerary => itinerary.user, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)
 ], Usuario.prototype, "itineraries", void 0);
+__decorate([
+    OneToMany(() => Participant, participant => participant.user, { cascade: [Cascade.ALL] }),
+    __metadata("design:type", Object)
+], Usuario.prototype, "participants", void 0);
 __decorate([
     OneToMany(() => Opinion, (opinion) => opinion.usuario, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)

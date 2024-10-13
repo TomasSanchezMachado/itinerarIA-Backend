@@ -6,16 +6,19 @@ import {
   add,
   update,
   remove,
+  addFavorite,
 } from "./participant.controller.js";
 import { validatePartialParticipant, validateParticipant } from "../schemas/participant.js";
 
 export const participantRouter = Router();
 
-participantRouter.get("/", findAll);
+participantRouter.get("/:userId", findAll);
 
-participantRouter.get("/:id", findOne);
+participantRouter.get("/getone/:id", findOne);
 
 participantRouter.post("/", sanitizeParticipantInput, add);
+
+participantRouter.post("/favorite", sanitizeParticipantInput, addFavorite);
 
 participantRouter.put("/:id", sanitizeParticipantInput, update);
 

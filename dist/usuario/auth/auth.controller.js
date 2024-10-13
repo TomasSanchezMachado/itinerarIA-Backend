@@ -39,7 +39,7 @@ export async function register(req, res) {
 }
 export async function login(req, res) {
     try {
-        const usuario = await em.findOne(Usuario, { username: req.body.username }, { populate: ["itineraries.activities"] });
+        const usuario = await em.findOne(Usuario, { username: req.body.username }, { populate: ["itineraries.activities", "participants"] });
         if (!usuario) {
             return res.status(400).json({ message: ["Usuario no encontrado"] }); //Deberia decir datos incorrectos nomas
         }
@@ -95,8 +95,7 @@ export async function verify(req, res) {
     jwt.verify(token, 'secret', async (err, user) => {
         if (err)
             return res.sendStatus(401);
-        console.log('llegue');
-        const userFound = await em.findOne(Usuario, { username: user.username }, { populate: ["itineraries.activities"] });
+        const userFound = await em.findOne(Usuario, { username: user.username }, { populate: ["itineraries.activities", "participants"] });
         if (!userFound)
             return res.status(401).json({ message: "Usuario no encontrado" });
         return res

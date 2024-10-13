@@ -7,7 +7,7 @@ POST http://localhost:3000/api/preferences
 Content-Type: application/json
 
 {
-    "name": "Diversion",
+    "name": "Diversionn",
     "description" : "Juegos para niñosa"
 }
 ###
@@ -37,4 +37,4 @@ Content-Type: application/json
 
 
 ###
-DELETE http://localhost:3000/api/preferences/670037ed836f65b3ad2dd21e
+DELETE http://localhost:3000/api/preferences/670bd10060eb88e665c9fb91

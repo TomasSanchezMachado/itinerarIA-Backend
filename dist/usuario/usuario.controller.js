@@ -25,7 +25,7 @@ export function sanitizeUsuarioInput(req, res, next) {
 }
 export async function findAll(req, res) {
     try {
-        const usuarios = await em.find(Usuario, {}, { populate: ["itineraries.activities"] });
+        const usuarios = await em.find(Usuario, {}, { populate: ["itineraries.activities", "participants"] });
         res.header("Access-Control-Allow-Origin", "*");
         res
             .status(200)
@@ -39,7 +39,7 @@ export async function findOne(req, res) {
     try {
         const id = req.params.id;
         const objectId = new ObjectId(id);
-        const usuario = await em.findOneOrFail(Usuario, { _id: objectId }, { populate: ["itineraries.activities"] });
+        const usuario = await em.findOneOrFail(Usuario, { _id: objectId }, { populate: ["itineraries.activities", "participants"] });
         return res
             .status(200)
             .json({ message: "Usuario encontrado exitosamente", data: usuario });

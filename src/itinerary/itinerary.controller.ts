@@ -2,6 +2,8 @@ import { Response, Request, NextFunction } from "express";
 import { Itinerary } from "./itinerary.entity.js";
 import { orm } from "../shared/db/orm.js";
 import { Usuario } from "../usuario/usuario.entity.js";
+import { Participant } from "../participant/participant.entity.js";
+import { ObjectId } from "@mikro-orm/mongodb";
 
 const em = orm.em;
 
@@ -18,8 +20,7 @@ export function sanitizeItineraryInput(
     activities: req.body.activities,
     participants: req.body.participants,
     user: req.body.user,
-    place: req.body.place,
-    preferences: req.body.preferences
+    place: req.body.place
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -61,19 +62,26 @@ export async function findOne(req: Request, res: Response) {
 
 export async function add(req: Request, res: Response) {
   try {
+
     //Valido que el usuario ingresado exista
-    const user = await em.findOne(Usuario, { id: req.body.sanitizedInput.user });
-    if (!user) {
+    const userFound = await em.findOne(Usuario, { id: req.body.sanitizedInput.user });
+    if (!userFound) {
       return res.status(400).json({ message: "El usuario ingresado no existe" });
     }
-    const itinerary = em.create(Itinerary, req.body.sanitizedInput);
-    await em.flush();
-    return res.status(201).json({ message: "Itinerario creado con exito", data: itinerary });
 
-  }
-  catch (error: any) {
-    return res.status(500).json({ message: error.message });
+    const itinerary = em.create(Itinerary, { ...req.body.sanitizedInput, participants: [] });
 
+  req.body.sanitizedInput.participants.forEach((participant: Participant) => {
+    const participantCreated = em.create(Participant, participant);
+    itinerary.participants.add(participantCreated);
+  });
+
+  await em.persistAndFlush(itinerary);
+
+  return res.status(201).json({ message: "Itinerario creado con éxito", data: itinerary });
+
+} catch (error: any) {
+  return res.status(500).json({ message: error.message });
   }
 }
 

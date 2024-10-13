@@ -8,8 +8,8 @@ Content-Type: application/json
 
 {
   
-  "tipoServicio": "Alquiler de bicis",
-  "nombre": "MiBiciTuBici",
+  "tipoServicio": "Alquiler de bicicletas",
+  "nombre": "MiBiciTuBicii",
   "descripcion": "Alquiler de bicis en todo el mundooo",
   "direccion": "Av. 9 de Julio 1234",
   "horario": "Lunes a Viernes de 10 a 12hs",

@@ -9,9 +9,10 @@ Content-Type: application/json
     "title": "Itinerario 1",
     "description": "Itinerario hecho para 7 dias en Disney...",
     "duration": 5,
-    "user":"66d12591f495b56ba354a1ef",
+    "user":"66fc4785f2b5cf4ef633816a",
     "place":"66fd97cb2e28ca23b47f2058",
-    "preferences":["670037ed836f65b3ad2dd21e"]
+    "activities":["66fd97cb2e28ca23b47f2058","66fd97cb2e28ca23b47f2058"],
+    "participants":[{"name":"Nicolás Escobar","age":20,"disability":false}]
 }
 
 ###

@@ -29,7 +29,7 @@ export function sanitizePreferenceInput(
 
 export async function findAll(req: Request, res: Response) {
   try{
-    const preferencias = await em.find(Preference,{},{populate:['participants']});
+    const preferencias = await em.find(Preference, {});
     if(preferencias.length === 0){
       return res.status(200).json({message: "No se encontraron preferencias"});
     }

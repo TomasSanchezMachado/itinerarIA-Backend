@@ -12,7 +12,8 @@ node_modules
 Thumbs.db
 
 # ignore built ts files
-dist/**/*
+dist/**/*.js
+
 
 # vscode
 .vscode/*

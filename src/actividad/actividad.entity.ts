@@ -2,7 +2,6 @@
 import { Entity, Property, OneToMany, ManyToOne, Collection, Cascade, Rel} from '@mikro-orm/core';
 import { Lugar } from "../lugar/lugar.entity.js";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
-
 import { Itinerary } from '../itinerary/itinerary.entity.js';
 import { Opinion } from '../opinion/opinion.entity.js';
 

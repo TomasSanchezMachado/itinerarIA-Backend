@@ -27,7 +27,7 @@ __decorate([
     __metadata("design:type", String)
 ], Preference.prototype, "description", void 0);
 __decorate([
-    ManyToMany(() => Participant, (participant) => participant.preferences, { owner: true }),
+    ManyToMany(() => Participant, (participant) => participant.preferences, { nullable: true }),
     __metadata("design:type", Object)
 ], Preference.prototype, "participants", void 0);
 Preference = __decorate([

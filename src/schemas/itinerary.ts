@@ -13,7 +13,12 @@ export const itinerarySchema = z.object({
     }).min(10,'La descripcion debe tener como minimo 10 caracteres').max(100),
     duration: z.number({
         required_error: 'La duración es requerida'
-    }).min(1,'El itinerario debe durar como minimo 1 día').max(30, 'El itinerario no puede durar más de 30 días')
+    }).min(1,'El itinerario debe durar como minimo 1 día').max(30, 'El itinerario no puede durar más de 30 días'),
+    place: z.string({
+        invalid_type_error: 'El lugar debe ser un string',
+        required_error: 'El lugar es requerido'
+    }),
+
 });
 
 export const patchItinerarySchema = z.object({
@@ -26,4 +31,7 @@ export const patchItinerarySchema = z.object({
     duration: z.number({
         invalid_type_error: 'La duración debe ser un número'
     }).min(1,'El itinerario debe durar como minimo 1 dia`').max(30, 'El itinerario no puede durar más de 30 días').optional(),
+    place: z.string({
+        invalid_type_error: 'El lugar debe ser un string'
+    }).optional(),
 });

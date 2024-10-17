@@ -32,8 +32,8 @@ export class Actividad extends BaseEntity{
   @ManyToOne(() => Itinerary,{nullable:false})
   itinerary!: Rel<Itinerary>
   
-  @OneToMany(() => Opinion, opiniones => opiniones.actividad, {cascade: [Cascade.ALL]})
-  opinions?: Opinion;
+  @OneToMany(() => Opinion, (opinion) => opinion.actividad, { cascade: [Cascade.ALL] })
+  opinions = new Collection<Opinion>(this)
 
 }
 

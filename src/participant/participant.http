@@ -31,7 +31,7 @@ Content-Type: application/json
 
 
 ### GET ONE
-GET http://localhost:3000/api/participants/getone/670b09cfa7a7990d52fa1f08
+GET http://localhost:3000/api/participants/getone/670bd0cc60eb88e665c9fb90
 ###
 PUT http://localhost:3000/api/participants/670bd0cc60eb88e665c9fb90
 Content-Type: application/json
@@ -40,7 +40,7 @@ Content-Type: application/json
     "name": "Facundo",
   "age": 24,
   "disability": false,
-  "preferences": [{"id":"670bce8c16da0fb6e0947f33"}]
+  "preferences": [{"id":"670bce8c16da0fb6e0947f33"},{"id":"670bce6416da0fb6e0947f31"}]
 
 }
 ###

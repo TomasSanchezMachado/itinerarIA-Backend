@@ -52,7 +52,7 @@ export async function register(req: RegisterRequest, res: Response) {
 export async function login(req: Request, res: Response) {
   try {
     const usuario = await em.findOne(Usuario, { username: req.body.username },
-      { populate: ["itineraries.activities", "participants"] });
+      { populate: ["itineraries.activities", "participants", "itineraries.place"] });
     if (!usuario) {
       return res.status(400).json({ message: ["Usuario no encontrado"] });//Deberia decir datos incorrectos nomas
     }

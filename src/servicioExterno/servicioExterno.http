@@ -28,6 +28,10 @@ Content-Type: application/json
 GET http://localhost:3000/api/externalServices/66e37760aaf541a2d11e0da5
 
 
+### GET servicioExterno by Place
+GET http://localhost:3000/api/externalServices/findByPlace/667ebe879b52c622400b1065
+
+
 ### Update servicioExterno by ID
 # @name updateServicioExterno
 PUT http://localhost:3000/api/externalServices/66e37760aaf541a2d11e0da5

@@ -10,14 +10,19 @@ Content-Type: application/json
     "description": "Itinerario hecho para 7 dias en Disney...",
     "duration": 5,
     "user":"66fc4785f2b5cf4ef633816a",
-    "place":"66fd97cb2e28ca23b47f2058",
+    "place":"667ebe879b52c622400b1065",
     "activities":["66fd97cb2e28ca23b47f2058","66fd97cb2e28ca23b47f2058"],
-    "participants":[{"name":"Nicolás Escobar","age":20,"disability":false}]
+    "participants":[{"name":"Nicolás Escobar","age":20,"disability":false},{"id":"670bd0cc60eb88e665c9fb90"}]
 }
 
 ###
 @id = {{createItinerario.response.body.data.id}}
-GET http://localhost:3000/api/itinerarios/66e320d4e04fa74c2b5154cf
+
+### GET ONE
+GET http://localhost:3000/api/itinerarios/671019da7c7c43a40950d950
+
+### GET all by user
+GET http://localhost:3000/api/itinerarios/user/66fc4785f2b5cf4ef633816a
 
 ###
 PUT http://localhost:3000/api/itinerarios/{{id}}
@@ -39,4 +44,4 @@ Content-Type: application/json
 
 
 ###
-DELETE http://localhost:3000/api/itinerarios/{{id}}
+DELETE http://localhost:3000/api/itinerarios/66d8801d79afc1938eea8fc9

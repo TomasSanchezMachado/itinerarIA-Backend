@@ -35,11 +35,25 @@ export function sanitizeItineraryInput(
 
 export async function findAll(req: Request, res: Response) {
   try {
-    const itineraries = await em.find(Itinerary, {}, { populate: ['activities', 'participants', 'user', 'place'] });
+    const itineraries = await em.find(Itinerary, {}, { populate: ['activities', 'participants.preferences', 'user', 'place'] });
     if (itineraries.length === 0) {
       return res.status(200).json({ message: "No se encontraron itinerarios" });
     }
-    res.header('Access-Control-Allow-Origin', '*');
+    res.status(200).json({ data: itineraries });
+  }
+  catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+
+}
+
+export async function findAllByUser(req: Request, res: Response) {
+  try {
+    const id = req.params.id;
+    const itineraries = await em.find(Itinerary, { user: id }, { populate: ['activities', 'participants.preferences', 'user', 'place'] });
+    if (itineraries.length === 0) {
+      return res.status(200).json({ message: "No se encontraron itinerarios" });
+    }
     res.status(200).json({ data: itineraries });
   }
   catch (error: any) {
@@ -62,28 +76,45 @@ export async function findOne(req: Request, res: Response) {
 
 export async function add(req: Request, res: Response) {
   try {
-
-    //Valido que el usuario ingresado exista
+    // Valido que el usuario ingresado exista
     const userFound = await em.findOne(Usuario, { id: req.body.sanitizedInput.user });
     if (!userFound) {
       return res.status(400).json({ message: "El usuario ingresado no existe" });
     }
 
+    console.log(req.body.sanitizedInput.participants, 'req.body.sanitizedInput.participants');
+
     const itinerary = em.create(Itinerary, { ...req.body.sanitizedInput, participants: [] });
 
-  req.body.sanitizedInput.participants.forEach((participant: Participant) => {
-    const participantCreated = em.create(Participant, participant);
-    itinerary.participants.add(participantCreated);
-  });
+    // Uso de for...of para esperar cada operación asíncrona
+    for (const participant of req.body.sanitizedInput.participants) {
+      if (participant.id === undefined) {
+        // Creo el participante si no existe
+        const participantCreated = em.create(Participant, {...participant, preferences: participant.preferences.map((preference: any) => new ObjectId(preference))});
+        console.log(participantCreated, 'participantCreated');
+        itinerary.participants.add(participantCreated);
+      } else {
+        // Si ya existe (de favoritos), lo busco y lo agrego
+        const participantFound = await em.findOne(Participant, participant.id);
+        console.log(participantFound, 'participantFound');
+        if (participantFound) {
+          itinerary.participants.add(participantFound);
+        } else {
+          console.log(`Participante con ID ${participant.id} no encontrado`);
+        }
+      }
+    }
+    console.log('---------------------------------');
+    console.log(itinerary.participants, 'itinerary.participants');
+    await em.persistAndFlush(itinerary);
 
-  await em.persistAndFlush(itinerary);
-
-  return res.status(201).json({ message: "Itinerario creado con éxito", data: itinerary });
-
-} catch (error: any) {
-  return res.status(500).json({ message: error.message });
+    return res.status(201).json({ message: "Itinerario creado con éxito", data: itinerary });
+    
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
   }
 }
+
 
 export async function update(req: Request, res: Response) {
   try {

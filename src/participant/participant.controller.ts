@@ -1,9 +1,7 @@
 import { Response, Request, NextFunction } from "express";
-import { validateParticipant, validatePartialParticipant } from "../schemas/participant.js";
 import { Participant } from "./participant.entity.js";
 import { orm } from "../shared/db/orm.js";
 import { ObjectId } from "@mikro-orm/mongodb";
-import { Itinerary } from "../itinerary/itinerary.entity.js";
 import { Preference } from "../preference/preference.entity.js";
 
 const em = orm.em;
@@ -109,12 +107,14 @@ export async function addFavorite(req: Request, res: Response) {
   }
 }
 
+
+
 export async function update(req: Request, res: Response) {
   try {
     const { name, age, disability, preferences, user } = req.body.sanitizedInput;
     const id = req.params.id;
 
-    // Asegúrate de que el participante existe
+    // Asegurar de que el participante existe
     const participant = await em.findOneOrFail(Participant, id);
 
     // Obtener las preferencias correctamente

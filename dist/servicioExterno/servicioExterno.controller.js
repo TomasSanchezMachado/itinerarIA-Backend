@@ -42,6 +42,22 @@ async function findOne(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
+async function findByPlace(req, res) {
+    try {
+        const lugar = await em.findOne('Lugar', { id: req.params.id });
+        if (!lugar) {
+            return res.status(404).json({ message: ['No se encontró el lugar con ese id'] });
+        }
+        const serviciosExternos = await em.find(ServicioExterno, { lugar: req.params.id });
+        if (serviciosExternos.length === 0) {
+            return res.status(200).json({ message: ['No se encontraron servicios externos para el lugar'] });
+        }
+        res.status(200).json({ message: 'Servicios externos encontrados', data: serviciosExternos });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
 async function add(req, res) {
     try {
         const lugar = await em.findOne('Lugar', { id: req.body.lugar });
@@ -70,7 +86,7 @@ async function update(req, res) {
             return res.status(409).json({ message: ['El nombre del servicio externo ya existe'] });
         }
         // Procede con la actualización si no hay conflicto
-        const servicioExterno = await em.getReference(ServicioExterno, id);
+        const servicioExterno = em.getReference(ServicioExterno, id);
         em.assign(servicioExterno, { ...req.body.sanitizedInput, lugar: req.body.sanitizedInput.lugar.id });
         await em.flush();
         res.status(200).json({ message: 'Servicio externo actualizado', data: servicioExterno });
@@ -90,5 +106,5 @@ async function remove(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-export { sanitizeServicioExternoInput, findAll, findOne, add, update, remove };
+export { sanitizeServicioExternoInput, findAll, findByPlace, findOne, add, update, remove };
 //# sourceMappingURL=servicioExterno.controller.js.map

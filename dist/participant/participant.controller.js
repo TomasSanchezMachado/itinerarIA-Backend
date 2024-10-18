@@ -85,7 +85,7 @@ export async function update(req, res) {
     try {
         const { name, age, disability, preferences, user } = req.body.sanitizedInput;
         const id = req.params.id;
-        // Asegúrate de que el participante existe
+        // Asegurar de que el participante existe
         const participant = await em.findOneOrFail(Participant, id);
         // Obtener las preferencias correctamente
         const preferenceIds = preferences.map((preference) => preference.id);

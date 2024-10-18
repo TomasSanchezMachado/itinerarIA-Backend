@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { sanitizeItineraryInput, findAll, findOne, add, update, remove, } from "./itinerary.controller.js";
+import { sanitizeItineraryInput, findAll, findOne, add, update, remove, findAllByUser, } from "./itinerary.controller.js";
 import { validateSchema } from "../shared/middlewares/validateSchema.js";
 import { itinerarySchema, patchItinerarySchema } from "../schemas/itinerary.js";
 export const itineraryRouter = Router();
 itineraryRouter.get("/", findAll);
+itineraryRouter.get("/user/:id", findAllByUser);
 itineraryRouter.get("/:id", findOne);
 itineraryRouter.post("/", sanitizeItineraryInput, validateSchema(itinerarySchema), add);
 itineraryRouter.put("/:id", sanitizeItineraryInput, validateSchema(itinerarySchema), update);

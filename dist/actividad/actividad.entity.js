@@ -7,12 +7,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, Property, OneToMany, ManyToOne, Cascade } from '@mikro-orm/core';
+import { Entity, Property, OneToMany, ManyToOne, Collection, Cascade } from '@mikro-orm/core';
 import { Lugar } from "../lugar/lugar.entity.js";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Itinerary } from '../itinerary/itinerary.entity.js';
 import { Opinion } from '../opinion/opinion.entity.js';
 export let Actividad = class Actividad extends BaseEntity {
+    constructor() {
+        super(...arguments);
+        this.opinions = new Collection(this);
+    }
 };
 __decorate([
     Property({ nullable: false }),
@@ -43,8 +47,8 @@ __decorate([
     __metadata("design:type", Object)
 ], Actividad.prototype, "itinerary", void 0);
 __decorate([
-    OneToMany(() => Opinion, opiniones => opiniones.actividad, { cascade: [Cascade.ALL] }),
-    __metadata("design:type", Opinion)
+    OneToMany(() => Opinion, (opinion) => opinion.actividad, { cascade: [Cascade.ALL] }),
+    __metadata("design:type", Object)
 ], Actividad.prototype, "opinions", void 0);
 Actividad = __decorate([
     Entity()

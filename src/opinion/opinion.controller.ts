@@ -54,7 +54,7 @@ async function add(req: Request, res: Response) {
     await em.flush();
     res.status(201).json({ message: "Opinion creada", data: opinion });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message, data: req.body.sanitizedInput });
   }
 }
 

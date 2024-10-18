@@ -45,11 +45,12 @@ async function findOne(req, res) {
 async function add(req, res) {
     try {
         //Validacion que la actividad no exista
+        console.log(req.body.place);
         const actividadExistente = await em.findOne(Actividad, { name: req.body.name, place: req.body.place, itinerary: req.body.itinerary });
         if (actividadExistente) {
             return res.status(400).json({ message: ['Actividad ya existente'] });
         }
-        const actividad = em.create(Actividad, req.body.sanitizedInput);
+        const actividad = em.create(Actividad, { ...req.body.sanitizedInput, place: req.body.place.id });
         await em.flush();
         res.status(201).json({ message: 'Actvidad creada', data: actividad });
     }
@@ -65,7 +66,7 @@ async function update(req, res) {
             return res.status(400).json({ message: ['Actividad ya existente'] });
         }
         const actividad = em.getReference(Actividad, id);
-        em.assign(actividad, req.body);
+        em.assign(actividad, { ...req.body.sanitizedInput, place: req.body.place.id });
         await em.flush();
         res.status(200).json({ message: 'Actividad actualizada', data: actividad, itinerary: req.body.itinerary });
     }

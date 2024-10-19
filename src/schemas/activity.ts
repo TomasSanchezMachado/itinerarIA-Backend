@@ -43,4 +43,5 @@ export const patchActivitySchema = z.object({
     itinerary: z.string({
         invalid_type_error: 'El itinerario debe ser un string'
     }).optional(),
+
 });

@@ -46,7 +46,7 @@ async function add(req, res) {
     try {
         //Validacion que la actividad no exista
         console.log(req.body.place);
-        const actividadExistente = await em.findOne(Actividad, { name: req.body.name, place: req.body.place, itinerary: req.body.itinerary });
+        const actividadExistente = await em.findOne(Actividad, { name: req.body.name, place: req.body.place.id, itinerary: req.body.itinerary });
         if (actividadExistente) {
             return res.status(400).json({ message: ['Actividad ya existente'] });
         }

@@ -19,7 +19,7 @@ export function sanitizeLugarInput(req, res, next) {
 }
 export async function findAll(req, res) {
     try {
-        const lugares = await em.find(Lugar, {}, { populate: ['serviciosExternos'] });
+        const lugares = await em.find(Lugar, {}, { populate: ['externalServices'] });
         if (lugares.length === 0) {
             return res.status(200).json({ message: "No se encontraron lugares", data: lugares });
         }

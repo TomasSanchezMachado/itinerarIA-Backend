@@ -9,13 +9,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Cascade, Collection, Entity, OneToMany, Property } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
-import { ServicioExterno } from "../servicioExterno/servicioExterno.entity.js";
+import { ExternalService } from "../externalService/externalService.entity.js";
 import { Actividad } from "../actividad/actividad.entity.js";
 import { Itinerary } from "../itinerary/itinerary.entity.js";
 export let Lugar = class Lugar extends BaseEntity {
     constructor() {
         super(...arguments);
-        this.serviciosExternos = new Collection(this);
+        this.externalServices = new Collection(this);
         this.actividades = new Collection(this);
         this.itinerarios = new Collection(this);
     }
@@ -45,9 +45,9 @@ __decorate([
     __metadata("design:type", String)
 ], Lugar.prototype, "pais", void 0);
 __decorate([
-    OneToMany(() => ServicioExterno, (servicioExterno) => servicioExterno.lugar, { cascade: [Cascade.ALL] }),
+    OneToMany(() => ExternalService, (externalService) => externalService.lugar, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)
-], Lugar.prototype, "serviciosExternos", void 0);
+], Lugar.prototype, "externalServices", void 0);
 __decorate([
     OneToMany(() => Actividad, (actividad) => actividad.place, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)

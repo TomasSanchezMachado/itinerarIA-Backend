@@ -3,28 +3,28 @@ import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Lugar } from "../lugar/lugar.entity.js";
 
 @Entity()
-export class ServicioExterno extends BaseEntity{
+export class ExternalService extends BaseEntity{
 
   @Property({nullable: false})
-  tipoServicio!: string;
+  serviceType!: string;
 
   @Property({nullable: false, unique: true})
-  nombre!: string;
+  name!: string;
  
   @Property({nullable: false})
-  descripcion!: string;
+  description!: string;
 
   @Property({nullable: false})
-  direccion!: string;
+  adress!: string;
 
   @Property({nullable: false})
-  horario?: string;
+  schedule?: string;
 
   @Property({nullable: true})
-  sitioWeb?: string;
+  website?: string;
 
   @Property({nullable: true})
-  telContacto?: string;
+  phoneNumber?: string;
 
   @ManyToOne(() => Lugar, { nullable: false })
   lugar!: Rel<Lugar>;

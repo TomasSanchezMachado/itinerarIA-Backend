@@ -8,19 +8,19 @@ import {
   remove,
 } from "./preference.controller.js";
 import { validateSchema } from "../shared/middlewares/validateSchema.js";
-import {preferenceSchema} from "../schemas/preference.js";
-import { authenticateJWT } from "../shared/middlewares/jwtMiddleware.js";
+import {preferenceSchema, validatePartialPreference} from "../schemas/preference.js";
+
 
 export const preferenceRouter = Router();
 
-preferenceRouter.get("/",authenticateJWT,findAll);
+preferenceRouter.get("/",findAll);
 
-preferenceRouter.get("/:id",authenticateJWT,findOne);
+preferenceRouter.get("/:id",findOne);
 
-preferenceRouter.post("/", sanitizePreferenceInput,validateSchema(preferenceSchema), authenticateJWT, add);
+preferenceRouter.post("/", sanitizePreferenceInput,validateSchema(preferenceSchema), add);
 
-preferenceRouter.put("/:id", sanitizePreferenceInput, authenticateJWT, update);
+preferenceRouter.put("/:id", sanitizePreferenceInput, validateSchema(preferenceSchema), update);
 
-preferenceRouter.patch("/:id", sanitizePreferenceInput, authenticateJWT, update);
+preferenceRouter.patch("/:id", sanitizePreferenceInput, update);
 
-preferenceRouter.delete("/:id",authenticateJWT, remove);
+preferenceRouter.delete("/:id", remove);

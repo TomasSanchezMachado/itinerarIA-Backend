@@ -1,6 +1,6 @@
 import { Cascade, Collection, Entity, OneToMany, Property } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
-import { ServicioExterno } from "../servicioExterno/servicioExterno.entity.js";
+import { ExternalService } from "../externalService/externalService.entity.js";
 import { Actividad } from "../actividad/actividad.entity.js";
 import { Itinerary } from "../itinerary/itinerary.entity.js";
 
@@ -26,9 +26,9 @@ export class Lugar extends BaseEntity {
     @Property()
     pais!: string
 
-    @OneToMany(() => ServicioExterno, (servicioExterno) => servicioExterno.lugar,
+    @OneToMany(() => ExternalService, (externalService) => externalService.lugar,
         { cascade: [Cascade.ALL] })
-    serviciosExternos = new Collection<ServicioExterno>(this)
+    externalServices = new Collection<ExternalService>(this)
 
     @OneToMany(() => Actividad, (actividad) => actividad.place,
         { cascade: [Cascade.ALL] })

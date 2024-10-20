@@ -104,8 +104,6 @@ export async function add(req: Request, res: Response) {
         }
       }
     }
-    console.log('---------------------------------');
-    console.log(itinerary.participants, 'itinerary.participants');
     await em.persistAndFlush(itinerary);
 
     return res.status(201).json({ message: "Itinerario creado con éxito", data: itinerary });

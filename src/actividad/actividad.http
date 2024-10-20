@@ -10,7 +10,8 @@ Content-Type: application/json
     "outdoor": false,
     "transport": true,
     "schedule": "10:00",
-    "place": "66d8801a79afc1938eea8fc6"
+    "place": "670d234d1267a5a51461a8d9",
+    "itinerary": "6713c67fa3b8326eea6abdee"
 }
 ###
 @id = {{createActividad.response.body.data.id}}

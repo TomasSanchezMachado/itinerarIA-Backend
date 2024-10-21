@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { orm } from "../shared/db/orm.js";
-import { Actividad } from "./actividad.entity.js";
+import { Activity } from "./activity.entity.js";
 
 const em = orm.em
 
@@ -31,11 +31,11 @@ function sanitizeActividadInput(
 
 async function findAll(req: Request, res: Response) {
   try {
-    const actividad = await em.find(Actividad, {}, { populate: ['place','itinerary', 'opinions'] });
-    if(actividad.length === 0){
-      return res.status(200).json({message: 'No se encontraron actividades'});
+    const activity = await em.find(Activity, {}, { populate: ['place','itinerary', 'opinions'] });
+    if(activity.length === 0){
+      return res.status(200).json({message: 'No se encontraron activities'});
     }
-    res.status(200).json({message: 'Todos las actividades encontrados', data: actividad});
+    res.status(200).json({message: 'Todos las activities encontrados', data: activity});
   }
   catch (error: any) {
     res.status(500).json({message: error.message});
@@ -45,8 +45,8 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const actividad = await em.findOneOrFail(Actividad, { id });
-    res.status(200).json({message: 'Actividad encontrada', data: actividad});
+    const activity = await em.findOneOrFail(Activity, { id });
+    res.status(200).json({message: 'Activity encontrada', data: activity});
   }
   catch (error: any) {
     res.status(500).json({message: error.message});
@@ -55,15 +55,15 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    //Validacion que la actividad no exista
+    //Validacion que la activity no exista
     console.log(req.body.place);
-    const actividadExistente = await em.findOne(Actividad, { name: req.body.name, place: req.body.place.id,itinerary: req.body.itinerary });
+    const actividadExistente = await em.findOne(Activity, { name: req.body.name, place: req.body.place.id,itinerary: req.body.itinerary });
     if (actividadExistente) {
-      return res.status(400).json({ message: ['Actividad ya existente'] });
+      return res.status(400).json({ message: ['Activity ya existente'] });
     }
-    const actividad = em.create(Actividad, {...req.body.sanitizedInput, place: req.body.place.id});
+    const activity = em.create(Activity, {...req.body.sanitizedInput, place: req.body.place.id});
     await em.flush();
-    res.status(201).json({ message: 'Actvidad creada', data: actividad });
+    res.status(201).json({ message: 'Actvidad creada', data: activity });
   }
   catch (error: any) {
     res.status(500).json({message: error.message});
@@ -73,14 +73,14 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const actividadExistente = await em.findOne(Actividad, { name: req.body.name, place: req.body.place,itinerary: req.body.itinerary });
+    const actividadExistente = await em.findOne(Activity, { name: req.body.name, place: req.body.place,itinerary: req.body.itinerary });
     if (actividadExistente && actividadExistente.id !== id) {
-      return res.status(400).json({ message: ['Actividad ya existente'] });
+      return res.status(400).json({ message: ['Activity ya existente'] });
     }
-    const actividad = em.getReference(Actividad, id);
-    em.assign(actividad, {...req.body.sanitizedInput, place: req.body.place.id});
+    const activity = em.getReference(Activity, id);
+    em.assign(activity, {...req.body.sanitizedInput, place: req.body.place.id});
     await em.flush();
-    res.status(200).json({ message: 'Actividad actualizada', data: actividad,itinerary: req.body.itinerary });
+    res.status(200).json({ message: 'Activity actualizada', data: activity,itinerary: req.body.itinerary });
   }
   catch (error: any) {
     res.status(500).json({message: error.message});
@@ -90,9 +90,9 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const actividad = em.getReference(Actividad, id);
-    em.removeAndFlush(actividad);
-    res.status(200).json({ message: 'Actividad eliminada', data: actividad });
+    const activity = em.getReference(Activity, id);
+    em.removeAndFlush(activity);
+    res.status(200).json({ message: 'Activity eliminada', data: activity });
   }
   catch (error: any) {
     res.status(500).json({message: error.message});

@@ -1,7 +1,7 @@
-GET http://localhost:3000/api/actividades
+GET http://localhost:3000/api/activities
 # @name createActividad
 ###
-POST http://localhost:3000/api/actividades
+POST http://localhost:3000/api/activities
 Content-Type: application/json
 
 {
@@ -17,10 +17,10 @@ Content-Type: application/json
 @id = {{createActividad.response.body.data.id}}
 
 ###
-GET http://localhost:3000/api/actividades/{{id}}
+GET http://localhost:3000/api/activities/{{id}}
 
 ###
-PUT http://localhost:3000/api/actividades/{{id}}
+PUT http://localhost:3000/api/activities/{{id}}
 Content-Type: application/json
 
 {
@@ -36,4 +36,4 @@ Content-Type: application/json
 ###
 
 ###
-DELETE http://localhost:3000/api/actividades/{{id}}
+DELETE http://localhost:3000/api/activities/{{id}}

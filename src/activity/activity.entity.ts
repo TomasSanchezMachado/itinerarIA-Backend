@@ -6,7 +6,7 @@ import { Itinerary } from '../itinerary/itinerary.entity.js';
 import { Opinion } from '../opinion/opinion.entity.js';
 
 @Entity()
-export class Actividad extends BaseEntity{
+export class Activity extends BaseEntity{
 
   @Property({nullable: false})
   name!: string;
@@ -32,7 +32,7 @@ export class Actividad extends BaseEntity{
   @ManyToOne(() => Itinerary,{nullable:false})
   itinerary!: Rel<Itinerary>
   
-  @OneToMany(() => Opinion, (opinion) => opinion.actividad, { cascade: [Cascade.ALL] })
+  @OneToMany(() => Opinion, (opinion) => opinion.activity, { cascade: [Cascade.ALL] })
   opinions = new Collection<Opinion>(this)
 
 }

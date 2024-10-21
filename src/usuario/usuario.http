@@ -1,4 +1,4 @@
-### GET ALL //funciona. Pero en la data del itinerario muestra los datos del usuario que posee ese itinerario, no muestra los datos del itinerario como titulo, actividades, etc.
+### GET ALL //funciona. Pero en la data del itinerario muestra los datos del usuario que posee ese itinerario, no muestra los datos del itinerario como titulo, activities, etc.
 GET http://localhost:3000/api/usuarios
 
 ###

@@ -10,10 +10,10 @@ export const activitySchema = z.object({
         required_error: 'La descripción es requerida'
     }).min(10,'La descripcion debe tener como minimo 10 caracteres').max(100),
     outdoor: z.boolean({
-        required_error: 'Debe especificar si la actividad es al aire libre o no'
+        required_error: 'Debe especificar si la activity es al aire libre o no'
     }),
     transport: z.boolean({
-        required_error: 'Debe especificar si la actividad requiere transporte o no'
+        required_error: 'Debe especificar si la activity requiere transporte o no'
     }).optional(),
     schedule: z.string({
         invalid_type_error: 'El horario debe ser un string',
@@ -32,10 +32,10 @@ export const patchActivitySchema = z.object({
         invalid_type_error: 'La descripción debe ser un string'
     }).min(10,'La descripcion debe tener como minimo 10 caracteres').max(100).optional(),
     outdoor: z.boolean({
-        invalid_type_error: 'Debe especificar si la actividad es al aire libre o no'
+        invalid_type_error: 'Debe especificar si la activity es al aire libre o no'
     }).optional(),
     transport: z.boolean({
-        invalid_type_error: 'Debe especificar si la actividad requiere transporte o no'
+        invalid_type_error: 'Debe especificar si la activity requiere transporte o no'
     }).optional(),
     schedule: z.string({
         invalid_type_error: 'El horario debe ser un string'

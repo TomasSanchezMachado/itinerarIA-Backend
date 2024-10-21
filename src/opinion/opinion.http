@@ -9,7 +9,7 @@ Content-Type: application/json
 {
   "calificacion": 5,
   "comentario": "Excelente lugar para pasar el día",
-  "actividad": "669d99ea03f535edd5c7aabd",
+  "activity": "669d99ea03f535edd5c7aabd",
   "usuario": "669d9a3503f535edd5c7aabe"
 }
 

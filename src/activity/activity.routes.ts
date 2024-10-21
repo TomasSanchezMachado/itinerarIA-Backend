@@ -6,7 +6,7 @@ import {
   add,
   update,
   remove,
-} from "./actividad.controller.js";
+} from "./activity.controller.js";
 import { validateSchema } from "../shared/middlewares/validateSchema.js";
 import { activitySchema, patchActivitySchema } from "../schemas/activity.js";
 

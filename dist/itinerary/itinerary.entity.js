@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Actividad } from '../actividad/actividad.entity.js';
+import { Activity } from '../activity/activity.entity.js';
 import { Usuario } from '../usuario/usuario.entity.js';
 import { Property, OneToMany, Collection, Entity, ManyToOne, Cascade, ManyToMany } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
@@ -33,7 +33,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Itinerary.prototype, "duration", void 0);
 __decorate([
-    OneToMany(() => Actividad, (activity) => activity.itinerary, { cascade: [Cascade.ALL] }),
+    OneToMany(() => Activity, (activity) => activity.itinerary, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)
 ], Itinerary.prototype, "activities", void 0);
 __decorate([

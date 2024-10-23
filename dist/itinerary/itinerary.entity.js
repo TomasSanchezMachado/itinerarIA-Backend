@@ -8,7 +8,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Activity } from '../activity/activity.entity.js';
-import { Usuario } from '../usuario/usuario.entity.js';
+import { User } from '../user/user.entity.js';
 import { Property, OneToMany, Collection, Entity, ManyToOne, Cascade, ManyToMany } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 import { Participant } from '../participant/participant.entity.js';
@@ -37,8 +37,8 @@ __decorate([
     __metadata("design:type", Object)
 ], Itinerary.prototype, "activities", void 0);
 __decorate([
-    ManyToOne(() => Usuario, { nullable: false }),
-    __metadata("design:type", Usuario)
+    ManyToOne(() => User, { nullable: false }),
+    __metadata("design:type", User)
 ], Itinerary.prototype, "user", void 0);
 __decorate([
     ManyToMany(() => Participant, (participant) => participant.itineraries, { owner: true, cascade: [Cascade.CANCEL_ORPHAN_REMOVAL], nullable: false }),

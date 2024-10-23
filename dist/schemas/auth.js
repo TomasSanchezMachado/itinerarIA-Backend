@@ -1,9 +1,9 @@
 import { z } from 'zod';
 export const registerSchema = z.object({
     username: z.string({
-        invalid_type_error: 'El nombre de usuario debe ser un string',
-        required_error: 'El nombre de usuario es requerido',
-    }).regex(/^[a-zA-Z0-9_-]{3,30}$/, 'El nombre de usuario debe tener entre 3 y 30 caracteres y solo puede contener letras, números, guiones bajos y guiones medios'),
+        invalid_type_error: 'El nombre de user debe ser un string',
+        required_error: 'El nombre de user es requerido',
+    }).regex(/^[a-zA-Z0-9_-]{3,30}$/, 'El nombre de user debe tener entre 3 y 30 caracteres y solo puede contener letras, números, guiones bajos y guiones medios'),
     password: z.string({
         invalid_type_error: 'La contraseña debe ser un string',
         required_error: 'La contraseña es requerida',
@@ -27,9 +27,9 @@ export const registerSchema = z.object({
 });
 export const loginSchema = z.object({
     username: z.string({
-        invalid_type_error: 'El nombre de usuario debe ser un string',
-        required_error: 'El nombre de usuario es requerido',
-    }).regex(/^[a-zA-Z0-9_-]{3,30}$/, 'El nombre de usuario debe tener entre 3 y 30 caracteres y solo puede contener letras, números, guiones bajos y guiones medios'),
+        invalid_type_error: 'El nombre de user debe ser un string',
+        required_error: 'El nombre de user es requerido',
+    }).regex(/^[a-zA-Z0-9_-]{3,30}$/, 'El nombre de user debe tener entre 3 y 30 caracteres y solo puede contener letras, números, guiones bajos y guiones medios'),
     password: z.string({
         invalid_type_error: 'La contraseña debe ser un string',
         required_error: 'La contraseña es requerida',

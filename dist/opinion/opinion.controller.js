@@ -5,7 +5,7 @@ function sanitizeOpinionInput(req, res, next) {
     req.body.sanitizedInput = {
         calificacion: req.body.calificacion,
         comentario: req.body.comentario,
-        usuario: req.body.usuario,
+        user: req.body.user,
         activity: req.body.activity,
     };
     Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -17,7 +17,7 @@ function sanitizeOpinionInput(req, res, next) {
 }
 async function findAll(req, res) {
     try {
-        const opinion = await em.find(Opinion, {}, { populate: ["usuario", "activity"] });
+        const opinion = await em.find(Opinion, {}, { populate: ["user", "activity"] });
         if (opinion.length === 0) {
             return res.status(200).json({ message: "No se encontraron opiniones" });
         }

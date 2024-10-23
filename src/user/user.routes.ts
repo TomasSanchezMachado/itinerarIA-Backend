@@ -6,7 +6,7 @@ import {
   update,
   remove,
   sanitizeUsuarioInput,
-} from "../usuario/usuario.controller.js";
+} from "./user.controller.js";
 import { validateSchema } from "../shared/middlewares/validateSchema.js";
 import { patchSchema, putSchema } from "../schemas/usuario.js";
 

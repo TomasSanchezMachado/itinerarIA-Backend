@@ -6,9 +6,9 @@ import { actividadRouter } from './activity/activity.routes.js';
 import { orm, syncSchema } from './shared/db/orm.js';
 import { RequestContext } from '@mikro-orm/core';
 import { externalServiceRouter } from './externalService/externalService.routes.js';
-import { usuarioRouter } from './usuario/usuario.routes.js';
+import { usuarioRouter } from './user/user.routes.js';
 import { opinionRouter } from './opinion/opinion.routes.js';
-import { authRouter } from "./usuario/auth/auth.routes.js"
+import { authRouter } from "./user/auth/auth.routes.js"
 import cookieParser from 'cookie-parser';
 import { corsMiddleware } from './shared/middlewares/corsMiddleware.js';
 import { participantRouter } from './participant/participant.routes.js';
@@ -36,7 +36,7 @@ app.use('/api/lugares', lugarRouter);
 app.use('/api/itinerarios', authenticateJWT,itineraryRouter);
 app.use('/api/externalServices', authenticateJWT,externalServiceRouter);
 app.use('/api/activities', authenticateJWT,actividadRouter)
-app.use('/api/usuarios', authenticateJWT, usuarioRouter)
+app.use('/api/users', authenticateJWT, usuarioRouter)
 app.use('/api/opiniones', authenticateJWT, opinionRouter);
 app.use('/api/participants', authenticateJWT, participantRouter);
 app.use('/api/preferences', authenticateJWT, preferenceRouter);

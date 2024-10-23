@@ -5,7 +5,7 @@ import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Participant } from '../participant/participant.entity.js';
 
 @Entity()
-export class Usuario extends BaseEntity {
+export class User extends BaseEntity {
     @Property({ nullable: false, unique: true })
     username!: string
 
@@ -33,6 +33,6 @@ export class Usuario extends BaseEntity {
     @OneToMany(() => Participant, participant => participant.user, { cascade: [Cascade.ALL] })
     participants = new Collection<Participant>(this);
 
-    @OneToMany(() => Opinion, (opinion) => opinion.usuario, { cascade: [Cascade.ALL] })
+    @OneToMany(() => Opinion, (opinion) => opinion.user, { cascade: [Cascade.ALL] })
     opiniones = new Collection<Opinion>(this)
 }

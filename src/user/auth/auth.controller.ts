@@ -1,11 +1,11 @@
 import { Response, Request, NextFunction } from "express";
-import { Usuario } from "../usuario.entity.js";
+import { User } from "../user.entity.js";
 import { orm } from "../../shared/db/orm.js";
 import bcrypt from "bcrypt";
 import createAccessToken from "../../libs/jwt.js";
 import { registerSchema } from "../../schemas/auth.js";
 import jwt from "jsonwebtoken";
-import { add } from "../usuario.controller.js";
+import { add } from "../user.controller.js";
 
 const em = orm.em;
 
@@ -35,9 +35,9 @@ export async function register(req: RegisterRequest, res: Response) {
   try {
     const { username, password } = req.body.sanitizedInput;
     //Valido que el username no exista
-    const usuario = await em.findOne(Usuario, { username });
-    if (usuario) {
-      return res.status(400).json({ message: ["Usuario ya existe"] });
+    const user = await em.findOne(User, { username });
+    if (user) {
+      return res.status(400).json({ message: ["User ya existe"] });
     }
     
     const passwordHash = await bcrypt.hash(password, 10);
@@ -45,59 +45,59 @@ export async function register(req: RegisterRequest, res: Response) {
     req.body.sanitizedInput.password = passwordHash;
     add(req, res);
   } catch (err) {
-    res.status(500).json({ message: "No se pudo crear el usuario", data: err });
+    res.status(500).json({ message: "No se pudo crear el user", data: err });
   }
 }
 
 export async function login(req: Request, res: Response) {
   try {
-    const usuario = await em.findOne(Usuario, { username: req.body.username },
+    const user = await em.findOne(User, { username: req.body.username },
       { populate: ["itineraries.activities", "participants", "itineraries.place"] });
-    if (!usuario) {
-      return res.status(400).json({ message: ["Usuario no encontrado"] });//Deberia decir datos incorrectos nomas
+    if (!user) {
+      return res.status(400).json({ message: ["User no encontrado"] });//Deberia decir datos incorrectos nomas
     }
-    if (bcrypt.compareSync(req.body.password, usuario.password)) {
-      const token = await createAccessToken({ username: usuario.username });
+    if (bcrypt.compareSync(req.body.password, user.password)) {
+      const token = await createAccessToken({ username: user.username });
       res.cookie("token", token);
-      console.log(usuario);
+      console.log(user);
       return res
         .status(200)
-        .json({ message: "Usuario logueado", data: { usuario } });
+        .json({ message: "User logueado", data: { user } });
     } else {
       return res.status(400).json({ message: ["Contraseña incorrecta"] });//Deberia decir datos incorrectos nomas
     }
   } catch (err) {
     res
       .status(500)
-      .json({ message: "No se pudo loguear el usuario", data: err });
+      .json({ message: "No se pudo loguear el user", data: err });
   }
 }
 
 export async function logout(req: Request, res: Response) {
   res.clearCookie("token");
-  res.status(200).json({ message: "Usuario deslogueado" });
+  res.status(200).json({ message: "User deslogueado" });
 }
 
 export async function profile(req: Request, res: Response) {
   try {
-    const usuario = await em.findOne(Usuario, {
+    const user = await em.findOne(User, {
       username: req.body.payload.username,
     });
-    if (!usuario) {
-      return res.status(400).json({ message: "Usuario no encontrado" });
+    if (!user) {
+      return res.status(400).json({ message: "User no encontrado" });
     }
     res.status(200).json({
-      message: "Perfil de usuario",
+      message: "Perfil de user",
       data: {
-        id: usuario._id,
-        username: usuario.username,
-        mail: usuario.mail,
+        id: user._id,
+        username: user.username,
+        mail: user.mail,
       },
     });
   } catch (err) {
     res
       .status(500)
-      .json({ message: "No se pudo obtener el perfil del usuario", data: err });
+      .json({ message: "No se pudo obtener el perfil del user", data: err });
   }
 }
 export async function verify(req:Request,res:Response){
@@ -106,11 +106,11 @@ export async function verify(req:Request,res:Response){
 
   jwt.verify(token, 'secret', async (err: any, user: any) => {
     if (err) return res.sendStatus(401);
-    const userFound = await em.findOne(Usuario,{ username: user.username }, { populate: ["itineraries.activities", "participants"] });
-    if (!userFound) return res.status(401).json({ message: "Usuario no encontrado" });
+    const userFound = await em.findOne(User,{ username: user.username }, { populate: ["itineraries.activities", "participants"] });
+    if (!userFound) return res.status(401).json({ message: "User no encontrado" });
 
     return res
         .status(200)
-        .json({ message: "Usuario logueado", data: { usuario: userFound } });
+        .json({ message: "User logueado", data: { user: userFound } });
   });
 };

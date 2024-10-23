@@ -2,7 +2,7 @@ import { Itinerary } from '../itinerary/itinerary.entity.js'
 import { Property, Entity, ManyToOne, Rel, ManyToMany, Collection } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Preference } from '../preference/preference.entity.js'
-import { Usuario } from '../usuario/usuario.entity.js'
+import { User } from '../user/user.entity.js'
 
 @Entity()
 export class Participant extends BaseEntity {
@@ -21,6 +21,6 @@ export class Participant extends BaseEntity {
         @ManyToMany(() => Preference, (preference) => preference.participants, { owner: true })
         preferences = new Collection<Preference>(this)
 
-        @ManyToOne(() => Usuario, { nullable: true })
-        user?: Rel<Usuario>;
+        @ManyToOne(() => User, { nullable: true })
+        user?: Rel<User>;
 }

@@ -3,9 +3,9 @@ import z from 'zod';
 
 export const putSchema = z.object({
     username: z.string({
-        invalid_type_error: 'El nombre de usuario debe ser un string',
-        required_error: 'El nombre de usuario es requerido',
-    }).regex(/^[a-zA-Z0-9_-]{3,30}$/, 'El nombre de usuario debe tener entre 3 y 30 caracteres y solo puede contener letras, números, guiones bajos y guiones medios'),
+        invalid_type_error: 'El nombre de user debe ser un string',
+        required_error: 'El nombre de user es requerido',
+    }).regex(/^[a-zA-Z0-9_-]{3,30}$/, 'El nombre de user debe tener entre 3 y 30 caracteres y solo puede contener letras, números, guiones bajos y guiones medios'),
     password: z.string({
         invalid_type_error: 'La contraseña debe ser un string',
     }).regex(/^(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/, 'La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un número'),
@@ -29,8 +29,8 @@ export const putSchema = z.object({
 
 export const patchSchema = z.object({
     username: z.string({
-        invalid_type_error: 'El nombre de usuario debe ser un string'
-    }).min(3, 'El nombre de usuario debe tener al menos 3 caracteres').max(15,'El nombre de usuario puede tener como maximo 15 caracteres').regex(/^[a-zA-Z0-9_-]{3,30}$/, 'El nombre de usuario debe tener entre 3 y 30 caracteres y solo puede contener letras, números, guiones bajos y guiones medios').optional(),
+        invalid_type_error: 'El nombre de user debe ser un string'
+    }).min(3, 'El nombre de user debe tener al menos 3 caracteres').max(15,'El nombre de user puede tener como maximo 15 caracteres').regex(/^[a-zA-Z0-9_-]{3,30}$/, 'El nombre de user debe tener entre 3 y 30 caracteres y solo puede contener letras, números, guiones bajos y guiones medios').optional(),
     password: z.string({
         invalid_type_error: 'La contraseña debe ser un string'
     }).regex(/^(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/, 'La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un número').optional(),

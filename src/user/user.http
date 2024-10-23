@@ -1,10 +1,10 @@
-### GET ALL //funciona. Pero en la data del itinerario muestra los datos del usuario que posee ese itinerario, no muestra los datos del itinerario como titulo, activities, etc.
-GET http://localhost:3000/api/usuarios
+### GET ALL //funciona. Pero en la data del itinerario muestra los datos del user que posee ese itinerario, no muestra los datos del itinerario como titulo, activities, etc.
+GET http://localhost:3000/api/users
 
 ###
 # @name CreateUsuario
 ### POST
-POST http://localhost:3000/api/usuarios
+POST http://localhost:3000/api/users
 Content-Type:application/json
 
 {
@@ -22,12 +22,12 @@ Content-Type:application/json
 
 ### GET ONE
 //FUNCIONA
-GET http://localhost:3000/api/usuarios/66fc4785f2b5cf4ef633816a
+GET http://localhost:3000/api/users/66fc4785f2b5cf4ef633816a
 
 
 ###
-PUT http://localhost:3000/api/usuarios/{{id}}
-//FUNCIONA. No permite modificar el campo itinerarios. Solo se puede modificar al usuario desde el itinerario.
+PUT http://localhost:3000/api/users/{{id}}
+//FUNCIONA. No permite modificar el campo itinerarios. Solo se puede modificar al user desde el itinerario.
 Content-Type:application/json
 
 {
@@ -41,7 +41,7 @@ Content-Type:application/json
 
 
 ###
-PATCH http://localhost:3000/api/usuarios/669d9a3503f535edd5c7aabe
+PATCH http://localhost:3000/api/users/669d9a3503f535edd5c7aabe
 //FUNCIONA
 Content-Type:application/json
 
@@ -54,4 +54,4 @@ Content-Type:application/json
 
 ### DELETE
 //FUNCIONA
-DELETE http://localhost:3000/api/usuarios/{{id}}
+DELETE http://localhost:3000/api/users/{{id}}

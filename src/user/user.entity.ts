@@ -13,19 +13,19 @@ export class User extends BaseEntity {
     password!:string
 
     @Property({ nullable: false })
-    nombres!: string
+    names!: string
 
     @Property({ nullable: false })
-    apellidos!: string
+    lastNames!: string
 
     @Property({ nullable: false })
-    fechaNacimiento!: Date
+    dateOfBirth!: Date
 
     @Property({ nullable: false, unique: true })
     mail!: string
 
     @Property({ nullable: false })
-    nroTelefono!: string
+    phoneNumber!: string
 
     @OneToMany(() => Itinerary, itinerary => itinerary.user, { cascade: [Cascade.ALL] })
     itineraries = new Collection<Itinerary>(this);
@@ -34,5 +34,5 @@ export class User extends BaseEntity {
     participants = new Collection<Participant>(this);
 
     @OneToMany(() => Opinion, (opinion) => opinion.user, { cascade: [Cascade.ALL] })
-    opiniones = new Collection<Opinion>(this)
+    opinions = new Collection<Opinion>(this)
 }

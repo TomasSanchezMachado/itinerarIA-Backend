@@ -6,10 +6,10 @@ import { Activity } from '../activity/activity.entity.js';
 @Entity()
 export class Opinion extends BaseEntity {
   @Property({ nullable: false })
-  calificacion!: number;
+  rating!: number;
 
   @Property({ nullable: false })
-  comentario!: string;
+  comment!: string;
 
   @ManyToOne(() => User, { nullable: false })
   user!: Rel<User>;

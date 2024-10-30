@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import express from 'express';
-import { lugarRouter } from './lugar/lugar.routes.js';
+import { placeRouter } from './place/place.routes.js';
 import { itineraryRouter } from './itinerary/itinerary.routes.js';
 import { actividadRouter } from './activity/activity.routes.js';
 import { orm, syncSchema } from './shared/db/orm.js';
@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 
 app.use('/api/auth', authRouter)
 
-app.use('/api/lugares', lugarRouter);
+app.use('/api/places'/*, authenticateJWT*/, placeRouter);
 app.use('/api/itinerarios', authenticateJWT,itineraryRouter);
 app.use('/api/externalServices', authenticateJWT,externalServiceRouter);
 app.use('/api/activities', authenticateJWT,actividadRouter)

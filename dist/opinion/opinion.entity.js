@@ -16,11 +16,11 @@ export let Opinion = class Opinion extends BaseEntity {
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", Number)
-], Opinion.prototype, "calificacion", void 0);
+], Opinion.prototype, "rating", void 0);
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)
-], Opinion.prototype, "comentario", void 0);
+], Opinion.prototype, "comment", void 0);
 __decorate([
     ManyToOne(() => User, { nullable: false }),
     __metadata("design:type", Object)

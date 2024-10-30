@@ -6,25 +6,25 @@ import { Itinerary } from "../itinerary/itinerary.entity.js";
 
 
 @Entity()
-export class Lugar extends BaseEntity {
+export class Place extends BaseEntity {
 
     @Property()
-    nombre!: string
+    name!: string
 
     @Property()
-    ubicacion_latitud!: number
+    latitude!: number
 
     @Property()
-    ubicacion_longitud!: number
+    longitude!: number
 
     @Property()
-    codigoPostal!: string
+    zipCode!: string
 
     @Property()
-    provincia!: string
+    province!: string
 
     @Property()
-    pais!: string
+    country!: string
 
     @OneToMany(() => ExternalService, (externalService) => externalService.lugar,
         { cascade: [Cascade.ALL] })
@@ -34,8 +34,8 @@ export class Lugar extends BaseEntity {
         { cascade: [Cascade.ALL] })
     activities = new Collection<Activity>(this)
 
-    @OneToMany(() => Itinerary, (itinerario) => itinerario.place,
+    @OneToMany(() => Itinerary, (itinerary) => itinerary.place,
         { cascade: [Cascade.ALL] }) 
-    itinerarios = new Collection<Itinerary>(this)
+    itineraries = new Collection<Itinerary>(this)
 
 }

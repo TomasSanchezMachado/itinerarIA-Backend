@@ -1,6 +1,6 @@
 
 import { Entity, Property, OneToMany, ManyToOne, Collection, Cascade, Rel} from '@mikro-orm/core';
-import { Lugar } from "../lugar/lugar.entity.js";
+import { Place } from "../place/place.entity.js";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Itinerary } from '../itinerary/itinerary.entity.js';
 import { Opinion } from '../opinion/opinion.entity.js';
@@ -26,8 +26,8 @@ export class Activity extends BaseEntity{
   // @Property()
   // fecha?: string;
 
-  @ManyToOne(() => Lugar, {nullable: false})
-  place!: Rel<Lugar>;
+  @ManyToOne(() => Place, {nullable: false})
+  place!: Rel<Place>;
 
   @ManyToOne(() => Itinerary,{nullable:false})
   itinerary!: Rel<Itinerary>

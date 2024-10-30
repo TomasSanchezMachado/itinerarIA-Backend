@@ -12,7 +12,7 @@ import { User } from '../user/user.entity.js';
 import { Property, OneToMany, Collection, Entity, ManyToOne, Cascade, ManyToMany } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 import { Participant } from '../participant/participant.entity.js';
-import { Lugar } from '../lugar/lugar.entity.js';
+import { Place } from '../place/place.entity.js';
 export let Itinerary = class Itinerary extends BaseEntity {
     constructor() {
         super(...arguments);
@@ -45,7 +45,7 @@ __decorate([
     __metadata("design:type", Object)
 ], Itinerary.prototype, "participants", void 0);
 __decorate([
-    ManyToOne(() => Lugar, { nullable: false }),
+    ManyToOne(() => Place, { nullable: false }),
     __metadata("design:type", Object)
 ], Itinerary.prototype, "place", void 0);
 Itinerary = __decorate([

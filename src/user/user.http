@@ -26,12 +26,13 @@ GET http://localhost:3000/api/users/66fc4785f2b5cf4ef633816a
 
 
 ###
-PUT http://localhost:3000/api/users/{{id}}
+PUT http://localhost:3000/api/users/67226488cf8ec0bfe936a770
 //FUNCIONA. No permite modificar el campo itinerarios. Solo se puede modificar al user desde el itinerario.
 Content-Type:application/json
 
 {
-    "username": "usuario2",
+    "username": "nikitox",
+    "password": "Nikitox123",
     "nombres": "mike",
     "apellidos": "mentzer",
     "fechaNacimiento": "2004-04-24",

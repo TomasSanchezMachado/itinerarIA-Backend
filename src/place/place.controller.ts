@@ -97,9 +97,6 @@ export async function remove(req: Request, res: Response) {
     if (place.externalServices.length > 0) {
       return res.status(400).json({ message: "Cannot delete the place because it has associated external services" });
     }
-    else if (place.activities.length > 0) {
-      return res.status(400).json({ message: "Cannot delete the place because it has associated activities" });
-    }
     else if (place.itineraries.length > 0) {
       return res.status(400).json({ message: "Cannot delete the place because it has associated itineraries" });
     }

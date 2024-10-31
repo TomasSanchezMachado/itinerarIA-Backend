@@ -9,7 +9,8 @@ export const orm = await MikroORM.init({
   entitiesTs: ['./src/**/*.entity.ts'],
   dbName: 'itinerarIA',
   type: 'mongo',
-  clientUrl: `mongodb://${mongoUsername}:${mongoPassword}@mongo-db:27017`,
+  clientUrl: `mongodb://localhost:27017`,
+  //clientUrl: `mongodb://${mongoUsername}:${mongoPassword}@mongo-db:27017`,
   highlighter: new MongoHighlighter(),
   debug: true,
   schemaGenerator: { //no es para mongo

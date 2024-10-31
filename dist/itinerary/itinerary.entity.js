@@ -7,12 +7,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Actividad } from '../actividad/actividad.entity.js';
-import { Usuario } from '../usuario/usuario.entity.js';
+import { Activity } from '../activity/activity.entity.js';
+import { User } from '../user/user.entity.js';
 import { Property, OneToMany, Collection, Entity, ManyToOne, Cascade, ManyToMany } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/db/baseEntity.entity.js';
 import { Participant } from '../participant/participant.entity.js';
-import { Lugar } from '../lugar/lugar.entity.js';
+import { Place } from '../place/place.entity.js';
 export let Itinerary = class Itinerary extends BaseEntity {
     constructor() {
         super(...arguments);
@@ -33,19 +33,19 @@ __decorate([
     __metadata("design:type", Number)
 ], Itinerary.prototype, "duration", void 0);
 __decorate([
-    OneToMany(() => Actividad, (activity) => activity.itinerary, { cascade: [Cascade.ALL] }),
+    OneToMany(() => Activity, (activity) => activity.itinerary, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)
 ], Itinerary.prototype, "activities", void 0);
 __decorate([
-    ManyToOne(() => Usuario, { nullable: false }),
-    __metadata("design:type", Usuario)
+    ManyToOne(() => User, { nullable: false }),
+    __metadata("design:type", User)
 ], Itinerary.prototype, "user", void 0);
 __decorate([
     ManyToMany(() => Participant, (participant) => participant.itineraries, { owner: true, cascade: [Cascade.CANCEL_ORPHAN_REMOVAL], nullable: false }),
     __metadata("design:type", Object)
 ], Itinerary.prototype, "participants", void 0);
 __decorate([
-    ManyToOne(() => Lugar, { nullable: false }),
+    ManyToOne(() => Place, { nullable: false }),
     __metadata("design:type", Object)
 ], Itinerary.prototype, "place", void 0);
 Itinerary = __decorate([

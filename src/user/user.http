@@ -1,0 +1,58 @@
+### GET ALL //funciona. Pero en la data del itinerario muestra los datos del user que posee ese itinerario, no muestra los datos del itinerario como titulo, activities, etc.
+GET http://localhost:3000/api/users
+
+###
+# @name CreateUsuario
+### POST
+POST http://localhost:3000/api/users
+Content-Type:application/json
+
+{
+    "username": "nicoaslasEscobar523",
+    "password": "123456Nicolas",
+    "nombres": "nicolas roberto",
+    "apellidos": "coleman levrone",
+    "fechaNacimiento": "2024-04-24",
+    "mail": "ronnie666@mdasdasdasd@ail.com",
+    "nroTelefono": "3415456985"
+}
+
+###
+@id = {{CreateUsuario.response.body.data.id}}
+
+### GET ONE
+//FUNCIONA
+GET http://localhost:3000/api/users/66fc4785f2b5cf4ef633816a
+
+
+###
+PUT http://localhost:3000/api/users/67226488cf8ec0bfe936a770
+//FUNCIONA. No permite modificar el campo itinerarios. Solo se puede modificar al user desde el itinerario.
+Content-Type:application/json
+
+{
+    "username": "nikitox",
+    "password": "Nikitox123",
+    "nombres": "mike",
+    "apellidos": "mentzer",
+    "fechaNacimiento": "2004-04-24",
+    "mail": "ronnie666@gmail.com",
+    "nroTelefono": "3415456985"
+}
+
+
+###
+PATCH http://localhost:3000/api/users/669d9a3503f535edd5c7aabe
+//FUNCIONA
+Content-Type:application/json
+
+{
+    "username" : "nikitox555",
+    "mail":"escobarisiutnfrro@gmail.com"
+
+}
+
+
+### DELETE
+//FUNCIONA
+DELETE http://localhost:3000/api/users/{{id}}

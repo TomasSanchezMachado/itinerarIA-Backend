@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction } from "express";
 import { Itinerary } from "./itinerary.entity.js";
 import { orm } from "../shared/db/orm.js";
-import { Usuario } from "../usuario/usuario.entity.js";
+import { User } from "../user/user.entity.js";
 import { Participant } from "../participant/participant.entity.js";
 import { ObjectId } from "@mikro-orm/mongodb";
 
@@ -76,10 +76,10 @@ export async function findOne(req: Request, res: Response) {
 
 export async function add(req: Request, res: Response) {
   try {
-    // Valido que el usuario ingresado exista
-    const userFound = await em.findOne(Usuario, { id: req.body.sanitizedInput.user });
+    // Valido que el user ingresado exista
+    const userFound = await em.findOne(User, { id: req.body.sanitizedInput.user });
     if (!userFound) {
-      return res.status(400).json({ message: "El usuario ingresado no existe" });
+      return res.status(400).json({ message: "El user ingresado no existe" });
     }
 
     console.log(req.body.sanitizedInput.participants, 'req.body.sanitizedInput.participants');
@@ -117,11 +117,11 @@ export async function add(req: Request, res: Response) {
 export async function update(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    // //Valido que, en caso de quererse cambiar el usuario,exista
-    // if(req.body.sanitizedInput.usuario){
-    //   const usuario = await em.findOne('Usuario', {id: req.body.sanitizedInput.usuario});
-    //   if(!usuario){
-    //     return res.status(400).json({message: "El usuario ingresado no existe"});
+    // //Valido que, en caso de quererse cambiar el user,exista
+    // if(req.body.sanitizedInput.user){
+    //   const user = await em.findOne('User', {id: req.body.sanitizedInput.user});
+    //   if(!user){
+    //     return res.status(400).json({message: "El user ingresado no existe"});
     //   }
     // }
     const itinerary = em.getReference(Itinerary, id);

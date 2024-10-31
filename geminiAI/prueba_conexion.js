@@ -15,7 +15,7 @@ const model = genAI.getGenerativeModel({
 });
 
 async function generateText() {
-  const prompt = `Dame un itinerario de 20 dias en Europa usando este JSON schema: { "type":"object", "properties": { "titulo": {"type":"string"}, "descripcion": {"type":"string"}, "cantDias": {"type":"number"}, "actividades": {"type":"array", "items": { "type":"object", "properties": { "nombre": {"type":"string"}, "descripcion": {"type":"string"}, "lugar": {"type":"object", "properties":{"nombre": "string",
+  const prompt = `Dame un itinerario de 20 dias en Europa usando este JSON schema: { "type":"object", "properties": { "titulo": {"type":"string"}, "descripcion": {"type":"string"}, "cantDias": {"type":"number"}, "activities": {"type":"array", "items": { "type":"object", "properties": { "nombre": {"type":"string"}, "descripcion": {"type":"string"}, "lugar": {"type":"object", "properties":{"nombre": "string",
     "ubicacion":{"type":"object", "properties": {
         "latitud": number,
         "longitud": number
@@ -25,7 +25,7 @@ async function generateText() {
     "pais": "string"}}, } } }, "transporte": {"type":"string"} } } Example: { "titulo": "Disney World",
   "descripcion": "Disney World is a magical place",
     "cantDias": 3,
-      "actividades": [ { "nombre": "Magic Kingdom",
+      "activities": [ { "nombre": "Magic Kingdom",
         "descripcion": "Magic Kingdom is a magical place",
           "lugar": { "nombre": "Magic Kingdom",
             "ubicacion": { "latitud": 28.4187,

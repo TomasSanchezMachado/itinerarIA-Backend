@@ -1,20 +1,20 @@
 import { Entity, Property, ManyToOne, Rel } from '@mikro-orm/core';
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
-import { Usuario } from '../usuario/usuario.entity.js';
-import { Actividad } from '../actividad/actividad.entity.js';
+import { User } from '../user/user.entity.js';
+import { Activity } from '../activity/activity.entity.js';
 
 @Entity()
 export class Opinion extends BaseEntity {
   @Property({ nullable: false })
-  calificacion!: number;
+  rating!: number;
 
   @Property({ nullable: false })
-  comentario!: string;
+  comment!: string;
 
-  @ManyToOne(() => Usuario, { nullable: false })
-  usuario!: Rel<Usuario>;
+  @ManyToOne(() => User, { nullable: false })
+  user!: Rel<User>;
 
-  @ManyToOne(() => Actividad, { nullable: false })
-  actividad!: Rel<Actividad>;
+  @ManyToOne(() => Activity, { nullable: false })
+  activity!: Rel<Activity>;
 }
 

@@ -32,7 +32,7 @@ export const postSchema = z.object({
   }).min(3, 'The schedule must have at least 3 characters'),
   website: websiteSchema.optional(),
   phoneNumber: telSchema.optional(),
-  lugar: z.string({
+  place: z.string({
     invalid_type_error: 'The place must be a string',
     required_error: 'The place is required',
   }),

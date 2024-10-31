@@ -1,0 +1,46 @@
+GET http://localhost:3000/api/places
+###
+# @name createLugar
+POST http://localhost:3000/api/places
+Content-Type: application/json
+
+{
+    "name": "Lugar 1",
+    "latitude": 20.078542,
+    "longitude": 77.012547,
+    "zipCode": "12345",
+    "province": "Provincia",
+    "country": "Pais"
+}
+###
+
+@id = {{createLugar.response.body.data.id}}
+
+###
+GET http://localhost:3000/api/places/{{id}}
+###
+PUT http://localhost:3000/api/places/{{id}}
+Content-Type: application/json
+
+{
+    "name": "Rosario",
+    "latitude": -32.944242,
+    "longitude": -60.650538,
+    "zipCode": "2000",
+    "province": "Santa Fe",
+    "country": "Angola"
+
+}
+###
+PATCH http://localhost:3000/api/places/{{id}}
+Content-Type: application/json
+
+{
+
+    "name" : "testPatch"
+
+}
+
+
+###
+DELETE http://localhost:3000/api/places/{{id}}

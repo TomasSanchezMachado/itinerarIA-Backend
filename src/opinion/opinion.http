@@ -9,8 +9,8 @@ Content-Type: application/json
 {
   "calificacion": 5,
   "comentario": "Excelente lugar para pasar el día",
-  "actividad": "669d99ea03f535edd5c7aabd",
-  "usuario": "669d9a3503f535edd5c7aabe"
+  "activity": "669d99ea03f535edd5c7aabd",
+  "user": "669d9a3503f535edd5c7aabe"
 }
 
 ### ID
@@ -28,7 +28,7 @@ Content-Type: application/json
   "calificacion": 4,
   "comentario": "Excelente lugar para pasar el día",
   "lugar": "667f733b2e2c094f338971ad",
-  "usuario": "667f733b2e2c094f338971ad"
+  "user": "667f733b2e2c094f338971ad"
 }
 
 ### DELETE opinion by ID

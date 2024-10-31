@@ -16,13 +16,13 @@ export function sanitizeUsuarioInput(
   req.body.sanitizedInput = {
     username: req.body.username,
     password: req.body.password,
-    nombres: req.body.nombres,
-    apellidos: req.body.apellidos,
-    fechaNacimiento: req.body.fechaNacimiento,
+    names: req.body.names,
+    lastName: req.body.lastName,
+    dateOfBirth: req.body.dateOfBirth,
     mail: req.body.mail,
-    nroTelefono: req.body.nroTelefono,
-    itinerarios: req.body.itinerarios,
-    opiniones: req.body.opiniones,
+    phoneNumber: req.body.phoneNumber,
+    itineraries: req.body.itineraries,
+    opinions: req.body.opinions,
   };
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {

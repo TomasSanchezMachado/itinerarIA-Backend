@@ -1,4 +1,6 @@
 GET http://localhost:3000/api/itinerarios
+
+
 ###
 # @name createItinerario
 
@@ -9,8 +11,8 @@ Content-Type: application/json
     "title": "Itinerario 1",
     "description": "Itinerario hecho para 7 dias en Disney...",
     "duration": 5,
-    "user":"66fc4785f2b5cf4ef633816a",
-    "place":"667ebe879b52c622400b1065",
+    "user":"67157b41371c9028019e640b",
+    "place":"67157b64371c9028019e640c",
     "activities":["66fd97cb2e28ca23b47f2058","66fd97cb2e28ca23b47f2058"],
     "participants":[{"name":"Nicolás Escobar","age":20,"disability":false},{"id":"670bd0cc60eb88e665c9fb90"}]
 }

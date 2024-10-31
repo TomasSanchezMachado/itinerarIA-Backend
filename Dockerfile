@@ -1,9 +1,13 @@
 FROM node:21.7.1
 
-RUN mkdir -p /home/app
+WORKDIR /home/app
 
-COPY . /home/app
+COPY package*.json ./
+
+COPY . .
+
+RUN npm install
 
 EXPOSE 3000
 
-CMD ["node", "/src/app.ts"]
+CMD ["npm", "run" ,"start:dev"]

@@ -1,6 +1,6 @@
 import z from 'zod';
 export const participantSchema = z.object({
-    nombres: z.string({
+    name: z.string({
         invalid_type_error: 'Name must be a string',
         required_error: 'Name is required',
     }).min(3, 'Name must be at least 3 characters').max(15, 'Name can have a maximum of 25 characters.').regex(/^[A-Za-z ]+$/, 'Name must contain only letters'),

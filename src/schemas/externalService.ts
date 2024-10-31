@@ -29,7 +29,7 @@ export const postSchema = z.object({
   schedule: z.string({
     invalid_type_error: 'The schedule must be a string',
     required_error: 'The schedule is required',
-  }),
+  }).min(3, 'The schedule must have at least 3 characters'),
   website: websiteSchema.optional(),
   phoneNumber: telSchema.optional(),
   lugar: z.string({
@@ -61,10 +61,6 @@ export const putSchema = z.object({
   }),
   website: websiteSchema.optional(),
   phoneNumber: telSchema.optional(),
-  lugar: z.string({
-    invalid_type_error: 'The place must be a string',
-    required_error: 'The place is required',
-  }),
 });
 
 export const patchSchema = z.object({
@@ -85,7 +81,4 @@ export const patchSchema = z.object({
   }).optional(),
   website: websiteSchema.optional(),
   phoneNumber: telSchema.optional(),
-  lugar: z.string({
-    invalid_type_error: 'The place must be a string',
-  }).optional(),
 });

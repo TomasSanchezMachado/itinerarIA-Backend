@@ -93,6 +93,7 @@ async function add(req: Request, res: Response) {
 
 async function update(req: Request, res: Response) {
   try {
+    console.log("hola")
     const id = req.params.id;
     const { name } = req.body.sanitizedInput;
 

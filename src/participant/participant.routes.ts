@@ -8,7 +8,6 @@ import {
   remove,
   addFavorite,
 } from "./participant.controller.js";
-import { validatePartialParticipant, validateParticipant } from "../schemas/participant.js";
 
 export const participantRouter = Router();
 

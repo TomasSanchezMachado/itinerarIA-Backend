@@ -5,7 +5,6 @@ const secretKey = process.env.JWT_SECRET || 'secret';
 
 export function authenticateJWT(req: Request, res: Response, next: NextFunction) {
   const token = req.cookies.token; // Accedemos al token desde las cookies
-  console.log(token);
 
   if (!token) {
     return res.status(401).json({ message: 'No authorization token provided' });

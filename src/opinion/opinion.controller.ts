@@ -10,8 +10,8 @@ function sanitizeOpinionInput(
   next: NextFunction
 ) {
   req.body.sanitizedInput = {
-    calificacion: req.body.calificacion,
-    comentario: req.body.comentario,
+    rating: req.body.rating,
+    comment: req.body.comment,
     user: req.body.user,
     activity: req.body.activity,
   };

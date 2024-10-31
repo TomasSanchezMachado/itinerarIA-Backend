@@ -56,9 +56,14 @@ export async function findOne(req: Request, res: Response) {
 export async function add(req: Request, res: Response) {
   try {
     // Validation to ensure the place does not already exist
-    const existingPlace = await em.findOne(Place, { latitude: req.body.latitude, longitude: req.body.longitude });
-    if (existingPlace) {
+    const existingPlaceCoordinates = await em.findOne(Place, { latitude: req.body.latitude, longitude: req.body.longitude });
+    const existingPlaceName = await em.findOne(Place, { name: req.body.name, country: req.body.country, province: req.body.province });
+    
+    if (existingPlaceCoordinates) {
       return res.status(400).json({ message: "There is already a place with the same coordinates" });
+    }
+    else if (existingPlaceName) {
+      return res.status(400).json({ message: "There is already a place with the same name, Province/State and Country" });
     }
     else {
       const place = em.create(Place, req.body.sanitizedInput);
@@ -74,9 +79,14 @@ export async function add(req: Request, res: Response) {
 export async function update(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const existingPlace = await em.findOne(Place, { latitude: req.body.latitude, longitude: req.body.longitude });
-    if (existingPlace && existingPlace.id !== id) {
+    const existingPlaceCoordinates = await em.findOne(Place, { latitude: req.body.latitude, longitude: req.body.longitude });
+    const existingPlaceName = await em.findOne(Place, { name: req.body.name, country: req.body.country, province: req.body.province });
+
+    if (existingPlaceCoordinates && existingPlaceCoordinates.id !== id) {
       return res.status(400).json({ message: "There is already a place with the same coordinates!" });
+    }
+    else if (existingPlaceName && existingPlaceName.id !== id) {
+      return res.status(400).json({ message: "There is already a place with the same name, Province/State and Country" });
     }
     else {
       const place = em.getReference(Place, id);

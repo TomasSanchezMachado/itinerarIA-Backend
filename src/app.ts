@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 
 app.use('/api/auth', authRouter)
 
-app.use('/api/places'/*, authenticateJWT*/, placeRouter);
+app.use('/api/places', authenticateJWT, placeRouter);
 app.use('/api/itinerarios', authenticateJWT,itineraryRouter);
 app.use('/api/externalServices', authenticateJWT,externalServiceRouter);
 app.use('/api/activities', authenticateJWT,actividadRouter)

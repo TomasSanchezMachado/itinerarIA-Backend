@@ -13,6 +13,7 @@ Thumbs.db
 
 # ignore built ts files
 dist/**/*.js
+tsconfig.tsbuildinfo
 
 
 # vscode

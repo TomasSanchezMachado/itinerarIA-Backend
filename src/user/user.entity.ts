@@ -16,7 +16,7 @@ export class User extends BaseEntity {
     names!: string
 
     @Property({ nullable: false })
-    lastNames!: string
+    lastName!: string
 
     @Property({ nullable: false })
     dateOfBirth!: Date

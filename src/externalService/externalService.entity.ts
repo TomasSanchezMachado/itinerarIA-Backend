@@ -27,6 +27,6 @@ export class ExternalService extends BaseEntity{
   phoneNumber?: string;
 
   @ManyToOne(() => Place, { nullable: false })
-  lugar!: Rel<Place>;
+  place!: Rel<Place>;
 
 }

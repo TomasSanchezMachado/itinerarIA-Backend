@@ -17,7 +17,7 @@ function sanitizeExternalServiceInput(
     schedule: req.body.schedule,
     website: req.body.website,
     phoneNumber: req.body.phoneNumber,
-    lugar: req.body.lugar
+    place: req.body.place
   }
   //more checks here
 
@@ -31,7 +31,7 @@ function sanitizeExternalServiceInput(
 
 async function findAll(req: Request, res: Response) {
   try {
-    const externalService = await em.find(ExternalService, {}, { populate: ['lugar'] });
+    const externalService = await em.find(ExternalService, {}, { populate: ['place'] });
     if(externalService.length === 0){
       return res.status(200).json({message: ['No se encontraron servicios externos']});
     }
@@ -45,7 +45,7 @@ async function findAll(req: Request, res: Response) {
 async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const externalService = await em.findOneOrFail(ExternalService, { id }, { populate: ['lugar'] });
+    const externalService = await em.findOneOrFail(ExternalService, { id }, { populate: ['place'] });
     res.status(200).json({message: 'Servicio externo encontrado', data: externalService});
   }
   catch (error: any) {
@@ -55,14 +55,14 @@ async function findOne(req: Request, res: Response) {
 
 async function findByPlace(req: Request, res: Response) {
   try {
-    const lugar = await em.findOne('Lugar', { id: req.params.id });
-    if (!lugar) {
-      return res.status(404).json({ message: ['No se encontró el lugar con ese id'] });
+    const place = await em.findOne('Place', { id: req.params.id });
+    if (!place) {
+      return res.status(404).json({ message: ['No se encontró el place con ese id'] });
     }
 
-    const serviciosExternos = await em.find(ExternalService, { lugar: req.params.id });
+    const serviciosExternos = await em.find(ExternalService, { place: req.params.id });
     if (serviciosExternos.length === 0) {
-      return res.status(200).json({ message: ['No se encontraron servicios externos para el lugar'] });
+      return res.status(200).json({ message: ['No se encontraron servicios externos para el place'] });
     }
     res.status(200).json({ message: 'Servicios externos encontrados', data: serviciosExternos });
   }
@@ -73,9 +73,9 @@ async function findByPlace(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const lugar = await em.findOne('Lugar', { id: req.body.sanitizedInput.lugar });
-    if (!lugar) {
-      return res.status(404).json({ message: ['No se encontró el lugar con ese id'] });
+    const place = await em.findOne('Place', { id: req.body.sanitizedInput.place });
+    if (!place) {
+      return res.status(404).json({ message: ['No se encontró el place con ese id'] });
     }
 
     const externalService = await em.findOne(ExternalService, { name: req.body.sanitizedInput.name });
@@ -105,7 +105,7 @@ async function update(req: Request, res: Response) {
 
     // Procede con la actualización si no hay conflicto
     const externalService = em.getReference(ExternalService, id);
-    em.assign(externalService, { ...req.body.sanitizedInput, lugar: req.body.sanitizedInput.lugar.id });
+    em.assign(externalService, { ...req.body.sanitizedInput, place: req.body.sanitizedInput.place.id });
     await em.flush();
 
     res.status(200).json({ message: 'Servicio externo actualizado', data: externalService });

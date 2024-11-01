@@ -83,10 +83,14 @@ export async function update(req: Request, res: Response) {
 export async function remove(req: Request, res: Response) {
   try{
     const id = req.params.id
-    const objectId = new ObjectId(id)
-    const preferencia = em.getReference(Preference, objectId)
-    await em.removeAndFlush(preferencia)
-    res.status(200).send({ message: 'Preference borrada',data:preferencia })
+    const preference = await em.findOneOrFail(Preference, { id: id }, { populate: ['participants']})
+    if(preference.participants.length > 0){
+      return res.status(400).json({ message: 'Cannot delete the preference because it has associated participants' })
+    }
+    else{
+      await em.removeAndFlush(preference)
+      res.status(200).send({ message: 'Preference deleted',data:preference })
+    }
   } 
   catch (error: any) {
     res.status(500).json({ message: error.message })

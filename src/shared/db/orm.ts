@@ -10,6 +10,7 @@ export const orm = await MikroORM.init({
   dbName: 'itinerarIA',
   type: 'mongo',
   clientUrl: `mongodb://localhost:27017`,
+  //cambiar a la linea de abajo para usar docker compose
   //clientUrl: `mongodb://${mongoUsername}:${mongoPassword}@mongo-db:27017`,
   highlighter: new MongoHighlighter(),
   debug: true,

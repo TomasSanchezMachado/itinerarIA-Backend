@@ -5,11 +5,11 @@ Content-Type:application/json
 {
     "username": "nikitox44",
     "password": "Nico1234",
-    "nombres": "nicolas roberto",
-    "apellidos": "escobar",
-    "fechaNacimiento": "2004/04/24",
-    "mail": "nico555@gmail.com",
-    "nroTelefono": "3415456985"
+    "names": "nicolas roberto",
+    "lastName": "coleman levrone",
+    "dateOfBirth": "2024-04-24",
+    "mail": "hoal@gmail.com",
+    "phoneNumber": "3415456985"
 }
 
 ###LOGIN

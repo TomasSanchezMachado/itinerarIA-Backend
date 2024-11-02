@@ -3,8 +3,8 @@ import { Opinion } from "./opinion.entity.js";
 const em = orm.em;
 function sanitizeOpinionInput(req, res, next) {
     req.body.sanitizedInput = {
-        calificacion: req.body.calificacion,
-        comentario: req.body.comentario,
+        rating: req.body.rating,
+        comment: req.body.comment,
         user: req.body.user,
         activity: req.body.activity,
     };

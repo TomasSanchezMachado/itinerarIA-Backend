@@ -5,22 +5,22 @@ import {
   add,
   update,
   remove,
-  sanitizeUsuarioInput,
+  sanitizeUserInput,
 } from "./user.controller.js";
 import { validateSchema } from "../shared/middlewares/validateSchema.js";
-import { patchSchema, putSchema } from "../schemas/usuario.js";
+import { patchSchema, putSchema } from "../schemas/user.js";
 
 
-export const usuarioRouter = Router();
+export const userRouter = Router();
 
-usuarioRouter.get("/", findAll);
+userRouter.get("/", findAll);
 
-usuarioRouter.get("/:id", findOne);
+userRouter.get("/:id", findOne);
 
-usuarioRouter.post("/", sanitizeUsuarioInput, add);
+userRouter.post("/", sanitizeUserInput, add);
 
-usuarioRouter.put("/:id", sanitizeUsuarioInput, validateSchema(putSchema), update);
+userRouter.put("/:id", sanitizeUserInput, validateSchema(putSchema), update);
 
-usuarioRouter.patch("/:id", sanitizeUsuarioInput, validateSchema(patchSchema), update);
+userRouter.patch("/:id", sanitizeUserInput, validateSchema(patchSchema), update);
 
-usuarioRouter.delete("/:id", remove);
+userRouter.delete("/:id", remove);

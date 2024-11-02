@@ -41,14 +41,16 @@ Content-Type:application/json
 }
 
 
+
+
 ###
-PATCH http://localhost:3000/api/users/669d9a3503f535edd5c7aabe
+PATCH http://localhost:3000/api/users/67242b092b19f0615b191eaa
 //FUNCIONA
 Content-Type:application/json
 
 {
-    "username" : "nikitox555",
-    "mail":"escobarisiutnfrro@gmail.com"
+    "username" : "facu",
+    "mail":"facundo@gmail.com"
 
 }
 

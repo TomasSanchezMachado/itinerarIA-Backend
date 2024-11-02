@@ -29,6 +29,21 @@ async function findAll(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
+async function findAllByActivity(req, res) {
+    try {
+        const id = req.params.id;
+        const opinion = await em.find(Opinion, { activity: id });
+        if (opinion.length === 0) {
+            return res.status(200).json({ message: "No se encontraron opiniones" });
+        }
+        res
+            .status(200)
+            .json({ message: "Todos las opiniones encontradas", data: opinion });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
 async function findOne(req, res) {
     try {
         const id = req.params.id;
@@ -72,5 +87,5 @@ async function remove(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-export { sanitizeOpinionInput, findAll, findOne, add, update, remove };
+export { sanitizeOpinionInput, findAll, findAllByActivity, findOne, add, update, remove };
 //# sourceMappingURL=opinion.controller.js.map

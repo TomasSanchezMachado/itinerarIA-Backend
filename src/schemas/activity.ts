@@ -8,7 +8,7 @@ export const activitySchema = z.object({
     description: z.string({
         invalid_type_error: 'La descripción debe ser un string',
         required_error: 'La descripción es requerida'
-    }).min(10,'La descripcion debe tener como minimo 10 caracteres').max(100),
+    }).min(3,'La descripcion debe tener como minimo 3 caracteres').max(100),
     outdoor: z.boolean({
         required_error: 'Debe especificar si la activity es al aire libre o no'
     }),
@@ -30,7 +30,7 @@ export const patchActivitySchema = z.object({
     }).min(3,'El nombre debe tener como minimo 3 caracteres').max(20).optional(),
     description: z.string({
         invalid_type_error: 'La descripción debe ser un string'
-    }).min(10,'La descripcion debe tener como minimo 10 caracteres').max(100).optional(),
+    }).min(3,'La descripcion debe tener como minimo 3 caracteres').max(100).optional(),
     outdoor: z.boolean({
         invalid_type_error: 'Debe especificar si la activity es al aire libre o no'
     }).optional(),

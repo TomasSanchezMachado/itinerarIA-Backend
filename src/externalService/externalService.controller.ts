@@ -33,9 +33,9 @@ async function findAll(req: Request, res: Response) {
   try {
     const externalService = await em.find(ExternalService, {}, { populate: ['place'] });
     if(externalService.length === 0){
-      return res.status(200).json({message: ['No se encontraron servicios externos']});
+      return res.status(200).json({message: ['External services not found']});
     }
-    res.status(200).json({message: 'Todos los servicios externos encontrados', data: externalService});
+    res.status(200).json({message: 'All external services found', data: externalService});
   }
   catch (error: any) {
     res.status(500).json({message: error.message});
@@ -46,7 +46,7 @@ async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id;
     const externalService = await em.findOneOrFail(ExternalService, { id }, { populate: ['place'] });
-    res.status(200).json({message: 'Servicio externo encontrado', data: externalService});
+    res.status(200).json({message: 'External service found', data: externalService});
   }
   catch (error: any) {
     res.status(500).json({message: error.message});
@@ -57,12 +57,12 @@ async function findByPlace(req: Request, res: Response) {
   try {
     const place = await em.findOne('Place', { id: req.params.id });
     if (!place) {
-      return res.status(404).json({ message: ['No se encontró el place con ese id'] });
+      return res.status(404).json({ message: ['A place with that id was not found'] });
     }
 
     const serviciosExternos = await em.find(ExternalService, { place: req.params.id });
     if (serviciosExternos.length === 0) {
-      return res.status(200).json({ message: ['No se encontraron servicios externos para el place'] });
+      return res.status(200).json({ message: ['External services not found for that place'] });
     }
     res.status(200).json({ message: 'Servicios externos encontrados', data: serviciosExternos });
   }
@@ -75,16 +75,16 @@ async function add(req: Request, res: Response) {
   try {
     const place = await em.findOne('Place', { id: req.body.sanitizedInput.place });
     if (!place) {
-      return res.status(404).json({ message: ['No se encontró el place con ese id'] });
+      return res.status(404).json({ message: ['The place does not exist'] });
     }
 
     const externalService = await em.findOne(ExternalService, { name: req.body.sanitizedInput.name });
     if (externalService) {
-      return res.status(409).json({ message: ['El servicio externo ya existe'] });
+      return res.status(409).json({ message: ['The external service already exists'] });
     }
     const NewExternalService = em.create(ExternalService, req.body.sanitizedInput);
     await em.flush();
-    res.status(201).json({ message: 'Servicio externo creado', data: NewExternalService });
+    res.status(201).json({ message: 'External service created', data: NewExternalService });
   }
   catch (error: any) {
     res.status(500).json({message: error.message});
@@ -101,7 +101,7 @@ async function update(req: Request, res: Response) {
     const existingService = await em.findOne(ExternalService, { name });
     
     if (existingService && existingService.id !== id) {
-      return res.status(409).json({ message: ['El nombre del servicio externo ya existe'] });
+      return res.status(409).json({ message: ['There is already a service with that name'] });
     }
 
     // Procede con la actualización si no hay conflicto
@@ -109,7 +109,7 @@ async function update(req: Request, res: Response) {
     em.assign(externalService, { ...req.body.sanitizedInput, place: req.body.sanitizedInput.place.id });
     await em.flush();
 
-    res.status(200).json({ message: 'Servicio externo actualizado', data: externalService });
+    res.status(200).json({ message: 'External service updated', data: externalService });
   }
   catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -121,7 +121,7 @@ async function remove(req: Request, res: Response) {
     const id = req.params.id;
     const externalService = em.getReference(ExternalService, id);
     em.removeAndFlush(externalService);
-    res.status(200).json({ message: 'Servicio externo eliminado', data: externalService });
+    res.status(200).json({ message: 'External service deleted' });
   }
   catch (error: any) {
     res.status(500).json({message: error.message});

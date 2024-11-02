@@ -21,7 +21,7 @@ export function validateToken(req: Request, res: Response, next: NextFunction) {
       .json({ message: "Auth token is not supplied" });
   }
   try {
-    const payload = jwt.verify(token, "secret");
+    const payload = jwt.verify(token, jwtSecret);
     req.body.payload = payload;
     next();
   } catch (err) {
@@ -63,7 +63,7 @@ export async function login(req: Request, res: Response) {
       return res.status(400).json({ message: ["Incorrect username or password. Please try again."] });
     }
     if (bcrypt.compareSync(req.body.password, user.password)) {
-      const token = await createAccessToken({ username: user.username });
+      const token = await createAccessToken({ id: user.id});
       res.cookie("token", token);
       return res
         .status(200)
@@ -110,7 +110,6 @@ export async function verify(req:Request,res:Response){
     if (err) return res.sendStatus(401);
     const userFound = await em.findOne(User, { id: user.id }, { populate: ["itineraries.activities", "participants"] });
     if (!userFound) return res.status(401).json({ message: "User not found" });
-
     return res
         .status(200)
         .json({ message: "User found", data: { user: userFound } });

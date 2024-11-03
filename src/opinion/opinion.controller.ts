@@ -41,7 +41,7 @@ async function findAll(req: Request, res: Response) {
 async function findAllByActivity(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const opinion = await em.find(Opinion, { activity: id });
+    const opinion = await em.find(Opinion, { activity: id },{populate: ["user", "activity"]});
     if (opinion.length === 0) {
       return res.status(200).json({ message: "No se encontraron opiniones" });
     }

@@ -19,7 +19,7 @@ export async function findAll(req, res) {
     try {
         const preferencias = await em.find(Preference, {});
         if (preferencias.length === 0) {
-            return res.status(200).json({ message: "No se encontraron preferencias" });
+            return res.status(200).json({ message: "Preferences not found" });
         }
         res.status(200).json({ data: preferencias });
     }
@@ -41,7 +41,7 @@ export async function add(req, res) {
     try {
         const preferencia = em.create(Preference, req.body.sanitizedInput);
         await em.flush();
-        return res.status(201).json({ message: "Preferencia creada con exito", data: preferencia });
+        return res.status(201).json({ message: "Preference created successfully", data: preferencia });
     }
     catch (error) {
         return res.status(500).json({ message: error.message });
@@ -54,7 +54,7 @@ export async function update(req, res) {
         const preferencia = em.getReference(Preference, objectId);
         em.assign(preferencia, req.body.sanitizedInput);
         await em.flush();
-        return res.status(200).json({ message: "Preference actualizada con exito", data: preferencia });
+        return res.status(200).json({ message: "Preference updated successfully", data: preferencia });
     }
     catch (error) {
         return res.status(500).json({ message: error.message });

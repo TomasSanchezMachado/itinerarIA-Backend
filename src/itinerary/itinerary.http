@@ -8,7 +8,7 @@ POST http://localhost:3000/api/itinerarios
 Content-Type: application/json
 
 {
-    "title": "Itinerario 1",
+    "title": "Itinerario 1111",
     "description": "Itinerario hecho para 7 dias en Disney...",
     "dayStart": "2024-10-30",
     "dayEnd": "2024-11-23",
@@ -18,6 +18,23 @@ Content-Type: application/json
     "participants":[]
     
 }
+
+###
+
+POST http://localhost:3000/api/itinerarios/ia
+Content-Type: application/json
+
+{
+    "title": "DISNEY",
+    "description": "Itinerario hecho para 7 dias en Disney...",
+    "dayStart": "2024-10-30",
+    "dayEnd": "2024-11-23",
+    "user":"6722862eeed0a44e8abde61f",
+    "place":"67236e6e1706dd5a0709c4df",
+    "participants":["6724d5e367bf8ca176f0b7ca","6724d5ee67bf8ca176f0b7cb"]
+    
+}
+###
 
 ###
 @id = {{createItinerario.response.body.data.id}}
@@ -48,4 +65,4 @@ Content-Type: application/json
 
 
 ###
-DELETE http://localhost:3000/api/itinerarios/66d8801d79afc1938eea8fc9
+DELETE http://localhost:3000/api/itinerarios/{{id}}

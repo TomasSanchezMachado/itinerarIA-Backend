@@ -51,6 +51,53 @@ export const itinerarySchema = z.object({
     message: 'Itinerary must not last more than 31 days',
     path: ['dayEnd'],
 });
+export const itineraryAISchema = z.object({
+    place: z.string({
+        invalid_type_error: 'Place must be a string',
+        required_error: 'Place is required'
+    }),
+    title: z.string({
+        invalid_type_error: 'Title must be a string',
+        required_error: 'Title is required'
+    }),
+    participantsAge: z.array(z.number()).optional(),
+    preferences: z.array(z.string()).optional(),
+    dayStart: z.preprocess((arg) => {
+        if (typeof arg === "string" || arg instanceof String) {
+            return new Date(arg);
+        }
+        return arg;
+    }, z.date({
+        invalid_type_error: 'Start day must be a valid date',
+        required_error: 'Start day is required',
+    })),
+    dayEnd: z.preprocess((arg) => {
+        if (typeof arg === "string" || arg instanceof String) {
+            return new Date(arg);
+        }
+        return arg;
+    }, z.date({
+        invalid_type_error: 'End day must be a valid date',
+        required_error: 'End day is required',
+    })),
+}).refine((data) => data.dayEnd > data.dayStart, {
+    message: 'End day must be after start day',
+    path: ['dayEnd'],
+}).refine((data) => {
+    const diffTime = Math.abs(data.dayEnd.getTime() - data.dayStart.getTime());
+    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+    return diffDays >= 2;
+}, {
+    message: 'Itinerary must last at least 2 days',
+    path: ['dayEnd'],
+}).refine((data) => {
+    const diffTime = Math.abs(data.dayEnd.getTime() - data.dayStart.getTime());
+    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+    return diffDays <= 31;
+}, {
+    message: 'Itinerary must not last more than 31 days',
+    path: ['dayEnd'],
+});
 export const patchItinerarySchema = z.object({
     title: z.string({
         invalid_type_error: 'Title must be a string',

@@ -16,7 +16,9 @@ export function sanitizeItineraryInput(
   req.body.sanitizedInput = {
     title: req.body.title,
     description: req.body.description,
-    duration: req.body.duration,
+    // duration: req.body.duration,
+    dayStart: req.body.dayStart,
+    dayEnd: req.body.dayEnd,
     activities: req.body.activities,
     participants: req.body.participants,
     user: req.body.user,
@@ -83,7 +85,9 @@ export async function add(req: Request, res: Response) {
     }
 
     console.log(req.body.sanitizedInput.participants, 'req.body.sanitizedInput.participants');
-
+    //parseo los dias
+    req.body.sanitizedInput.dayStart = new Date(req.body.sanitizedInput.dayStart);
+    req.body.sanitizedInput.dayEnd = new Date(req.body.sanitizedInput.dayEnd);
     const itinerary = em.create(Itinerary, { ...req.body.sanitizedInput, participants: [] });
 
     // Uso de for...of para esperar cada operación asíncrona

@@ -30,8 +30,12 @@ __decorate([
 ], Itinerary.prototype, "description", void 0);
 __decorate([
     Property({ nullable: false }),
-    __metadata("design:type", Number)
-], Itinerary.prototype, "duration", void 0);
+    __metadata("design:type", Date)
+], Itinerary.prototype, "dayStart", void 0);
+__decorate([
+    Property({ nullable: false }),
+    __metadata("design:type", Date)
+], Itinerary.prototype, "dayEnd", void 0);
 __decorate([
     OneToMany(() => Activity, (activity) => activity.itinerary, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)

@@ -1,29 +1,41 @@
 # itinerarIA-Backend
-Requisitos previos
-Lista de dependencias y versiones necesarias para ejecutar el proyecto:
 
-Node.js (versión 21.7.1 o superior)
-npm
-mongoDB
+## Prerequisites
+List of necessary dependencies and versions to run the project:
+- [Docker](https://docs.docker.com/desktop/)
 
-Instalación
-Instrucciones para clonar el repositorio e instalar dependencias:
+## Installation
+Instructions to clone the repository:
 
-git clone https://github.com/tuusuario/nombre-proyecto.git
-cd nombre-proyecto
-npm install
+```bash
+git clone https://github.com/TomasSanchezMachado/itinerarIA-Backend.git
+cd itinerarIA-Backend
+```
 
-Debe crear un archivo .env donde se va a colocar la API_KEY de Gemini AI(esta misma se debe obtener en https://aistudio.google.com/apikey), de la siguiente manera:
+You must create a .env file with:
 
-GEMINI_API_KEY = apiKey
-Dentro del archivo .env tambien se debe colocar el JWT_SECRET, el cual debe ser una clave secreta que usara JWT para validar el usuario.
+- The JWT secret key JWT_SECRET
+- The MongoDB username MONGO_INITDB_ROOT_USERNAME
+- The MongoDB password MONGO_INITDB_ROOT_PASSWORD
+- The Gemini API Key GEMINI_API_KEY (you can obtain this key at https://aistudio.google.com/apikey)
+  
+Example:
+```bash
+# .env file
+JWT_SECRET=secret
+MONGO_INITDB_ROOT_USERNAME=root
+MONGO_INITDB_ROOT_PASSWORD=example
+GEMINI_API_KEY=example123
+```
 
+## Usage
+Run the command `docker compose up --build`. This will install the necessary dependencies to run the application and connect to the database.
 
+To verify that the application is running correctly, you should see the following message in the console:
 
-Uso
-Cómo ejecutar la aplicación en un entorno de desarrollo:
+```bash
+itinerarIA-app    | Server is running on http://localhost:3000/
+```
 
-npm run start:dev
-Esto abrirá la aplicación en http://localhost:3000
-
-Para que la aplicación funcione correctamente, debe haber un servidor de mongoDB en la url mongodb://localhost:27017 el cual debe estar funcionando
+## Link to the Frontend of the application
+[itinerarIA-Frontend](https://github.com/facundososab/itinerarIA-Frontend.git)

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { orm } from "../shared/db/orm.js";
 import { Opinion } from "./opinion.entity.js";
+import { Activity } from "../activity/activity.entity.js";
 
 const em = orm.em;
 
@@ -65,6 +66,12 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
+    const activity = await em.findOne(Activity, { id: req.body.activity.id},{populate:['place','itinerary'
+    ]} );
+    if(!activity){
+      return res.status(404).json({message: 'Actividad no encontrada'});
+    }
+    req.body.activity = activity;
     const opinion = em.create(Opinion, req.body.sanitizedInput);
     await em.flush();
     res.status(201).json({ message: "Opinion creada", data: opinion });

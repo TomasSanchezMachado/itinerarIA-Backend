@@ -12,7 +12,7 @@ export class Itinerary extends BaseEntity {
         title!: string
 
         @Property({ nullable: false })
-        description!: string
+        description?: string
 
         // @Property({ nullable: false })
         // duration!: number

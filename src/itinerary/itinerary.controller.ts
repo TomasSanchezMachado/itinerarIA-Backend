@@ -83,7 +83,7 @@ export async function findOne(req: Request, res: Response) {
 export async function add(req: Request, res: Response) {
   try {
     // Valido que el user ingresado exista
-    const userFound = await em.findOne(User, { id: req.body.sanitizedInput.user });
+    const userFound = await em.findOne(User, { id: req.body.sanitizedInput.user.id });
     if (!userFound) {
       return res.status(400).json({ message: "El user ingresado no existe" });
     }
@@ -92,7 +92,7 @@ export async function add(req: Request, res: Response) {
     //parseo los dias
     req.body.sanitizedInput.dayStart = new Date(req.body.sanitizedInput.dayStart);
     req.body.sanitizedInput.dayEnd = new Date(req.body.sanitizedInput.dayEnd);
-    const itinerary = em.create(Itinerary, { ...req.body.sanitizedInput, participants: [] });
+    const itinerary = em.create(Itinerary, { ...req.body.sanitizedInput, participants: [],user:userFound.id });
 
     // Uso de for...of para esperar cada operación asíncrona
     for (const participant of req.body.sanitizedInput.participants) {
@@ -124,7 +124,7 @@ export async function add(req: Request, res: Response) {
 export async function addWithAI(req: Request, res: Response) {
   try {
     // Valido que el user ingresado exista
-    const userFound = await em.findOne(User, { id: req.body.sanitizedInput.user });
+    const userFound = await em.findOne(User, { id: req.body.sanitizedInput.user.id });
     if (!userFound) {
       return res.status(400).json({ message: "El user ingresado no existe" });
     }
@@ -144,7 +144,7 @@ export async function addWithAI(req: Request, res: Response) {
 
     
 
-    const itineraryAI = await generateText(req.body.sanitizedInput.dayStart, req.body.sanitizedInput.dayEnd, place.name, req.body.sanitizedInput.title, ages, preferences);
+    const itineraryAI = await generateText(req.body.sanitizedInput.dayStart, req.body.sanitizedInput.dayEnd, place.name, req.body.sanitizedInput.title, ages, preferences,req.body.sanitizedInput.description);
     const itineraryAIJSON = JSON.parse(itineraryAI);
     const activities = itineraryAIJSON.activities;
     for (const activity of activities) {
@@ -159,7 +159,7 @@ export async function addWithAI(req: Request, res: Response) {
     }
 
 
-    const itinerary = em.create(Itinerary, { ...itineraryAIJSON, user:req.body.sanitizedInput.user,participants: [], place: req.body.sanitizedInput.place });
+    const itinerary = em.create(Itinerary, { ...itineraryAIJSON, user:userFound.id,participants: [], place: req.body.sanitizedInput.place });
 
     // Uso de for...of para esperar cada operación asíncrona
     participants.forEach(async (participant: Participant) => {

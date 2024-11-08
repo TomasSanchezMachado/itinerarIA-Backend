@@ -15,17 +15,17 @@ const model = genAI.getGenerativeModel({
   generationConfig: { responseMimeType: 'application/json' },
 });
 
-export async function generateText(dayStart: Date, dayEnd: Date, place: string, title: string, participantsAge: number[], preferences: Preference[]) {
+export async function generateText(dayStart: Date, dayEnd: Date, place: string, title: string, participantsAge: number[], preferences: Preference[],description: string) {
   const prompt =
   `Give me an itinerary for this days: ${dayStart} ${dayEnd} in ${place} with this title ${title} ,with this JSON schema,and make the activities place to be in ${place} and make it an object like this one ${Itinerary}: 
-    { "type":"object", "properties": { "title": {"type":"string"}, "description": {"type":"string"}, "dayStart":{"type":"date"},"dayEnd":{"type":"date"}, "activities": {"type":"array", "items": { "type":"object", "properties": { "name": {"type":"string"}, "description": {"type":"string"} "transport": {"type":"boolean"},"outdoor": {"type":"boolean"},"schedule":{"type":"string"}} 
+    { "type":"object", "properties": { "title": {"type":"string"}, "description": {"type":"string"}, "dayStart":{"type":"date"},"dayEnd":{"type":"date"}, "activities": {"type":"array", "items": { "type":"object", "properties": { "name": {"type":"string"}, "description": {"type":"string"} "transport": {"type":"boolean"},"outdoor": {"type":"boolean"},"scheduleStart":{"type":"string"},"scheduleEnd":{"type":"string"}} 
     "place": 
     {"type":"object", "properties":{"name": "string","latitude": "number","longitude": "number","zipCode": "string"NOTNULL,
     "province":"string"NOTNULL,"country": "string"}}
     take into account that the participants are ${participantsAge} years old,
-    and have this preferences:${preferences}
-    If the participants age or preferences are null, you can ignore them.
-    All the others fields are REQUIRED, THEY CAN'T BE NULL.
+    and have this preferences:${preferences} and this description:${description}(create a new one, use this one for the activities only)
+    If the participants age or preferences or the description are null, you can ignore them,if not, take them into account for the activities.
+    All the fields are REQUIRED, THEY CAN'T BE NULL.
     Example: { 
       "title": "Disney Trip",
     "descripcion": "Disney World is a magical place",
@@ -39,7 +39,8 @@ export async function generateText(dayStart: Date, dayEnd: Date, place: string, 
               "province": "Florida",
               "country": "USA" } } ],
               "transport": true
-              "schedule":"all day" }`;
+              "scheduleStart":"08:00"
+              "scheduleEnd":"20:00" }`;
 
   const result = await model.generateContent(prompt);
   const response = await result.response;

@@ -10,7 +10,7 @@ export const itinerarySchema = z.object({
     description: z.string({
         invalid_type_error: 'Description must be a string',
         required_error: 'Description is required'
-    }).min(10,'Description must have at least 10 characters').max(100,'Description can have a maximum of 100 characters'),
+    }).min(10,'Description must have at least 10 characters').max(100,'Description can have a maximum of 100 characters').optional(),
     // duration: z.number({
     //     required_error: 'La duración es requerida'
     // }).min(1,'El itinerario debe durar como minimo 1 día').max(30, 'El itinerario no puede durar más de 30 días'),

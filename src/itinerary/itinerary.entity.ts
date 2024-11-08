@@ -14,8 +14,14 @@ export class Itinerary extends BaseEntity {
         @Property({ nullable: false })
         description!: string
 
+        // @Property({ nullable: false })
+        // duration!: number
+
         @Property({ nullable: false })
-        duration!: number
+        dayStart!: Date
+
+        @Property({ nullable: false })
+        dayEnd!: Date
 
         @OneToMany(() => Activity, (activity) => activity.itinerary, { cascade: [Cascade.ALL] })
         activities = new Collection<Activity>(this)

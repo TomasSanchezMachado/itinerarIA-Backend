@@ -72,7 +72,7 @@ export async function update(req: Request, res: Response) {
     const preferencia = em.getReference(Preference, objectId);
     em.assign(preferencia, req.body.sanitizedInput);
     await em.flush();
-    return res.status(200).json({message: "Preference updated successfully",data:preferencia});
+    return res.status(200).json({message: "Preference updated successfully",data:preferencia});1
   }
   catch(error:any){
     return res.status(500).json({message: error.message});  

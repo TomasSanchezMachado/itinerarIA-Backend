@@ -12,7 +12,7 @@ node_modules
 Thumbs.db
 
 # ignore built ts files
-dist/**/*.js
+dist
 tsconfig.tsbuildinfo
 
 

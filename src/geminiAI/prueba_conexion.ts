@@ -23,7 +23,7 @@ export async function generateText(dayStart: Date, dayEnd: Date, place: string, 
     {"type":"object", "properties":{"name": "string","latitude": "number","longitude": "number","zipCode": "string"NOTNULL,
     "province":"string"NOTNULL,"country": "string"}}
     take into account that the participants are ${participantsAge} years old,
-    and have this preferences:${preferences} and this description:${description}(create a new one, use this one for the activities only)
+    and have this preferences:${preferences} and the itinerary has this description:${description}(create a new one, use this one for creating the activities only)
     If the participants age or preferences or the description are null, you can ignore them,if not, take them into account for the activities.
     All the fields are REQUIRED, THEY CAN'T BE NULL.
     Example: { 

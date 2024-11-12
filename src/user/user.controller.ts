@@ -94,8 +94,7 @@ export async function findOneByPassword(req: Request, res: Response) {
 
 export async function update(req: Request, res: Response) {
   try {
-    console.log(req.body.sanitizedInput, req.params.id);
-    const user = em.getReference(User, req.params.id);
+    const user = em.findOneOrFail(User, req.params.id,{ populate: ["itineraries"] });
     const newUser = em.assign(user, req.body.sanitizedInput);
     console.log(newUser);
     await em.flush();
@@ -107,7 +106,7 @@ export async function update(req: Request, res: Response) {
     if (error.code === 11000) {
       return res.status(400).send({ message: "Username or email already exists" });
     }
-    return res.status(500).send({ message: error.message });
+    return res.status(500).send({ message: error.message,data:req.body.sanitizedInput });
   }
 }
 

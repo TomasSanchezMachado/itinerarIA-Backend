@@ -1,6 +1,6 @@
 import { Activity } from '../activity/activity.entity.js'
 import { User } from '../user/user.entity.js'
-import { Property, OneToMany, Collection, Entity, ManyToOne, Cascade, Rel, ManyToMany } from '@mikro-orm/core'
+import { Property, OneToMany, Collection, Entity, ManyToOne, Cascade, Rel, ManyToMany, DateType } from '@mikro-orm/core'
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Participant } from '../participant/participant.entity.js'
 import { Place } from '../place/place.entity.js'
@@ -18,10 +18,10 @@ export class Itinerary extends BaseEntity {
         // duration!: number
 
         @Property({ nullable: false })
-        dayStart!: Date
+        dayStart!: DateType
 
         @Property({ nullable: false })
-        dayEnd!: Date
+        dayEnd!: DateType
 
         @OneToMany(() => Activity, (activity) => activity.itinerary, { cascade: [Cascade.ALL] })
         activities = new Collection<Activity>(this)

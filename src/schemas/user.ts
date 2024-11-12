@@ -24,6 +24,7 @@ export const putSchema = z.object({
         invalid_type_error: 'Phone number must be a string',
         required_error: 'Phone number is required',
     }).min(7, 'Phone number must be at least 7 digits').max(14, 'Phone number can be a maximum of 14 digits').regex(/[0-9]/),
+    itineraries: z.array(z.string()).optional(),
 });
 
 export const patchSchema = z.object({
@@ -41,5 +42,6 @@ export const patchSchema = z.object({
     }).email('Email must be a valid format').optional(),
     phoneNumber: z.string({
         invalid_type_error: 'Phone number must be a string'
-    }).min(7, 'Phone number must be at least 7 digits').max(14, 'Phone number can be a maximum of 14 digits').regex(/[0-9]/).optional()
+    }).min(7, 'Phone number must be at least 7 digits').max(14, 'Phone number can be a maximum of 14 digits').regex(/[0-9]/).optional(),
+    itineraries: z.array(z.string()).optional(),
 });

@@ -201,8 +201,9 @@ export async function update(req: Request, res: Response) {
     //     return res.status(400).json({message: "El user ingresado no existe"});
     //   }
     // }
+    const place = await em.findOne(Place, {id: req.body.sanitizedInput.place.id});
     const itinerary = em.getReference(Itinerary, id);
-    em.assign(itinerary, req.body.sanitizedInput);
+    em.assign(itinerary, {...req.body.sanitizedInput, place: place?.id});
     await em.flush();
     return res.status(200).json({ message: "Itinerario actualizado con exito", data: itinerary });
   }

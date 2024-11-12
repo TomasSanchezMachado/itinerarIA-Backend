@@ -115,9 +115,9 @@ export const patchItinerarySchema = z.object({
     // duration: z.number({
     //     invalid_type_error: 'La duración debe ser un número'
     // }).min(1,'El itinerario debe durar como minimo 1 dia`').max(30, 'El itinerario no puede durar más de 30 días').optional(),
-    place: z.string({
-        invalid_type_error: 'Place must be a string',
-    }).optional(),
+    // place: z.string({
+    //     invalid_type_error: 'Place must be a string',
+    // }).optional(),
     dayStart: z
     .preprocess((arg) => {
       if (typeof arg === 'string' || arg instanceof String) {

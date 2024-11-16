@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { orm } from "../shared/db/orm.js";
-import { ExternalService } from "./externalService.entity.js";
+import { ExternalService, ExternalServiceStatus } from "./externalService.entity.js";
+
 
 const em = orm.em
 
@@ -17,7 +18,8 @@ function sanitizeExternalServiceInput(
     schedule: req.body.schedule,
     website: req.body.website,
     phoneNumber: req.body.phoneNumber,
-    place: req.body.place
+    place: req.body.place,
+    status: req.body.status
   }
   //more checks here
 
@@ -83,6 +85,7 @@ async function add(req: Request, res: Response) {
       return res.status(409).json({ message: ['The external service already exists'] });
     }
     const NewExternalService = em.create(ExternalService, req.body.sanitizedInput);
+    NewExternalService.status = ExternalServiceStatus.Active;
     await em.flush();
     res.status(201).json({ message: 'External service created', data: NewExternalService });
   }
@@ -93,7 +96,6 @@ async function add(req: Request, res: Response) {
 
 async function update(req: Request, res: Response) {
   try {
-    console.log("hola")
     const id = req.params.id;
     const { name } = req.body.sanitizedInput;
 
@@ -128,4 +130,47 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export {sanitizeExternalServiceInput, findAll, findByPlace,findOne, add, update, remove };
+// Función para agregar una solicitud de publicidad
+
+async function addPublicityRequest(req: Request, res: Response) {
+  try {
+    const place = await em.findOne('Place', { id: req.body.sanitizedInput.place });
+    if (!place) {
+      return res.status(404).json({ message: ['The place does not exist'] });
+    }
+
+    const externalService = await em.findOne(ExternalService, { name: req.body.sanitizedInput.name });
+    if (externalService) {
+      return res.status(409).json({ message: ['The external service already exists'] });
+    }
+
+    const NewExternalService = em.create(ExternalService, req.body.sanitizedInput);
+    console.log(NewExternalService, 'NewExternalService');
+    await em.flush(); 
+
+    res.status(201).json({ message: 'The request has been sent', data: NewExternalService });
+  }
+  catch (error: any) {
+    res.status(500).json({message: error.message});
+  }
+}
+
+//Funcion para aceptar una solicitud de publicidad
+
+async function acceptPublicityRequest(req: Request, res: Response) {
+  try {
+    const id = req.params.id;
+    console.log(id, 'id');
+    const externalService = em.getReference(ExternalService, id);
+    externalService.status = ExternalServiceStatus.Active;
+    await em.flush();
+    res.status(200).json({ message: 'The request has been accepted', data: externalService });
+  }
+  catch (error: any) {
+    console.log('error', error);
+    res.status(500).json({message: error.message});
+  }
+}
+
+
+export {sanitizeExternalServiceInput, findAll, findByPlace,findOne, add, update, remove, addPublicityRequest, acceptPublicityRequest };

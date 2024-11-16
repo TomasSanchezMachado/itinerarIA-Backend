@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import express from 'express';
+import express, { Router } from 'express';
 import { placeRouter } from './place/place.routes.js';
 import { itineraryRouter } from './itinerary/itinerary.routes.js';
 import { actividadRouter } from './activity/activity.routes.js';
@@ -14,6 +14,7 @@ import { corsMiddleware } from './shared/middlewares/corsMiddleware.js';
 import { participantRouter } from './participant/participant.routes.js';
 import { preferenceRouter } from './preference/preference.routes.js';
 import { authenticateJWT } from './shared/middlewares/jwtMiddleware.js';
+import { publicExternalServiceRouter } from './externalService/externalService.routes.public.js';
 
 
 const app = express();
@@ -22,7 +23,6 @@ app.use(corsMiddleware());
 app.use(express.json());
 app.use(cookieParser());
 
-app.use
 
 app.disable('x-powered-by')
 
@@ -30,16 +30,29 @@ app.use((req, res, next) => {
   RequestContext.create(orm.em, next);
 });
 
-app.use('/api/auth', authRouter)
+//Public routes
+const publicRouter = Router();
 
-app.use('/api/places', authenticateJWT, placeRouter);
-app.use('/api/itinerarios', authenticateJWT,itineraryRouter);
-app.use('/api/externalServices', authenticateJWT,externalServiceRouter);
-app.use('/api/activities', authenticateJWT,actividadRouter)
-app.use('/api/users', userRouter)
-app.use('/api/opiniones', authenticateJWT, opinionRouter);
-app.use('/api/participants', authenticateJWT, participantRouter);
-app.use('/api/preferences', authenticateJWT, preferenceRouter);
+publicRouter.use('/api/auth', authRouter)
+publicRouter.use('/api/publicity', publicExternalServiceRouter)
+publicRouter.use('/api/users', userRouter)
+
+//Protected routes
+const protectedRouter = Router();
+
+protectedRouter.use(authenticateJWT);
+
+protectedRouter.use('/api/places', placeRouter);
+protectedRouter.use('/api/itinerarios', itineraryRouter);
+protectedRouter.use('/api/externalServices', externalServiceRouter);
+protectedRouter.use('/api/activities', actividadRouter)
+protectedRouter.use('/api/opiniones', opinionRouter);
+protectedRouter.use('/api/participants', participantRouter);
+protectedRouter.use('/api/preferences', preferenceRouter);
+
+app.use(publicRouter);
+app.use(protectedRouter);
+
 
 
 app.use((_, res) => {

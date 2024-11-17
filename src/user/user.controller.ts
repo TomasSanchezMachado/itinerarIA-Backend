@@ -4,7 +4,7 @@ import { orm } from "../shared/db/orm.js";
 import { ObjectId } from "@mikro-orm/mongodb";
 import createAccessToken from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
-
+import { Itinerary } from "../itinerary/itinerary.entity.js";
 
 const em = orm.em;
 
@@ -41,12 +41,10 @@ export async function findAll(req: Request, res: Response) {
     const users = await em.find(
       User,
       {},
-      { populate: ["itineraries.activities","participants"] }
+      { populate: ["itineraries.activities", "participants"] }
     );
     res.header("Access-Control-Allow-Origin", "*");
-    res
-      .status(200)
-      .json({ message: "Users found successfully", data: users });
+    res.status(200).json({ message: "Users found successfully", data: users });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }
@@ -73,9 +71,11 @@ export async function add(req: Request, res: Response) {
   try {
     const userCreated = em.create(User, req.body.sanitizedInput);
     const token = await createAccessToken({ id: userCreated.id });
-    res.cookie('token', token);
+    res.cookie("token", token);
     await em.flush();
-    res.status(201).json({ message: "User created successfully", data: userCreated });
+    res
+      .status(201)
+      .json({ message: "User created successfully", data: userCreated });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }
@@ -91,11 +91,16 @@ export async function findOneByPassword(req: Request, res: Response) {
   }
 }
 
-
 export async function update(req: Request, res: Response) {
   try {
-    const user = em.findOneOrFail(User, req.params.id,{ populate: ["itineraries"] });
-    const newUser = em.assign(user, req.body.sanitizedInput);
+    const user = em.findOne(User, req.params.id);
+    const itineraries = req.body.sanitizedInput.itineraries as Itinerary[];
+    const itinerariesIds = itineraries.map((itinerary) => itinerary.id);
+
+    const newUser = em.assign(user, {
+      ...req.body.sanitizedInput,
+      itineraries: itinerariesIds,
+    });
     console.log(newUser);
     await em.flush();
     res
@@ -104,12 +109,15 @@ export async function update(req: Request, res: Response) {
   } catch (error: any) {
     console.log("Error updating user", error);
     if (error.code === 11000) {
-      return res.status(400).send({ message: "Username or email already exists" });
+      return res
+        .status(400)
+        .send({ message: "Username or email already exists" });
     }
-    return res.status(500).send({ message: error.message,data:req.body.sanitizedInput });
+    return res
+      .status(500)
+      .send({ message: error.message, data: req.body.sanitizedInput });
   }
 }
-
 
 export async function remove(req: Request, res: Response) {
   try {

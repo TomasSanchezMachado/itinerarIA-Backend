@@ -2,8 +2,17 @@ import {Entity,  ManyToOne,  Property, Rel } from "@mikro-orm/core";
 import { BaseEntity } from "../shared/db/baseEntity.entity.js";
 import { Place } from "../place/place.entity.js";
 
+export enum ExternalServiceStatus {
+  Pending = 'PENDING',
+  Active = 'ACTIVE',
+  Canceled = 'CANCELED'
+}
+
 @Entity()
 export class ExternalService extends BaseEntity{
+
+  @Property({ nullable: false, default: ExternalServiceStatus.Pending })
+  status: string = ExternalServiceStatus.Pending;
 
   @Property({nullable: false})
   serviceType!: string;
@@ -17,7 +26,7 @@ export class ExternalService extends BaseEntity{
   @Property({nullable: false})
   adress!: string;
 
-  @Property({nullable: false})
+  @Property({ nullable: true })
   schedule?: string;
 
   @Property({nullable: true})

@@ -17,6 +17,8 @@ import { authenticateJWT } from './shared/middlewares/jwtMiddleware.js';
 import { publicExternalServiceRouter } from './externalService/externalService.routes.public.js';
 
 
+
+
 const app = express();
 
 app.use(corsMiddleware());
@@ -24,11 +26,15 @@ app.use(express.json());
 app.use(cookieParser());
 
 
-app.disable('x-powered-by')
+app.use;
+
+
+app.disable("x-powered-by");
 
 app.use((req, res, next) => {
   RequestContext.create(orm.em, next);
 });
+
 
 //Public routes
 const publicRouter = Router();
@@ -55,12 +61,21 @@ app.use(protectedRouter);
 
 
 
-app.use((_, res) => {
-  res.status(404).send({ message: 'Resource not found' });
-});
+app.use("/api/places", authenticateJWT, placeRouter);
+app.use("/api/itineraries", itineraryRouter);
+app.use("/api/externalServices", authenticateJWT, externalServiceRouter);
+app.use("/api/activities", authenticateJWT, actividadRouter);
+app.use("/api/users", userRouter);
+app.use("/api/opiniones", authenticateJWT, opinionRouter);
+app.use("/api/participants", authenticateJWT, participantRouter);
+app.use("/api/preferences", authenticateJWT, preferenceRouter);
 
-await syncSchema();
+app.use((_, res) => {
+  res.status(404).send({ message: "Resource not found" });
+});
 
 app.listen(3000, () => {
-  console.log('Server is running on http://localhost:3000/');
+  console.log("Server is running on http://localhost:3000/");
 });
+
+export default app;

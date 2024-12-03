@@ -1,9 +1,13 @@
 {
   "compilerOptions": {
     "incremental": true,
-    "target": "es2020",
-    "module": "ES2022",
-    "moduleResolution": "bundler",
+    "baseUrl": "./src", // Use src as the base for imports
+    "paths": {
+      "*": ["*", "../dist/*"] // Resolve modules in src and fallback to dist
+    },
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "./dist",
     "esModuleInterop": true,
@@ -14,6 +18,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
-  "include": ["src/**/*", "**/*.ts", "src/geminiAI/prueba_conexion.js"],
-  "exclude": ["node_modules"]
+  "include": ["src/**/*", "**/*.ts", "src/geminiAI/prueba_conexion.js", "jest.config.js", "babel.config.js","src/**/*.test.ts", "jest.config.mjs"],
+  "exclude": ["node_modules","dist"]
 }

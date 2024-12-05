@@ -3,13 +3,14 @@ POST http://localhost:3000/api/auth/register
 Content-Type:application/json
 
 {
-    "username": "nikitox44",
-    "password": "Nico1234",
-    "names": "nicolas roberto",
+    "username": "facundososabbb",
+    "password": "1234Facu",
+    "names": "facundo",
     "lastName": "coleman levrone",
     "dateOfBirth": "2024-04-24",
-    "mail": "hoal@gmail.com",
-    "phoneNumber": "3415456985"
+    "mail": "facu@gmailll.com",
+    "phoneNumber": "3415456985",
+    "isAdmin": true
 }
 
 ###LOGIN

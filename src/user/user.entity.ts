@@ -6,6 +6,9 @@ import { Participant } from '../participant/participant.entity.js';
 
 @Entity()
 export class User extends BaseEntity {
+    @Property({ nullable: false })
+    isAdmin: boolean = false //Falso por defecto
+
     @Property({ nullable: false, unique: true })
     username!: string
 
@@ -35,4 +38,5 @@ export class User extends BaseEntity {
 
     @OneToMany(() => Opinion, (opinion) => opinion.user, { cascade: [Cascade.ALL] })
     opinions = new Collection<Opinion>(this)
+
 }

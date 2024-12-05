@@ -1,6 +1,7 @@
 ###GET ALL
 GET http://localhost:3000/api/preferences
-###
+
+
 # @name createPreference
 ###
 POST http://localhost:3000/api/preferences

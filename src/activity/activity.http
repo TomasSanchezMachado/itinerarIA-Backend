@@ -9,8 +9,9 @@ Content-Type: application/json
     "description": "Visita guiada al museo de Lionel Messi",
     "outdoor": false,
     "transport": true,
-    "schedule": "10:00",
-    "place": "670d234d1267a5a51461a8d9",
+    "scheduleStart": "11:59",
+    "scheduleEnd": "12:00",
+    "place": "67236e6e1706dd5a0709c4df",
     "itinerary": "6713c67fa3b8326eea6abdee"
 }
 ###

@@ -7,9 +7,9 @@ POST http://localhost:3000/api/opiniones
 Content-Type: application/json
 
 {
-  "calificacion": 5,
-  "comentario": "Excelente lugar para pasar el día",
-  "activity": "669d99ea03f535edd5c7aabd",
+  "rating": 5,
+  "comment": "Excelente lugar para pasar el día",
+  "activity": "67178bbf8fec993032a05aa9",
   "user": "669d9a3503f535edd5c7aabe"
 }
 

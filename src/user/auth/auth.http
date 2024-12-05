@@ -18,8 +18,8 @@ POST http://localhost:3000/api/auth/login
 Content-Type:application/json
 
 {
-    "username": "facu",
-    "password": "1234Facu"
+    "username": "vitto1889",
+    "password": "Vitto123"
 }
 
 ###LOGOUT

@@ -45,7 +45,7 @@ protectedRouter.use('/api/places', placeRouter);
 
 // Admin protected routes
 const protectedAdminRouter = Router();
-protectedAdminRouter.use(authenticateJWT); // Asegúrate de que esté autenticado antes de verificar el rol
+protectedAdminRouter.use(authenticateJWT); 
 protectedAdminRouter.use(isAdmin);
 protectedAdminRouter.use('/api/preferences', preferenceRouter);
 protectedAdminRouter.use('/api/externalServices', externalServiceRouter);
@@ -53,7 +53,7 @@ protectedAdminRouter.use('/api/externalServices', externalServiceRouter);
 // Register routers
 app.use(publicRouter);
 app.use(protectedRouter);
-app.use(protectedAdminRouter); // <--- Aquí incluyes el router de administradores
+app.use(protectedAdminRouter); 
 
 // 404 handler
 app.use((_, res) => {

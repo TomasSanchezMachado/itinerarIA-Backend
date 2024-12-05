@@ -4,6 +4,7 @@ import { orm } from "../shared/db/orm.js";
 import { ObjectId } from "@mikro-orm/mongodb";
 import createAccessToken from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
+import { isAdmin } from "../shared/middlewares/adminMiddleware.js";
 
 
 const em = orm.em;
@@ -16,6 +17,7 @@ export function sanitizeUserInput(
   next: NextFunction
 ) {
   req.body.sanitizedInput = {
+    isAdmin: req.body.isAdmin,
     username: req.body.username,
     password: req.body.password,
     names: req.body.names,
@@ -94,16 +96,13 @@ export async function findOneByPassword(req: Request, res: Response) {
 
 export async function update(req: Request, res: Response) {
   try {
-    console.log(req.body.sanitizedInput, req.params.id);
     const user = em.getReference(User, req.params.id);
     const newUser = em.assign(user, req.body.sanitizedInput);
-    console.log(newUser);
     await em.flush();
     res
       .status(200)
       .json({ message: "User updated successfully", data: newUser });
   } catch (error: any) {
-    console.log("Error updating user", error);
     if (error.code === 11000) {
       return res.status(400).send({ message: "Username or email already exists" });
     }

@@ -1,40 +1,37 @@
-// itinerary.test.ts
 import request from "supertest";
 import app from "../app.js";
-import { itineraryRouter } from "../itinerary/itinerary.routes.js";
-// import { connect, closeDatabase } from "../shared/db/orm.js"; // Assuming you have DB connection utilities
+import { expect, test } from "vitest";
 
-describe("GET /itineraries", () => {
-  test("should respond with a 200 status code", async () => {
-    const login = await request(app).post("/api/auth/login").send({
-      username: "vitto1889",
-      password: "Vitto123",
-    });
-    const token = login.body.token;
+test("GET /itineraries", async () => {
+  const responseLogin = await request(app).post("/api/auth/login").send({
+    Content: "application/json",
+    username: "vitto1889",
+    password: "Vitto123",
+  });
+  console.log(responseLogin.headers, "responseLogin.headers");
+  if (responseLogin.status === 200) {
+    const setCookie = responseLogin.headers["set-cookie"];
+    const token = setCookie[0].split(";")[0].split("=")[1];
     const response = await request(app)
       .get("/api/itineraries")
-      .set("Authorization", `Bearer ${token}`);
+      .set("Cookie", [`token=${token}`]);
     expect(response.status).toBe(200);
+    expect(response.body.data).toBeInstanceOf(Array);
+  }
+});
 
-    console.log(response, "response");
+test("GET /itineraries with user not created", async () => {
+  const responseLogin = await request(app).post("/api/auth/login").send({
+    Content: "application/json",
+    username: "fakeUser",
+    password: "fakePassword",
   });
-
-  //   beforeAll(async () => {
-  //     await connect(); // Connect to your test DB (can be in-memory)
-  //   });
-
-  //   afterAll(async () => {
-  //     await closeDatabase(); // Close DB connection
-  //   });
-
-  // it("should return a list of itineraries", async () => {
-  //   const response = await request(app).get("/itineraries");
-  //   expect(response.status).toBe(200);
-  //   expect(response.body).toBeInstanceOf(Array); // Assumes response is an array
-  // });
-
-  // it("should return 404 for a non-existent itinerary", async () => {
-  //   const response = await request(app).get("/itineraries/999");
-  //   expect(response.status).toBe(404);
-  // });
+  if (responseLogin.status === 200) {
+    const setCookie = responseLogin.headers["set-cookie"];
+    const token = setCookie[0].split(";")[0].split("=")[1];
+    const response = await request(app)
+      .get("/api/itineraries")
+      .set("Cookie", [`token=${token}`]);
+  }
+  expect(responseLogin.status).toBe(400);
 });

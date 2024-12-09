@@ -109,13 +109,11 @@ async function update(req: Request, res: Response) {
       place: req.body.place.id,
     });
     await em.flush();
-    res
-      .status(200)
-      .json({
-        message: "Activity actualizada",
-        data: activity,
-        itinerary: req.body.itinerary,
-      });
+    res.status(200).json({
+      message: "Activity actualizada",
+      data: activity,
+      itinerary: req.body.itinerary,
+    });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

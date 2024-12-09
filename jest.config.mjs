@@ -1,19 +1,27 @@
-export default {
-  preset: 'ts-jest/presets/default-esm',
-  testEnvironment: 'node',
-  moduleFileExtensions: ['ts', 'js'],
+//NO HACE FALTA SI USAMOS VITEST
+
+const jestConfig = {
+  preset: "ts-jest/presets/default-esm",
+  testEnvironment: "node",
+  moduleFileExtensions: ["ts", "js"],
   moduleNameMapper: {
-    // Redirect imports from dist to src
-    '^@/(.*)$': '<rootDir>/src/$1',
+    "^@/(.*)$": "<rootDir>/src/$1",
   },
   transform: {
-    '^.+\\.ts$': [
-      'ts-jest',
+    "^.+\\.tsx?$": [
+      "ts-jest",
       {
-        useESM: true,
+        tsconfig: "<rootDir>/tsconfig.json",
+        useESM: true, // Move ts-jest-specific settings here
       },
     ],
   },
-  extensionsToTreatAsEsm: ['.ts'],
-  testMatch: ['**/*.test.ts', '**/*.spec.ts'],
+  extensionsToTreatAsEsm: [".ts"],
+  testMatch: ["**/*.test.ts", "**/*.spec.ts"],
+  resolver: "ts-jest-resolver",
+  testEnvironmentOptions: {
+    customExportConditions: ["node", "node-addons"], // Ensure compatibility with Node
+  },
 };
+
+export default jestConfig;

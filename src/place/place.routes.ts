@@ -18,8 +18,13 @@ placeRouter.get("/:id", findOne);
 
 placeRouter.post("/", sanitizePlaceInput, validateSchema(postSchema), add);
 
-placeRouter.put("/:id", sanitizePlaceInput,validateSchema(putSchema), update);
+placeRouter.put("/:id", sanitizePlaceInput, validateSchema(putSchema), update);
 
-placeRouter.patch("/:id", sanitizePlaceInput,validateSchema(patchSchema), update);
+placeRouter.patch(
+  "/:id",
+  sanitizePlaceInput,
+  validateSchema(patchSchema),
+  update
+);
 
 placeRouter.delete("/:id", remove);

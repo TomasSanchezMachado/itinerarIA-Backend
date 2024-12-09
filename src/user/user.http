@@ -44,7 +44,7 @@ Content-Type:application/json
 
 
 ###
-PATCH http://localhost:3000/api/users/672669451603be879855590b
+PATCH http://localhost:3000/api/users/672232960e1252f6e1d05780
 //FUNCIONA
 Content-Type:application/json
 

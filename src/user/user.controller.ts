@@ -6,7 +6,6 @@ import createAccessToken from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
 import { isAdmin } from "../shared/middlewares/adminMiddleware.js";
 
-
 const em = orm.em;
 
 const jwtSecret = process.env.JWT_SECRET || "secret";
@@ -43,12 +42,10 @@ export async function findAll(req: Request, res: Response) {
     const users = await em.find(
       User,
       {},
-      { populate: ["itineraries.activities","participants"] }
+      { populate: ["itineraries.activities", "participants"] }
     );
     res.header("Access-Control-Allow-Origin", "*");
-    res
-      .status(200)
-      .json({ message: "Users found successfully", data: users });
+    res.status(200).json({ message: "Users found successfully", data: users });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }
@@ -73,11 +70,14 @@ export async function findOne(req: Request, res: Response) {
 
 export async function add(req: Request, res: Response) {
   try {
+    req.body.sanitizedInput.isAdmin = false;
     const userCreated = em.create(User, req.body.sanitizedInput);
     const token = await createAccessToken({ id: userCreated.id });
-    res.cookie('token', token);
+    res.cookie("token", token);
     await em.flush();
-    res.status(201).json({ message: "User created successfully", data: userCreated });
+    res
+      .status(201)
+      .json({ message: "User created successfully", data: userCreated });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }
@@ -93,7 +93,6 @@ export async function findOneByPassword(req: Request, res: Response) {
   }
 }
 
-
 export async function update(req: Request, res: Response) {
   try {
     const user = em.getReference(User, req.params.id);
@@ -104,12 +103,13 @@ export async function update(req: Request, res: Response) {
       .json({ message: "User updated successfully", data: newUser });
   } catch (error: any) {
     if (error.code === 11000) {
-      return res.status(400).send({ message: "Username or email already exists" });
+      return res
+        .status(400)
+        .send({ message: "Username or email already exists" });
     }
     return res.status(500).send({ message: error.message });
   }
 }
-
 
 export async function remove(req: Request, res: Response) {
   try {

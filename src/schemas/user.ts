@@ -1,3 +1,4 @@
+import { isAdmin } from "shared/middlewares/adminMiddleware.js";
 import z from "zod";
 
 export const putSchema = z.object({
@@ -55,6 +56,7 @@ export const putSchema = z.object({
       })
     )
     .optional(),
+  isAdmin: z.boolean().optional(),
 });
 
 export const patchSchema = z.object({
@@ -97,7 +99,8 @@ export const patchSchema = z.object({
     })
     .min(7, "Phone number must be at least 7 digits")
     .max(14, "Phone number can be a maximum of 14 digits")
-    .regex(/[0-9]/),
+    .regex(/[0-9]/)
+    .optional(),
   itineraries: z
     .array(
       z.object({
@@ -105,4 +108,5 @@ export const patchSchema = z.object({
       })
     )
     .optional(),
+  isAdmin: z.boolean().optional(),
 });

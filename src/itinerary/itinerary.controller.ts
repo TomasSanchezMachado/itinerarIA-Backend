@@ -206,21 +206,22 @@ export async function addWithAI(req: Request, res: Response) {
       place: req.body.sanitizedInput.place,
     });
 
+    console.log(req.body.sanitizedInput.participants, "req.body.sanitizedInput.participants");
     // Uso de for...of para esperar cada operación asíncrona
-    participants.forEach(async (participant: Participant) => {
-      if (participant.id && participant.id === undefined) {
+    for (const participant of req.body.sanitizedInput.participants) {
+      if (participant.id === undefined) {
         // Creo el participante si no existe
         const participantCreated = em.create(Participant, {
           ...participant,
           preferences: participant.preferences.map(
-            (preference: Preference) => new ObjectId(preference.id)
+            (preference: any) => new ObjectId(preference)
           ),
         });
         console.log(participantCreated, "participantCreated");
         itinerary.participants.add(participantCreated);
       } else {
         // Si ya existe (de favoritos), lo busco y lo agrego
-        const participantFound = await em.findOne(Participant, participant);
+        const participantFound = await em.findOne(Participant, participant.id);
         console.log(participantFound, "participantFound");
         if (participantFound) {
           itinerary.participants.add(participantFound);
@@ -228,8 +229,9 @@ export async function addWithAI(req: Request, res: Response) {
           console.log(`Participante con ID ${participant.id} no encontrado`);
         }
       }
-    });
+    }
     await em.persistAndFlush(itinerary);
+    console.log(itinerary, "itinerary");
 
     return res
       .status(201)

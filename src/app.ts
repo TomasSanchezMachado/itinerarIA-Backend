@@ -16,6 +16,7 @@ import { preferenceRouter } from "./preference/preference.routes.js";
 import { authenticateJWT } from "./shared/middlewares/jwtMiddleware.js";
 import { publicExternalServiceRouter } from "./externalService/externalService.routes.public.js";
 import { isAdmin } from "./shared/middlewares/adminMiddleware.js";
+import {testingRouter} from "./test/testing.routes.js";
 
 const app = express();
 
@@ -50,10 +51,16 @@ protectedAdminRouter.use(isAdmin);
 protectedAdminRouter.use("/api/preferences", preferenceRouter);
 protectedAdminRouter.use("/api/externalServices", externalServiceRouter);
 
+// Testing router
+if(process.env.NODE_ENV === "test") {
+  app.use("/api/testing", testingRouter);
+}
+
 // Register routers
 app.use(publicRouter);
 app.use(protectedRouter);
 app.use(protectedAdminRouter);
+
 
 // 404 handler
 app.use((_, res) => {

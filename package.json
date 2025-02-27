@@ -7,7 +7,7 @@
   "scripts": {
     "start:dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node dist/app.js\"",
     "start": "docker start itinerarIA && tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node dist/app.js\"",
-    "test": "vitest",
+    "test:vitest": "cross-env NODE_ENV=test vitest",
     "test:e2e": "cross-env NODE_ENV=test tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node dist/app.js\""
   },
   "keywords": [],

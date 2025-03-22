@@ -8,8 +8,8 @@ POST http://localhost:3000/api/preferences
 Content-Type: application/json
 
 {
-    "name": "Diversionn",
-    "description" : "Juegos para niñosa"
+    "name": "Diversion",
+    "description" : "Juegos para niños"
 }
 ###
 #

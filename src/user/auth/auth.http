@@ -3,8 +3,8 @@ POST http://localhost:3000/api/auth/register
 Content-Type:application/json
 
 {
-    "username": "bichito1889",
-    "password": "Bicho013",
+    "username": "facu",
+    "password": "1234Facu",
     "names": "Jaminton",
     "lastName": "Campaz",
     "dateOfBirth": "2024-04-24",

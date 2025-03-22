@@ -67,7 +67,7 @@ export async function login(req: Request, res: Response) {
       res.cookie("token", token);
       return res
         .status(200)
-        .json({ message: "User logueado", data: { user } });
+        .json({ message: "User logueado", data: { user }, token });
     } else {
       return res.status(400).json({ message: ["Incorrect username or password. Please try again."] });
     }

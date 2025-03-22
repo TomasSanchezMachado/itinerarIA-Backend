@@ -54,6 +54,8 @@ protectedAdminRouter.use("/api/externalServices", externalServiceRouter);
 // Testing router
 if(process.env.NODE_ENV === "test") {
   app.use("/api/testing", testingRouter);
+  app.use("/api/places", placeRouter);
+  app.use("/api/preferences", preferenceRouter);
 }
 
 // Register routers

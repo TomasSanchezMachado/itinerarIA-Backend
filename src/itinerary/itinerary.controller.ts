@@ -255,7 +255,15 @@ export async function update(req: Request, res: Response) {
       id: req.body.sanitizedInput.place.id,
     });
     const itinerary = em.getReference(Itinerary, id);
-    em.assign(itinerary, { ...req.body.sanitizedInput, place: place?.id });
+    const participants = await em.find(Participant, req.body.sanitizedInput.participants);
+    console.log(participants, "participants");
+
+em.assign(itinerary, {
+  ...req.body.sanitizedInput,
+  place: place?.id,
+  participants, // Ahora son referencias de MikroORM
+});
+
     await em.flush();
     return res
       .status(200)

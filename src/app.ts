@@ -16,7 +16,7 @@ import { preferenceRouter } from "./preference/preference.routes.js";
 import { authenticateJWT } from "./shared/middlewares/jwtMiddleware.js";
 import { publicExternalServiceRouter } from "./externalService/externalService.routes.public.js";
 import { isAdmin } from "./shared/middlewares/adminMiddleware.js";
-import {testingRouter} from "./test/testing.routes.js";
+import { testingRouter } from "./test/testing.routes.js";
 
 const app = express();
 
@@ -52,7 +52,7 @@ protectedAdminRouter.use("/api/preferences", preferenceRouter);
 protectedAdminRouter.use("/api/externalServices", externalServiceRouter);
 
 // Testing router
-if(process.env.NODE_ENV === "test") {
+if (process.env.NODE_ENV === "test") {
   app.use("/api/testing", testingRouter);
   app.use("/api/places", placeRouter);
   app.use("/api/preferences", preferenceRouter);
@@ -63,7 +63,6 @@ app.use(publicRouter);
 app.use(protectedRouter);
 app.use(protectedAdminRouter);
 
-
 // 404 handler
 app.use((_, res) => {
   res.status(404).send({ message: "Resource not found" });
@@ -71,10 +70,11 @@ app.use((_, res) => {
 
 // Sync database schema
 // await syncSchema();
+const port = 3000;
 
 // Start server
-app.listen(3000, () => {
-  console.log("Server is running on http://localhost:3000/");
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}/`);
 });
 
 export default app;

@@ -15,21 +15,14 @@ export const corsMiddleware = ({
   acceptedOrigins = ACCEPTED_ORIGINS,
 }: CorsMiddlewareOptions = {}) => {
   const options: CorsOptions = {
-    origin: (
-      origin: string | undefined,
-      callback: (err: Error | null, allow?: boolean) => void
-    ) => {
-      if (origin && acceptedOrigins.includes(origin)) {
-        return callback(null, true);
+    origin: (origin, callback) => {
+      if (!origin || acceptedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
       }
-
-      if (!origin) {
-        return callback(null, true);
-      }
-
-      return callback(new Error("Not allowed by CORS"));
     },
-    credentials: true,
+    credentials: true, // 👈 NECESARIO para cookies
   };
 
   return cors(options);

@@ -47,12 +47,10 @@ export async function register(req: RegisterRequest, res: Response) {
     req.body.sanitizedInput.password = passwordHash;
     add(req, res);
   } catch (err: any) {
-    res
-      .status(500)
-      .json({
-        message: "The user could not be registered",
-        data: { message: "User already exists" },
-      });
+    res.status(500).json({
+      message: "The user could not be registered",
+      data: { message: "User already exists" },
+    });
   }
 }
 
@@ -70,24 +68,25 @@ export async function login(req: Request, res: Response) {
       }
     );
     if (!user) {
-      return res
-        .status(400)
-        .json({
-          message: ["Incorrect username or password. Please try again."],
-        });
+      return res.status(400).json({
+        message: ["Incorrect username or password. Please try again."],
+      });
     }
     if (bcrypt.compareSync(req.body.password, user.password)) {
       const token = await createAccessToken({ id: user.id });
-      res.cookie("token", token);
+      res.cookie("token", token, {
+        httpOnly: true,
+        // secure: process.env.NODE_ENV === "production",
+        sameSite: "none",
+        maxAge: 3600000,
+      });
       return res
         .status(200)
         .json({ message: "User logueado", data: { user }, token });
     } else {
-      return res
-        .status(400)
-        .json({
-          message: ["Incorrect username or password. Please try again."],
-        });
+      return res.status(400).json({
+        message: ["Incorrect username or password. Please try again."],
+      });
     }
   } catch (err) {
     res

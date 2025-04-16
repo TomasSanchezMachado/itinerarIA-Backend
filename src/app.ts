@@ -70,11 +70,11 @@ app.use((_, res) => {
 
 // Sync database schema
 // await syncSchema();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Start server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}/`);
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}/`);
 });
 
 export default app;

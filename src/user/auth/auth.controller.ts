@@ -78,6 +78,7 @@ export async function login(req: Request, res: Response) {
         httpOnly: true,
         secure: process.env.ENVIRONMENT === "production",
         sameSite: "none",
+        maxAge: 1000 * 60 * 60 * 24, // 1 day
       });
       return res
         .status(200)

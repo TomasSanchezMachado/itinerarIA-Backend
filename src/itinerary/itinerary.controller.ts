@@ -59,7 +59,7 @@ export async function findAllByUser(req: Request, res: Response) {
     const itineraries = await em.find(
       Itinerary,
       { user: id },
-      { populate: ["activities", "participants.preferences", "user", "place"] }
+      { populate: ["place"] }
     );
     if (itineraries.length === 0) {
       return res.status(200).json({ message: "No se encontraron itinerarios" });
@@ -76,8 +76,10 @@ export async function findOne(req: Request, res: Response) {
     const itinerary = await em.findOneOrFail(
       Itinerary,
       { id },
-      { populate: ["activities", "participants", "user", "place"] }
+      { populate: ["activities", "user", "place", "participants.preferences"] }
     );
+
+    
     return res.status(200).json({ data: itinerary });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });

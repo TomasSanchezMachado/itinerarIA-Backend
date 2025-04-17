@@ -5,7 +5,7 @@ const ACCEPTED_ORIGINS = [
   "http://localhost:5173",
   "http://localhost:3000",
   "https://itineraria-backend.onrender.com",
-  "itineraria-backend-production.up.railway.app",
+  "https://itineraria-backend-production.up.railway.app",
 ];
 
 interface CorsMiddlewareOptions {

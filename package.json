@@ -4,6 +4,9 @@
   "type": "module",
   "description": "",
   "main": "app.js",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "start:dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node dist/app.js\"",
     "start": "docker start itinerarIA && tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node dist/app.js\"",
@@ -19,12 +22,14 @@
     "@mikro-orm/core": "5.8.10",
     "@mikro-orm/mongo-highlighter": "1.0.0",
     "@mikro-orm/mongodb": "5.8.10",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.6",
     "cors": "2.8.5",
     "dotenv": "^16.4.5",
     "express": "4.18.2",
     "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.15.0",
+    "mongoose": "^8.13.2",
     "react-is": "^18.3.1",
     "reflect-metadata": "0.1.13",
     "zod": "^3.23.8"

@@ -76,9 +76,8 @@ export async function login(req: Request, res: Response) {
       const token = await createAccessToken({ id: user.id });
       res.cookie("token", token, {
         httpOnly: true,
-        // secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
-        maxAge: 3600000,
+        secure: true,
+        sameSite: "lax",
       });
       return res
         .status(200)

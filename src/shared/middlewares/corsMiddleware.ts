@@ -4,8 +4,7 @@ const ACCEPTED_ORIGINS = [
   "http://localhost:5174",
   "http://localhost:5173",
   "http://localhost:3000",
-  "https://itineraria-backend.onrender.com",
-  "https://itineraria-backend-production.up.railway.app",
+  "https://itineraria-backend-production.up.railway.app/",
 ];
 
 interface CorsMiddlewareOptions {
@@ -16,14 +15,21 @@ export const corsMiddleware = ({
   acceptedOrigins = ACCEPTED_ORIGINS,
 }: CorsMiddlewareOptions = {}) => {
   const options: CorsOptions = {
-    origin: (origin, callback) => {
-      if (!origin || acceptedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
+    origin: (
+      origin: string | undefined,
+      callback: (err: Error | null, allow?: boolean) => void
+    ) => {
+      if (origin && acceptedOrigins.includes(origin)) {
+        return callback(null, true);
       }
+
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
     },
-    credentials: true, // 👈 NECESARIO para cookies
+    credentials: true,
   };
 
   return cors(options);

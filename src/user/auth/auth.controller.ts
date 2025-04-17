@@ -76,8 +76,8 @@ export async function login(req: Request, res: Response) {
       const token = await createAccessToken({ id: user.id });
       res.cookie("token", token, {
         httpOnly: true,
-        secure: false,
-        sameSite: "lax",
+        secure: true,
+        sameSite: "none",
       });
       return res
         .status(200)

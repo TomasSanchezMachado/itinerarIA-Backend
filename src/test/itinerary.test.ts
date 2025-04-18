@@ -5,7 +5,7 @@ import { expect, test } from "vitest";
 test("GET /itineraries", async () => {
   const responseLogin = await request(app).post("/api/auth/login").send({
     Content: "application/json",
-    username: "vitto1889",
+    username: "VittoRC",
     password: "Vitto123",
   });
   console.log(responseLogin.headers, "responseLogin.headers");

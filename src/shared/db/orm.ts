@@ -1,17 +1,17 @@
 import { MikroORM } from "@mikro-orm/core";
 import { MongoHighlighter } from "@mikro-orm/mongo-highlighter";
 import "dotenv/config.js";
-// const dbName =
-//   process.env.NODE_ENV === "test" ? "itinerarIA_test" : "itinerarIA";
+const dbName =
+  process.env.NODE_ENV === "test" ? "itinerarIA_test" : "itinerarIA";
 
-// if (process.env.NODE_ENV === "test") {
-//   console.log("Using test database,", dbName);
-// }
+if (process.env.NODE_ENV === "test") {
+  console.log("Using test database,", dbName);
+}
 
 export const orm = await MikroORM.init({
   entities: ["./dist/**/*.entity.js"],
   entitiesTs: ["./src/**/*.entity.ts"],
-  dbName: "itinerarIA", // Usa la BD de testing si estamos en test
+  dbName: dbName, // Usa la BD de testing si estamos en test
   type: "mongo",
   clientUrl: process.env.MONGO_URI,
   //cambiar a la linea de abajo para usar docker compose

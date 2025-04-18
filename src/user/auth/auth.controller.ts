@@ -77,7 +77,7 @@ export async function login(req: Request, res: Response) {
     if (bcrypt.compareSync(req.body.password, user.password)) {
       const token = await createAccessToken({ id: user.id });
       res.cookie("token", token, {
-        httpOnly: true,
+        httpOnly: isProduction,
         secure: isProduction,
         sameSite: sameSite,
         maxAge: 1000 * 60 * 60 * 24, // 1 day

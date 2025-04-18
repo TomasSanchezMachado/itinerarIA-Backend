@@ -17,6 +17,7 @@ import { authenticateJWT } from "./shared/middlewares/jwtMiddleware.js";
 import { publicExternalServiceRouter } from "./externalService/externalService.routes.public.js";
 import { isAdmin } from "./shared/middlewares/adminMiddleware.js";
 import { testingRouter } from "./test/testing.routes.js";
+import cors from "cors";
 
 const app = express();
 
@@ -58,10 +59,27 @@ if (process.env.NODE_ENV === "test") {
   app.use("/api/preferences", preferenceRouter);
 }
 
+const allowedOrigins = [
+  "http://localhost:5174",
+  "https://itinerariafrontend.vercel.app",
+];
+
 // Register routers
 app.use(publicRouter);
 app.use(protectedRouter);
 app.use(protectedAdminRouter);
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 
 // 404 handler
 app.use((_, res) => {

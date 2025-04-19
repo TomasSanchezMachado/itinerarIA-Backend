@@ -79,7 +79,6 @@ export async function findOne(req: Request, res: Response) {
       { populate: ["activities", "user", "place", "participants.preferences"] }
     );
 
-    
     return res.status(200).json({ data: itinerary });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
@@ -208,7 +207,10 @@ export async function addWithAI(req: Request, res: Response) {
       place: req.body.sanitizedInput.place,
     });
 
-    console.log(req.body.sanitizedInput.participants, "req.body.sanitizedInput.participants");
+    console.log(
+      req.body.sanitizedInput.participants,
+      "req.body.sanitizedInput.participants"
+    );
     // Uso de for...of para esperar cada operación asíncrona
     for (const participant of req.body.sanitizedInput.participants) {
       if (participant.id === undefined) {
@@ -257,14 +259,17 @@ export async function update(req: Request, res: Response) {
       id: req.body.sanitizedInput.place.id,
     });
     const itinerary = em.getReference(Itinerary, id);
-    const participants = await em.find(Participant, req.body.sanitizedInput.participants);
+    const participants = await em.find(
+      Participant,
+      req.body.sanitizedInput.participants
+    );
     console.log(participants, "participants");
 
-em.assign(itinerary, {
-  ...req.body.sanitizedInput,
-  place: place?.id,
-  participants, // Ahora son referencias de MikroORM
-});
+    em.assign(itinerary, {
+      ...req.body.sanitizedInput,
+      place: place?.id,
+      participants, // Ahora son referencias de MikroORM
+    });
 
     await em.flush();
     return res

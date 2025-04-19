@@ -18,6 +18,7 @@ import { publicExternalServiceRouter } from "./externalService/externalService.r
 import { isAdmin } from "./shared/middlewares/adminMiddleware.js";
 import { testingRouter } from "./test/testing.routes.js";
 import cors from "cors";
+import { PORT } from "./config.js";
 
 const app = express();
 
@@ -88,7 +89,6 @@ app.use((_, res) => {
 
 // Sync database schema
 // await syncSchema();
-const PORT = process.env.PORT || 3000;
 
 // Start server
 app.listen(PORT, () => {

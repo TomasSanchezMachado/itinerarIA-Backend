@@ -6,6 +6,7 @@ const ACCEPTED_ORIGINS = [
   "http://localhost:3000",
   "https://itineraria-backend-production.up.railway.app",
   "https://itinerariafrontend.vercel.app",
+  "https://itinerar-ia-frontend.vercel.app/"
 ];
 
 interface CorsMiddlewareOptions {

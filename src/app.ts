@@ -19,10 +19,12 @@ import { isAdmin } from "./shared/middlewares/adminMiddleware.js";
 import { testingRouter } from "./test/testing.routes.js";
 import cors from "cors";
 import { PORT } from "./config.js";
+import { ACCEPTED_ORIGINS } from "./shared/middlewares/corsMiddleware.js";
 
 const app = express();
 
 app.use(corsMiddleware());
+app.options('*', corsMiddleware()); 
 app.use(express.json());
 app.use(cookieParser());
 app.disable("x-powered-by");
@@ -31,11 +33,15 @@ app.use((req, res, next) => {
   RequestContext.create(orm.em, next);
 });
 
+
+
 // Public routes
 const publicRouter = Router();
 publicRouter.use("/api/auth", authRouter);
 publicRouter.use("/api/publicity", publicExternalServiceRouter);
 publicRouter.use("/api/users", userRouter);
+publicRouter.use("/api/places", placeRouter);
+
 
 // Protected routes
 const protectedRouter = Router();
@@ -44,7 +50,6 @@ protectedRouter.use("/api/itineraries", itineraryRouter);
 protectedRouter.use("/api/activities", actividadRouter);
 protectedRouter.use("/api/opiniones", opinionRouter);
 protectedRouter.use("/api/participants", participantRouter);
-protectedRouter.use("/api/places", placeRouter);
 
 // Admin protected routes
 const protectedAdminRouter = Router();
@@ -60,27 +65,13 @@ if (process.env.NODE_ENV === "test") {
   app.use("/api/preferences", preferenceRouter);
 }
 
-const allowedOrigins = [
-  "http://localhost:5174",
-  "https://itinerariafrontend.vercel.app",
-];
+
 
 // Register routers
 app.use(publicRouter);
 app.use(protectedRouter);
 app.use(protectedAdminRouter);
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
+
 
 // 404 handler
 app.use((_, res) => {

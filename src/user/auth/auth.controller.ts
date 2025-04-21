@@ -72,7 +72,7 @@ export async function login(req: Request, res: Response) {
         message: ["Incorrect username or password. Please try again."],
       });
     }
-    const isProduction = process.env.ENVIRONMENT === "production";
+    const isProduction = process.env.NODE_ENV === "production";
     const sameSite = isProduction ? "none" : "lax";
     if (bcrypt.compareSync(req.body.password, user.password)) {
       const token = await createAccessToken({ id: user.id });

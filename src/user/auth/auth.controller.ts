@@ -9,6 +9,9 @@ import { add } from "../user.controller.js";
 
 const em = orm.em;
 
+const isProduction = process.env.NODE_ENV === "production";
+const sameSite = isProduction ? "none" : "lax";
+
 const jwtSecret = process.env.JWT_SECRET || "secret";
 
 export function validateToken(req: Request, res: Response, next: NextFunction) {
@@ -72,8 +75,7 @@ export async function login(req: Request, res: Response) {
         message: ["Incorrect username or password. Please try again."],
       });
     }
-    const isProduction = process.env.NODE_ENV === "production";
-    const sameSite = isProduction ? "none" : "lax";
+
     if (bcrypt.compareSync(req.body.password, user.password)) {
       const token = await createAccessToken({ id: user.id });
       res.cookie("token", token, {
@@ -98,7 +100,11 @@ export async function login(req: Request, res: Response) {
 }
 
 export async function logout(req: Request, res: Response) {
-  res.clearCookie("token");
+  res.clearCookie("token", {
+    httpOnly: isProduction,
+    secure: isProduction,
+    sameSite: sameSite,
+  });
   res.status(200).json({ message: "User logged out" });
 }
 

@@ -9,6 +9,8 @@ import { isAdmin } from "../shared/middlewares/adminMiddleware.js";
 const em = orm.em;
 
 const jwtSecret = process.env.JWT_SECRET || "secret";
+const isProduction = process.env.NODE_ENV === "production";
+const sameSite = isProduction ? "none" : "lax";
 
 export function sanitizeUserInput(
   req: Request,
@@ -73,7 +75,12 @@ export async function add(req: Request, res: Response) {
     req.body.sanitizedInput.isAdmin = false;
     const userCreated = em.create(User, req.body.sanitizedInput);
     const token = await createAccessToken({ id: userCreated.id });
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      httpOnly: isProduction,
+      secure: isProduction,
+      sameSite: sameSite,
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+    });
     await em.flush();
     res
       .status(201)

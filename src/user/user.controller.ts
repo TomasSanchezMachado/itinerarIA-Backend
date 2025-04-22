@@ -73,22 +73,18 @@ export async function findOne(req: Request, res: Response) {
 export async function add(req: Request, res: Response) {
   try {
     req.body.sanitizedInput.isAdmin = false;
-    const userCreated = em.create(User, req.body.sanitizedInput);
-    const token = await createAccessToken({ id: userCreated.id });
+    const user = em.create(User, req.body.sanitizedInput);
+    await em.flush();
+    const token = await createAccessToken({ id: user._id });
     res.cookie("token", token, {
       httpOnly: isProduction,
       secure: isProduction,
       sameSite: sameSite,
       maxAge: 1000 * 60 * 60 * 24, // 1 day
     });
-    await em.flush();
-    res
+    return res
       .status(201)
-      .json({
-        message: "User created successfully",
-        data: { userCreated },
-        token,
-      });
+      .json({ message: "User logged successfully", data: { user }, token });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }

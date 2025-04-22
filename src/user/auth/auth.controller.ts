@@ -86,7 +86,7 @@ export async function login(req: Request, res: Response) {
       });
       return res
         .status(200)
-        .json({ message: "User logueado", data: { user }, token });
+        .json({ message: "User logged successfully", data: { user }, token });
     } else {
       return res.status(400).json({
         message: ["Incorrect username or password. Please try again."],
@@ -137,7 +137,10 @@ export async function verify(req: Request, res: Response) {
       { id: user.id },
       { populate: ["itineraries.activities", "participants"] }
     );
-    if (!userFound) return res.status(401).json({ message: "User not found" });
+    if (!userFound)
+      return res
+        .status(401)
+        .json({ message: "User not found", userFound: userFound });
     return res
       .status(200)
       .json({ message: "User found", data: { user: userFound } });

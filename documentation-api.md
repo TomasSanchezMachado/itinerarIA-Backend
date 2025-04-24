@@ -581,7 +581,7 @@ Errores:
 | Método | Ruta                | Descripción                          | Protegida |
 | ------ | --------------      | --------------------------------     | --------- |
 | GET    | /preferences        | Obtener todas las preferencias       | ✅ (Admin)|
-| GET    | /preferences/:id      | Obtener una preferencia específica   | ✅ (Admin)|
+| GET    | /preferences/:id    | Obtener una preferencia específica   | ✅ (Admin)|
 | POST   | /preferences        | Crear una nueva preferencia          | ✅ (Admin)|
 | PUT    | /preferences /      | Actualizar una preferencia completa  | ✅ (Admin)|
 |PATCH   | /preferences/       | Actualizar campos específicos        | ✅ (Admin)|
@@ -1377,4 +1377,628 @@ Errores comunes:
 401 Unauthorized: "Authentication required"
 500 Internal Server Error: "An error occurred while processing your request"
 
+### Opinions
 
+| Método | Ruta                               | Descripción                           | Protegida |
+| ------ | --------------                     | --------------------------------      | --------- |
+| GET    | /api/itineraries                    | Obtener todas las opiniones           | ✅        |
+| GET    | /api/opiniones/                    | Obtener una opinión específica        | ✅        |
+| GET    | /api/opiniones/activity/           | Obtener opiniones por actividad       | ✅        |
+| POST   | /api/opiniones                     | Crear una nueva opinión               | ✅        |
+| PUT    | /api/opiniones/                    | Actualizar una opinión completa       | ✅        |
+|PATCH   | /api/opiniones/                    | Actualizar parcialmente una opinión   | ✅        |
+|DELETE  | /api/opiniones/                    | Eliminar una opinión                  | ✅        | 
+
+#### Obtener todas las opiniones
+
+GET /api/opiniones
+
+Obtiene todas las opiniones registradas en el sistema.
+
+Respuesta:
+```ts
+jsonContent-Type: application/json
+{
+  "message": "Todos las opiniones encontradas",
+  "data": [
+ {
+      "id": "670bd0cc60eb88e665c9fb90",
+      "rating": 5,
+      "comment": "Excelente lugar para pasar el día",
+      "user": {...},
+      "activity": {...}
+    },
+    {...}
+  ]
+}
+```
+
+Respuesta (no hay opiniones):
+```ts
+jsonContent-Type: application/json
+{ message: "No se encontraron opiniones" }
+```
+
+Errores:
+
+500 Internal Server Error: Error del servidor
+
+#### Obtener una opinión específica
+
+GET /api/opiniones/:id
+
+Obtiene información detallada de una opinión específica.
+
+Parámetros URL:
+id: ID de la opinión a consultar
+
+Respuesta:
+```ts
+jsonContent-Type: application/json
+{
+  "message": "Opinion encontrada: ",
+  "data": {
+    "id": "670bd0cc60eb88e665c9fb90",
+    "rating": 5,
+    "comment": "Excelente lugar para pasar el día",
+    "user": {...},
+    "activity": {...}
+  }
+}
+```
+
+Errores:
+
+500 Internal Server Error: Error del servidor
+
+#### Obtener opiniones por actividad
+
+GET /api/opiniones/activity/:id
+
+Obtiene todas las opiniones asociadas a una actividad específica.
+
+Parámetros URL:
+id: ID de la actividad cuyos opiniones se desean obtener
+
+Respuesta:
+```ts
+jsonContent-Type: application/json
+{
+  "message": "Todos las opiniones encontradas",
+  "data": [
+    {
+      "id": "670bd0cc60eb88e665c9fb90",
+      "rating": 5,
+      "comment": "Excelente lugar para pasar el día",
+      "user": {...},
+      "activity": {...}
+    },
+    {...}
+  ]
+}
+```
+
+Respuesta (no hay opiniones):
+```ts
+jsonContent-Type: application/json
+{ message: "No se encontraron opiniones" }
+```
+
+Errores:
+
+500 Internal Server Error: Error del servidor
+
+#### Crear una nueva opinión
+
+POST /api/opiniones
+
+Crea una nueva opinión en el sistema.
+
+Solicitud:
+```ts
+jsonContent-Type: application/json
+{
+  "rating": 5,
+  "comment": "Excelente lugar para pasar el día",
+  "activity": "67178bbf8fec993032a05aa9",
+  "user": "669d9a3503f535edd5c7aabe"
+}
+```
+
+Validación:
+
+- rating:
+
+  - "La calificación debe ser un número"
+  - "La calificación es requerida"
+  - "La calificación debe ser un número entre 1 y 5"
+
+
+- comment:
+
+  - "El comentario debe ser un string"
+  - "El comentario es requerido"
+  - "El comentario debe tener entre 1 y 100 caracteres"
+
+
+activity.id: ID de la actividad que se está valorando
+user.id: ID del usuario que crea la opinión
+
+Respuesta:
+```ts
+jsonContent-Type: application/json
+{
+  "message": "Opinion creada",
+  "data": {
+    "id": "670bd0cc60eb88e665c9fb90",
+    "rating": 5,
+    "comment": "Excelente lugar para pasar el día",
+    "activity": "67178bbf8fec993032a05aa9",
+    "user": "669d9a3503f535edd5c7aabe"
+  }
+}
+```
+
+Errores:
+
+404 Not Found: "Actividad no encontrada" o "Usuario no encontrado"
+500 Internal Server Error: Error del servidor
+
+#### Actualizar una opinión completa
+
+PUT /api/opiniones/:id
+
+Actualiza todos los datos de una opinión existente.
+
+Parámetros URL:
+id: ID de la opinión a actualizar
+
+Solicitud:
+```ts
+jsonContent-Type: application/json
+{
+  "rating": 4,
+  "comment": "Excelente lugar para pasar el día"
+}
+```
+
+Validación:
+
+Los campos deben cumplir con las validaciones del schema del modelo. Se deben incluir todos los campos.
+El middleware sanitizeOpinionInput realiza una limpieza de los datos, eliminando campos indefinidos.
+
+Respuesta:
+```ts
+jsonContent-Type: application/json
+{
+  "message": "Opinion actualizada",
+  "data": {
+    "id": "670bd0cc60eb88e665c9fb90",
+    "rating": 4,
+    "comment": "Excelente lugar para pasar el día",
+    "activity": "67178bbf8fec993032a05aa9",
+    "user": "669d9a3503f535edd5c7aabe"
+  }
+}
+```
+
+Errores:
+
+500 Internal Server Error: Error del servidor
+
+#### Actualizar parcialmente una opinión
+
+PATCH /api/opiniones/:id
+
+Actualiza solo los campos específicos de una opinión existente.
+
+Parámetros URL:
+id: ID de la opinión a actualizar parcialmente
+
+Solicitud:
+```ts
+jsonContent-Type: application/json
+{
+  "rating": 3
+}
+```
+
+Validación:
+
+Cualquier campo que se incluya debe cumplir con las validaciones del schema del modelo
+El middleware sanitizeOpinionInput realiza una limpieza de los datos, eliminando campos indefinidos.
+
+Respuesta:
+```ts
+jsonContent-Type: application/json
+{
+  "message": "Opinion actualizada",
+  "data": {
+    "id": "670bd0cc60eb88e665c9fb90",
+    "rating": 3,
+    "comment": "Excelente lugar para pasar el día",
+    "activity": "67178bbf8fec993032a05aa9",
+    "user": "669d9a3503f535edd5c7aabe"
+  }
+}
+```
+
+Errores:
+
+500 Internal Server Error: Error del servidor
+
+#### Eliminar una opinión
+
+DELETE /api/opiniones/:id
+
+Elimina una opinión específica del sistema.
+
+Parámetros URL:
+id: ID de la opinión a eliminar
+
+Respuesta:
+```ts
+jsonContent-Type: application/json
+{
+  "message": "Opinion eliminada"
+}
+```
+
+Errores:
+
+500 Internal Server Error: Error del servidor
+
+### Itineraries
+
+| Método | Ruta                             | Descripción                                  | Protegida |
+| ------ | --------------                   | --------------------------------             | --------- |
+| GET    | /api/itineraries                 | Obtener todos los itinerarios                | ✅        |
+| GET    | /api/itineraries/user/:id        | Obtener itinerarios por usuario              | ✅        |
+| GET    | /api/itineraries/                | Obtener un itinerario específico             | ✅        |
+| POST   | /api/itineraries                 | Crear un nuevo itinerario                    | ✅        |
+| POST   | /api/itineraries/ia              | Crear un itinerario con IA                   | ✅        |
+| PUT    | /api/itineraries/                | Actualizar un itinerario completo            | ✅        |
+|PATCH   | /api/itineraries/                | Actualizar parcialmente un itinerario        | ✅        |
+|DELETE  | /api/itineraries/                | Eliminar un itinerario                       | ✅        | 
+
+####  Obtener todos los itinerarios
+
+GET /api/itineraries
+
+Obtiene todos los itinerarios registrados en el sistema.
+
+Respuesta:
+```ts
+jsonContent-Type: application/json
+{
+  "data": [
+    {
+      "id": "670bd0cc60eb88e665c9fb90",
+      "title": "Itinerario 1111",
+      "description": "Itinerario hecho para 7 dias en Disney...",
+      "dayStart": "2024-10-30T00:00:00.000Z",
+      "dayEnd": "2024-11-23T00:00:00.000Z",
+      "activities": [...],
+      "participants": [...],
+      "user": {...},
+      "place": {...}
+    },
+    {...}
+  ]
+}
+```
+
+Errores:
+
+500 Internal Server Error: Error del servidor
+
+#### Obtener itinerarios por usuario
+
+GET /api/itineraries/user/:id
+
+Obtiene todos los itinerarios asociados a un usuario específico.
+
+Parámetros URL:
+id: ID del usuario cuyos itinerarios se desean obtener
+
+Respuesta:
+```ts
+jsonContent-Type: application/json
+{
+  "data": [
+    {
+      "id": "670bd0cc60eb88e665c9fb90",
+      "title": "Itinerario 1111",
+      "description": "Itinerario hecho para 7 dias en Disney...",
+      "dayStart": "2024-10-30T00:00:00.000Z",
+      "dayEnd": "2024-11-23T00:00:00.000Z",
+      "place": {...}
+    },
+    {...}
+  ]
+}
+```
+
+Errores:
+
+500 Internal Server Error: Error del servidor
+
+#### Obtener un itinerario específico
+
+GET /api/itineraries/:id
+
+Obtiene información detallada de un itinerario específico.
+
+Parámetros URL:
+id: ID del itinerario a consultar
+
+Respuesta:
+```ts
+jsonContent-Type: application/json
+{
+  "data": {
+    "id": "670bd0cc60eb88e665c9fb90",
+    "title": "Itinerario 1111",
+    "description": "Itinerario hecho para 7 dias en Disney...",
+    "dayStart": "2024-10-30T00:00:00.000Z",
+    "dayEnd": "2024-11-23T00:00:00.000Z",
+    "activities": [...],
+    "participants": [...],
+    "user": {...},
+    "place": {...}
+  }
+}
+```
+
+Errores:
+
+500 Internal Server Error: Error del servidor
+
+#### Crear un nuevo itinerario
+
+POST /api/itineraries
+
+Crea un nuevo itinerario en el sistema.
+
+Solicitud:
+```ts
+jsonContent-Type: application/json
+{
+  "title": "Itinerario 1111",
+  "description": "Itinerario hecho para 7 dias en Disney...",
+  "dayStart": "2024-10-30",
+  "dayEnd": "2024-11-23",
+  "user": "6722862eeed0a44e8abde61f",
+  "place": "67157b64371c9028019e640c",
+  "activities": ["66fd97cb2e28ca23b47f2058", "66fd97cb2e28ca23b47f2058"],
+  "participants": []
+}
+```
+
+Validación:
+
+- title:
+
+  - "Title must be a string"
+  - "Title is required"
+  - "Title must have at least 3 characters"
+  - "Title can have a maximum of 20 characters"
+
+
+- description:
+
+  - "Description must be a string"
+  - "Description must have at least 10 characters"
+  - "Description can have a maximum of 100 characters"
+
+
+- place:
+
+  - "Place must be a string"
+  - "Place is required"
+
+
+- dayStart:
+
+  - "Start day must be a valid date"
+  - "Start day is required"
+
+
+- dayEnd:
+
+  - "End day must be a valid date"
+  - "End day is required"
+  - "End day must be after start day"
+  - "Itinerary must last at least 2 days"
+  - "Itinerary must not last more than 31 days"
+
+
+
+Respuesta:
+```ts
+jsonContent-Type: application/json
+{
+  "message": "Itinerario creado con éxito",
+  "data": {
+    "id": "670bd0cc60eb88e665c9fb90",
+    "title": "Itinerario 1111",
+    "description": "Itinerario hecho para 7 dias en Disney...",
+    "dayStart": "2024-10-30T00:00:00.000Z",
+    "dayEnd": "2024-11-23T00:00:00.000Z",
+    "activities": [...],
+    "participants": [],
+    "user": "6722862eeed0a44e8abde61f",
+    "place": "67157b64371c9028019e640c"
+  }
+}
+```
+
+Errores:
+
+400 Bad Request: "El user ingresado no existe"
+500 Internal Server Error: Error del servidor
+
+#### Crear un itinerario con IA
+
+POST /api/itineraries/ia
+
+Crea un nuevo itinerario utilizando inteligencia artificial basado en las preferencias y participantes.
+
+Solicitud:
+```ts
+jsonContent-Type: application/json
+{
+  "title": "DISNEY",
+  "description": "Itinerario hecho para 7 dias en Disney...",
+  "dayStart": "2024-10-30",
+  "dayEnd": "2024-11-23",
+  "user": "6722862eeed0a44e8abde61f",
+  "place": "67236e6e1706dd5a0709c4df",
+  "participants": ["6724d5e367bf8ca176f0b7ca", "6724d5ee67bf8ca176f0b7cb"]
+}
+```
+
+Validación:
+
+Los campos deben cumplir con las validaciones del schema del modelo. Se deben incluir todos los campos.
+
+Errores:
+
+400 Bad Request: "El user ingresado no existe" o "El place ingresado no existe"
+500 Internal Server Error: Error del servidor
+
+#### Actualizar un itinerario completo
+
+PUT /api/itineraries/:id
+
+Actualiza todos los datos de un itinerario existente.
+
+Parámetros URL:
+id: ID del itinerario a actualizar
+
+Solicitud:
+```ts
+jsonContent-Type: application/json
+{
+  "title": "Itinerario 2",
+  "description": "Itinerario hecho para 7 dias en Disney...",
+  "dayStart": "2024-10-30",
+  "dayEnd": "2024-11-23",
+  "place": {
+    "id": "67157b64371c9028019e640c"
+  },
+  "participants": [...]
+}
+```
+
+Validación:
+
+Los campos deben cumplir con las validaciones del schema del modelo. Se deben incluir todos los campos.
+El middleware sanitizeItineraryInput realiza una limpieza de los datos, eliminando campos indefinidos.
+
+Respuesta:
+```ts
+jsonContent-Type: application/json
+{
+  "message": "Itinerario actualizado con exito",
+  "data": {
+    "id": "670bd0cc60eb88e665c9fb90",
+    "title": "Itinerario 2",
+    "description": "Itinerario hecho para 7 dias en Disney...",
+    "dayStart": "2024-10-30T00:00:00.000Z",
+    "dayEnd": "2024-11-23T00:00:00.000Z",
+    "place": "67157b64371c9028019e640c",
+    "participants": [...]
+  }
+}
+```
+
+Errores:
+
+500 Internal Server Error: Error del servidor
+
+#### Actualizar parcialmente un itinerario
+
+PATCH /api/itineraries/:id
+
+Actualiza solo los campos específicos de un itinerario existente.
+
+Parámetros URL:
+id: ID del itinerario a actualizar parcialmente
+
+Solicitud:
+```ts
+jsonContent-Type: application/json
+{
+  "title": "Nuevo título"
+}
+```
+
+Validación:
+
+Cualquier campo que se incluya debe cumplir con las validaciones del schema del modelo
+El middleware sanitizeItineraryInput realiza una limpieza de los datos, eliminando campos indefinidos.
+
+Respuesta:
+```ts
+jsonContent-Type: application/json
+{
+  "message": "Itinerario actualizado con exito",
+  "data": {
+    "id": "670bd0cc60eb88e665c9fb90",
+    "title": "Nuevo título",
+    "description": "Itinerario hecho para 7 dias en Disney...",
+    "dayStart": "2024-10-30T00:00:00.000Z",
+    "dayEnd": "2024-11-23T00:00:00.000Z",
+    "place": "67157b64371c9028019e640c",
+    "participants": [...]
+  }
+}
+```
+
+Errores:
+
+500 Internal Server Error: Error del servidor
+
+#### Eliminar un itinerario
+
+DELETE /api/itineraries/:id
+
+Elimina un itinerario específico del sistema.
+
+Parámetros URL:
+id: ID del itinerario a eliminar
+
+Respuesta:
+```ts
+jsonContent-Type: application/json
+{
+  "message": "Itinerario borrado",
+  "data": {
+    "id": "670bd0cc60eb88e665c9fb90",
+    "title": "Itinerario 1111",
+    "description": "Itinerario hecho para 7 dias en Disney...",
+    "dayStart": "2024-10-30T00:00:00.000Z",
+    "dayEnd": "2024-11-23T00:00:00.000Z"
+  }
+}
+```
+
+Errores:
+
+500 Internal Server Error: Error del servidor
+
+### External Services
+
+| Método | Ruta                               | Descripción                           | Protegida |
+| ------ | --------------                     | --------------------------------      | --------- |
+| POST   | /api/publicity                    | Submit a publicity request               | ❌        |
+| GET    | /api/publicity/places                   | Get all external services          | ❌       |
+| GET    | /api/externalServices                   | Get all external services          | ✅        |
+| GET    | /api/externalServices/                   | Get an external service by ID        | ✅        |
+| GET    | /api/externalServices/findByPlace/          | Get external services by place ID      | ✅        |
+| POST   | /api/externalServices                   | Create a new external service              | ✅        |
+| POST   | /api/externalServices/acceptRequest/                    | Accept a publicity request               | ✅        |
+| PUT    | /api/externalServices/                    | Update an external service       | ✅        |
+|PATCH   | /api/externalServices/                    | Partially update external service   | ✅        |
+|DELETE  | /api/externalServices/                  | Delete an external service               | ✅        |

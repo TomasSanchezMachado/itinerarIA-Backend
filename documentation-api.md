@@ -1990,6 +1990,29 @@ Errores:
 
 ### External Services
 
+#### Data Models
+ExternalService
+```ts
+{
+  id: string;                // Unique identifier
+  serviceType: string;       // Type of service
+  name: string;              // Service name (unique)
+  description: string;       // Service description
+  adress: string;            // Service address
+  schedule: string;          // Service schedule (optional)
+  website: string;           // Service website (optional)
+  phoneNumber: string;       // Service phone number (optional)
+  place: string | Place;     // Reference to a Place
+  status: string;            // PENDING, ACTIVE, or CANCELED
+  createdAt: Date;           // Creation timestamp
+  updatedAt: Date;           // Last update timestamp
+}
+```
+- Status Values
+  - PENDING: Default status for new publicity requests
+  - ACTIVE: Status after admin approval or direct creation
+  - CANCELED: Service has been canceled
+
 | Método | Ruta                               | Descripción                           | Protegida |
 | ------ | --------------                     | --------------------------------      | --------- |
 | POST   | /api/publicity                    | Submit a publicity request               | ❌        |
@@ -2002,3 +2025,895 @@ Errores:
 | PUT    | /api/externalServices/                    | Update an external service       | ✅        |
 |PATCH   | /api/externalServices/                    | Partially update external service   | ✅        |
 |DELETE  | /api/externalServices/                  | Delete an external service               | ✅        |
+
+#### Submit Publicity Request
+
+POST /api/publicity
+
+Creates a new publicity request in pending status.
+
+Request:
+```ts
+jsonContent-Type: application/json
+{
+  "serviceType": "string",
+  "name": "string",
+  "description": "string",
+  "adress": "string",
+  "schedule": "string",
+  "website": "string",
+  "phoneNumber": "string",
+  "place": "string (ID)"
+}
+```
+
+Validation:
+
+- serviceType:
+
+  - "The service type must be a string"
+  - "The service type is required"
+  - "The service type must have at least 3 characters"
+
+
+- name:
+
+  - "The name must be a string"
+  - "The name is required"
+  - "The name must have at least 3 characters"
+
+
+- description:
+
+  - "The description must be a string"
+  - "The description is required"
+  - "The description must have at least 3 characters"
+
+
+- adress:
+
+  - "The address must be a string"
+  - "The address is required"
+  - "The address must have at least 3 characters"
+
+
+- schedule:
+
+  - "The schedule must be a string"
+  - "The schedule is required"
+  - "The schedule must have at least 3 characters"
+
+
+- website (optional):
+
+  - "Invalid website format" (must match format: www.example.com)
+
+
+- phoneNumber (optional):
+
+  - "Invalid phone number format" (must be 10 digits)
+
+
+- place: The place must be registered
+
+Response:
+```ts
+jsonStatus: 201 Created
+Content-Type: application/json
+
+{
+  "message": "The request has been sent",
+  "data": {
+    "id": "string",
+    "serviceType": "string",
+    "name": "string",
+    "description": "string",
+    "adress": "string",
+    "schedule": "string",
+    "website": "string",
+    "phoneNumber": "string",
+    "place": "string (ID)",
+    "status": "PENDING",
+    "createdAt": "timestamp",
+    "updatedAt": "timestamp"
+  }
+}
+```
+
+Errors:
+
+404 Not Found: "The place does not exist"
+409 Conflict: "The external service already exists"
+500 Internal Server Error: Error message
+
+#### Get All External Services
+
+GET /api/publicity/places
+
+Returns all external services.
+
+Response:
+```ts
+jsonStatus: 200 OK
+Content-Type: application/json
+
+{
+  "message": "All external services found",
+  "data": [
+    {
+      "id": "string",
+      "serviceType": "string",
+      "name": "string",
+      "description": "string",
+      "adress": "string",
+      "schedule": "string",
+      "website": "string",
+      "phoneNumber": "string",
+      "place": {
+        "id": "string",
+        "name": "string",
+        // other place properties
+      },
+      "status": "string",
+      "createdAt": "timestamp",
+      "updatedAt": "timestamp"
+    }
+  ]
+}
+```
+
+Errors:
+
+200 OK (with message): If no external services are found: {"message": ["External services not found"]}
+500 Internal Server Error: Error message
+
+#### Get All External Services
+
+GET /api/externalServices
+
+Returns all external services.
+
+Response:
+```ts
+jsonStatus: 200 OK
+Content-Type: application/json
+
+{
+  "message": "All external services found",
+  "data": [
+    {
+      "id": "string",
+      "serviceType": "string",
+      "name": "string",
+      "description": "string",
+      "adress": "string",
+      "schedule": "string",
+      "website": "string",
+      "phoneNumber": "string",
+      "place": {
+        "id": "string",
+        "name": "string",
+        // other place properties
+      },
+      "status": "string",
+      "createdAt": "timestamp",
+      "updatedAt": "timestamp"
+    }
+  ]
+}
+```
+
+Errors:
+
+200 OK (with message): If no external services are found: {"message": ["External services not found"]}
+500 Internal Server Error: Error message
+
+#### Get External Service by ID
+
+GET /api/externalServices/:id
+
+Returns an external service by its ID.
+
+Parameters:
+id: External service ID (path parameter)
+
+Response:
+```ts
+jsonStatus: 200 OK
+Content-Type: application/json
+
+{
+  "message": "External service found",
+  "data": {
+    "id": "string",
+    "serviceType": "string",
+    "name": "string",
+    "description": "string",
+    "adress": "string",
+    "schedule": "string",
+    "website": "string",
+    "phoneNumber": "string",
+    "place": {
+      "id": "string",
+      "name": "string",
+      // other place properties
+    },
+    "status": "string",
+    "createdAt": "timestamp",
+    "updatedAt": "timestamp"
+  }
+}
+```
+
+Errors:
+
+500 Internal Server Error: Error message (includes 404 Not Found scenarios)
+
+#### Get External Services by Place ID
+
+GET /api/externalServices/findByPlace/:id
+
+Returns all external services associated with a specific place.
+
+Parameters:
+id: Place ID (path parameter)
+
+Response:
+```ts
+jsonStatus: 200 OK
+Content-Type: application/json
+
+{
+  "message": "Servicios externos encontrados",
+  "data": [
+    {
+      "id": "string",
+      "serviceType": "string",
+      "name": "string",
+      "description": "string",
+      "adress": "string",
+      "schedule": "string",
+      "website": "string",
+      "phoneNumber": "string",
+      "place": {
+        "id": "string",
+        "name": "string",
+        // other place properties
+      },
+      "status": "string",
+      "createdAt": "timestamp",
+      "updatedAt": "timestamp"
+    }
+  ]
+}
+```
+
+Errors:
+
+200 OK (with message): If no external services are found: {"message": ["External services not found for that place"]}
+404 Not Found: {"message": ["A place with that id was not found"]}
+500 Internal Server Error: Error message
+
+#### Create External Service
+
+POST /api/externalServices
+
+Creates a new external service with ACTIVE status.
+
+Request:
+```ts
+jsonContent-Type: application/json
+
+{
+  "serviceType": "string",
+  "name": "string",
+  "description": "string",
+  "adress": "string",
+  "schedule": "string",
+  "website": "string",
+  "phoneNumber": "string",
+  "place": "string (ID)"
+}
+```
+
+Validation:
+
+Los campos deben cumplir con las validaciones del schema del modelo. Website and PhoneNumber are optionals.
+
+Response:
+```ts
+jsonStatus: 201 Created
+Content-Type: application/json
+
+{
+  "message": "External service created",
+  "data": {
+    "id": "string",
+    "serviceType": "string",
+    "name": "string",
+    "description": "string",
+    "adress": "string",
+    "schedule": "string",
+    "website": "string",
+    "phoneNumber": "string",
+    "place": "string (ID)",
+    "status": "ACTIVE",
+    "createdAt": "timestamp",
+    "updatedAt": "timestamp"
+  }
+}
+```
+
+Errors:
+
+404 Not Found: {"message": ["The place does not exist"]}
+409 Conflict: {"message": ["The external service already exists"]}
+500 Internal Server Error: Error message
+
+#### Accept Publicity Request
+
+POST /api/externalServices/acceptRequest/:id
+
+Changes the status of a pending publicity request to ACTIVE.
+
+Parameters:
+id: External service ID (path parameter)
+
+Response:
+```ts
+jsonStatus: 200 OK
+Content-Type: application/json
+
+{
+  "message": "The request has been accepted",
+  "data": {
+    "id": "string",
+    "serviceType": "string",
+    "name": "string",
+    "description": "string",
+    "adress": "string",
+    "schedule": "string",
+    "website": "string",
+    "phoneNumber": "string",
+    "place": "string (ID)",
+    "status": "ACTIVE",
+    "createdAt": "timestamp",
+    "updatedAt": "timestamp"
+  }
+}
+```
+
+Errors:
+
+500 Internal Server Error: Error message
+
+#### Update External Service
+
+PUT /api/externalServices/:id
+
+Updates an external service completely.
+
+Parameters:
+id: External service ID (path parameter)
+
+Request:
+```ts
+jsonContent-Type: application/json
+
+{
+  "serviceType": "string",
+  "name": "string",
+  "description": "string",
+  "adress": "string",
+  "schedule": "string",
+  "website": "string",
+  "phoneNumber": "string",
+  "place": "string (ID)"
+}
+```
+
+Validation:
+
+Los campos deben cumplir con las validaciones del schema del modelo.
+El middleware sanitizeExternalServiceInput realiza una limpieza de los datos, eliminando campos indefinidos.
+
+Response:
+```ts
+jsonStatus: 200 OK
+Content-Type: application/json
+
+{
+  "message": "External service updated",
+  "data": {
+    "id": "string",
+    "serviceType": "string",
+    "name": "string",
+    "description": "string",
+    "adress": "string",
+    "schedule": "string",
+    "website": "string",
+    "phoneNumber": "string",
+    "place": "string (ID)",
+    "status": "string",
+    "createdAt": "timestamp",
+    "updatedAt": "timestamp"
+  }
+}
+```
+
+Errors:
+
+409 Conflict: {"message": ["There is already a service with that name"]}
+500 Internal Server Error: Error message
+
+#### Partially Update External Service
+
+PATCH /api/externalServices/:id
+
+Updates only the provided fields of an external service.
+
+Parameters:
+id: External service ID (path parameter)
+
+Request:
+```ts
+jsonContent-Type: application/json
+
+{
+  // Any combination of these fields
+  "serviceType": "string",
+  "name": "string",
+  "description": "string",
+  "adress": "string",
+  "schedule": "string",
+  "website": "string",
+  "phoneNumber": "string"
+}
+```
+
+Validation:
+Same as PUT request but all fields are optional.
+Response:
+```ts
+jsonStatus: 200 OK
+Content-Type: application/json
+
+{
+  "message": "External service updated",
+  "data": {
+    "id": "string",
+    "serviceType": "string",
+    "name": "string",
+    "description": "string",
+    "adress": "string",
+    "schedule": "string",
+    "website": "string",
+    "phoneNumber": "string",
+    "place": "string (ID)",
+    "status": "string",
+    "createdAt": "timestamp",
+    "updatedAt": "timestamp"
+  }
+}
+```
+
+Errors:
+
+409 Conflict: {"message": ["There is already a service with that name"]}
+500 Internal Server Error: Error message
+
+#### Delete External Service
+
+DELETE /api/externalServices/:id
+
+Deletes an external service.
+
+Parameters:
+id: External service ID (path parameter)
+
+Response:
+```ts
+jsonStatus: 200 OK
+Content-Type: application/json
+
+{
+  "message": "External service deleted"
+}
+```
+
+Errors:
+
+500 Internal Server Error: Error message
+
+### Activities
+
+####Modelo de datos
+
+Activity
+```ts
+{
+  id: string;               // Identificador único
+  name: string;             // Nombre de la actividad
+  description: string;      // Descripción de la actividad
+  outdoor: boolean;         // Indica si la actividad es al aire libre
+  transport?: boolean;      // Indica si se necesita transporte (opcional)
+  scheduleStart: string;    // Hora de inicio (formato HH:MM)
+  scheduleEnd: string;      // Hora de fin (formato HH:MM)
+  place: Place;             // Referencia al lugar donde se realiza
+  itinerary: Itinerary;     // Referencia al itinerario asociado
+  opinions: Opinion[];      // Colección de opiniones sobre la actividad
+  createdAt: Date;          // Fecha de creación
+  updatedAt: Date;          // Fecha de última actualización
+}
+```
+
+| Método | Ruta                               | Descripción                                    | Protegida |
+| ------ | --------------                     | --------------------------------               | --------- |
+| GET    | /api/activities         | Obtener todas las actividades  | ✅        |
+| GET    | /api/activities/:id     | Obtener una actividad por ID             | ✅        |
+| POST   | /api/activities                | Crear una nueva actividad                    | ✅        |
+| PUT    | /api/activities/               | Actualizar una actividad por completo            | ✅        |
+|PATCH   | /api/activities/               | Actualizar parcialmente actividad     | ✅        |
+|DELETE  | /api/activities/               | Eliminar una actividad                  | ✅        | 
+
+#### Obtener todas las actividades
+
+GET /api/activities
+
+Retorna todas las actividades existentes en el sistema.
+
+Respuesta:
+```ts
+jsonContent-Type: application/json
+
+{
+  "message": "Todos las activities encontrados",
+  "data": [
+    {
+      "id": "string",
+      "name": "string",
+      "description": "string",
+      "outdoor": boolean,
+      "transport": boolean,
+      "scheduleStart": "string",
+      "scheduleEnd": "string",
+      "place": {
+        "id": "string",
+        // otros datos del lugar
+      },
+      "itinerary": {
+        "id": "string",
+        // otros datos del itinerario
+      },
+      "opinions": [
+        {
+          "id": "string",
+          // datos de opiniones
+        }
+      ],
+      "createdAt": "timestamp",
+      "updatedAt": "timestamp"
+    }
+  ]
+}
+```
+
+Errores:
+
+200 OK (con mensaje): Si no hay actividades: {"message": "No se encontraron activities"}
+500 Internal Server Error: {"message": error.message}
+
+#### Obtener actividad por ID
+
+GET /api/activities/:id
+
+Retorna una actividad específica según su ID.
+
+Parámetros:
+id: ID de la actividad (parámetro de ruta)
+
+Respuesta:
+```ts
+jsonContent-Type: application/json
+
+{
+  "message": "Activity encontrada",
+  "data": {
+    "id": "string",
+    "name": "string",
+    "description": "string",
+    "outdoor": boolean,
+    "transport": boolean,
+    "scheduleStart": "string",
+    "scheduleEnd": "string",
+    "place": {
+      "id": "string",
+      // otros datos del lugar
+    },
+    "itinerary": {
+      "id": "string",
+      // otros datos del itinerario
+    },
+    "opinions": [
+      {
+        "id": "string",
+        // datos de opiniones
+      }
+    ],
+    "createdAt": "timestamp",
+    "updatedAt": "timestamp"
+  }
+}
+```
+
+Errores:
+
+500 Internal Server Error: {"message": error.message} (incluye escenarios de 404 Not Found)
+
+#### Crear actividad
+
+POST /api/activities
+
+Crea una nueva actividad.
+
+Solicitud:
+```ts
+jsonContent-Type: application/json
+
+{
+  "name": "string",
+  "description": "string",
+  "outdoor": boolean,
+  "transport": boolean,
+  "scheduleStart": "string",
+  "scheduleEnd": "string",
+  "place": {
+    "id": "string"
+  },
+  "itinerary": {
+    "id": "string"
+  }
+}
+```
+
+Validación:
+
+- name:
+
+  - "Name must be a string"
+  - "Name is required"
+  - "Name must have at least 3 characters"
+  - "Name can have a maximum of 20 characters"
+
+- description:
+
+  - "Description must be a string"
+  - "Description is required"
+  - "Description must have at least 3 characters"
+  - "Description can have a maximum of 100 characters"
+
+- outdoor:
+
+  - "You must specify if the activity is outdoor or not"
+
+- transport (opcional):
+
+  - "You must specify if the activity needs transport or not"
+
+- scheduleStart:
+
+  - "Schedule start must be a string"
+  - "Schedule start is required"
+  - "Schedule start must be in the format HH"
+
+
+- scheduleEnd:
+
+  - "Schedule end must be a string"
+  - "Schedule end is required"
+  - "Schedule end must be in the format HH"
+
+
+- Validación adicional:
+
+"The activity must start before it ends" (scheduleStart debe ser anterior a scheduleEnd)
+
+Respuesta:
+```ts
+jsonStatus: 201 Created
+Content-Type: application/json
+
+{
+  "message": "Actvidad creada",
+  "data": {
+    "id": "string",
+    "name": "string",
+    "description": "string",
+    "outdoor": boolean,
+    "transport": boolean,
+    "scheduleStart": "string",
+    "scheduleEnd": "string",
+    "place": "string (ID)",
+    "itinerary": {
+      "id": "string",
+      // otros datos del itinerario
+    },
+    "createdAt": "timestamp",
+    "updatedAt": "timestamp"
+  }
+}
+```
+
+Errores:
+
+400 Bad Request: {"message": ["Itinerario no encontrado"]}
+400 Bad Request: {"message": ["Activity ya existente"]}
+500 Internal Server Error: {"message": error.message}
+
+#### Actualizar actividad
+
+PUT /api/activities/:id
+
+Actualiza completamente una actividad existente.
+
+Parámetros:
+id: ID de la actividad (parámetro de ruta)
+
+Solicitud:
+```ts
+jsonContent-Type: application/json
+
+{
+  "name": "string",
+  "description": "string",
+  "outdoor": boolean,
+  "transport": boolean,
+  "scheduleStart": "string",
+  "scheduleEnd": "string",
+  "place": {
+    "id": "string"
+  },
+  "itinerary": {
+    "id": "string"
+  }
+}
+```
+
+Validación:
+
+Los campos deben cumplir con las validaciones del schema del modelo. Se deben incluir todos los campos.
+
+
+Respuesta:
+```ts
+jsonStatus: 200 OK
+Content-Type: application/json
+
+{
+  "message": "Activity actualizada",
+  "data": {
+    "id": "string",
+    "name": "string",
+    "description": "string",
+    "outdoor": boolean,
+    "transport": boolean,
+    "scheduleStart": "string",
+    "scheduleEnd": "string",
+    "place": "string (ID)",
+    "itinerary": "string (ID)",
+    "createdAt": "timestamp",
+    "updatedAt": "timestamp"
+  },
+  "itinerary": {
+    "id": "string",
+    // otros datos del itinerario
+  }
+}
+```
+
+Errores:
+
+400 Bad Request: {"message": ["Activity ya existente"]}
+500 Internal Server Error: {"message": error.message}
+
+#### Actualizar parcialmente actividad
+
+PATCH /api/activities/:id
+
+Actualiza parcialmente una actividad existente.
+
+Parámetros:
+id: ID de la actividad (parámetro de ruta)
+
+Solicitud:
+```ts
+jsonContent-Type: application/json
+
+{
+  // Cualquier combinación de estos campos
+  "name": "string",
+  "description": "string",
+  "outdoor": boolean,
+  "transport": boolean,
+  "scheduleStart": "string",
+  "scheduleEnd": "string",
+  "place": {
+    "id": "string"
+  },
+  "itinerary": {
+    "id": "string"
+  }
+}
+```
+
+Validación:
+
+Same as PUT request but all fields are optional.
+
+Respuesta:
+```ts
+jsonStatus: 200 OK
+Content-Type: application/json
+
+{
+  "message": "Activity actualizada",
+  "data": {
+    "id": "string",
+    "name": "string",
+    "description": "string",
+    "outdoor": boolean,
+    "transport": boolean,
+    "scheduleStart": "string",
+    "scheduleEnd": "string",
+    "place": "string (ID)",
+    "itinerary": "string (ID)",
+    "createdAt": "timestamp",
+    "updatedAt": "timestamp"
+  },
+  "itinerary": {
+    "id": "string",
+    // otros datos del itinerario
+  }
+}
+```
+
+Errores:
+
+400 Bad Request: {"message": ["Activity ya existente"]}
+500 Internal Server Error: {"message": error.message}
+
+#### Eliminar actividad
+
+DELETE /api/activities/:id
+
+Elimina una actividad existente.
+
+Parámetros:
+id: ID de la actividad (parámetro de ruta)
+
+Respuesta:
+```ts
+jsonStatus: 200 OK
+Content-Type: application/json
+
+{
+  "message": "Activity eliminada",
+  "data": {
+    "id": "string",
+    "name": "string",
+    "description": "string",
+    "outdoor": boolean,
+    "transport": boolean,
+    "scheduleStart": "string",
+    "scheduleEnd": "string",
+    "place": "string (ID)",
+    "itinerary": "string (ID)",
+    "createdAt": "timestamp",
+    "updatedAt": "timestamp"
+  }
+}
+```
+
+Errores:
+
+500 Internal Server Error: {"message": error.message}

@@ -50,7 +50,7 @@ export async function findAll(req: Request, res: Response) {
     }
     res.status(200).json({ data: participants });
   } catch (error: any) {
-    return res.status(500).json({ message: [error.message], req: "hola" });
+    return res.status(500).json({ message: [error.message]});
   }
 }
 export async function findOne(req: Request, res: Response) {

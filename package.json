@@ -12,6 +12,7 @@
     "start:docker": "docker start itinerarIA && tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node dist/app.js\"",
     "start": "node cross-env NODE_ENV=production -r dotenv/config dist/app.js",
     "start-test": "docker start itinerarIA-test && tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node dist/app.js\"",
+    "test":"vitest --run",
     "test:vitest": "cross-env NODE_ENV=test vitest",
     "test:e2e": "cross-env NODE_ENV=test tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node dist/app.js\"",
     "test-mac:e2e": "docker start itinerarIA-test && cross-env NODE_ENV=test tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node dist/app.js\""

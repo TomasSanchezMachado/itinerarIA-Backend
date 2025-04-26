@@ -19,10 +19,8 @@ test("Top-level await example", async () => {
     username: "facu",
     password: "1234Facu",
   });
-  console.log(response.body);
   const setCookie = response.headers["set-cookie"];
   const token = setCookie[0].split(";")[0].split("=")[1];
-  console.log(token);
   expect(response.status).toBe(200);
 });
 

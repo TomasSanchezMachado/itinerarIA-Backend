@@ -100,12 +100,16 @@ export async function login(req: Request, res: Response) {
 }
 
 export async function logout(req: Request, res: Response) {
-  res.clearCookie("token", {
-    httpOnly: isProduction,
-    secure: isProduction,
-    sameSite: sameSite,
-  });
-  res.status(200).json({ message: "User logged out" });
+  try{
+    res.clearCookie("token", {
+      httpOnly: isProduction,
+      secure: isProduction,
+      sameSite: sameSite,
+    });
+    res.status(200).json({ message: "User logged out" });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error during logout" });
+  }
 }
 
 export async function profile(req: Request, res: Response) {

@@ -263,7 +263,7 @@ const validateSchema = (schema: any) => (req: Request, res: Response, next: Next
 
 #### Register User
 
-POST /auth/register
+HTTP Method & URL: POST /api/auth/register
 
 Description: Registers a new user in the system.
 
@@ -376,22 +376,21 @@ OR
 
 
 
-#### Inicio de Sesión
+#### User Login
 
-POST /auth/login
+HTTP Method & URL: POST /api/auth/login
 
-Inicia sesión de un usuario existente.
+Description: Authenticates a user and returns a session token.
 
-Solicitud:
-```ts
-jsonContent-Type: application/json
+Request Body:
+```json
 {
   "username": "string",
   "password": "string"
 }
 ```
 
-Validación:
+Validation Rules:
 
 - username:
 
@@ -405,120 +404,229 @@ Validación:
   - "Password is required"
   - "Password must be at least 8 characters long and contain at least one uppercase letter and one number"
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Response Codes:
+
+200 OK: Login successful
+400 Bad Request: Invalid credentials
+500 Internal Server Error: Login process failed
+
+Response Body (Success - 200 OK):
+```json
 {
   "message": "User logged successfully",
   "data": {
-    "user": {...}
+    "user": {
+      "id": "string",
+      "username": "string",
+      "names": "string",
+      "lastName": "string",
+      "dateOfBirth": "2024-04-24",
+      "mail": "string",
+      "phoneNumber": "string",
+      "isAdmin": false,
+      "itineraries": [],
+      "participants": []
+    }
   },
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
+Error Responses:
 
-Errores:
+400 Bad Request:
 
-400 Bad Request: "Incorrect username or password. Please try again."
-500 Internal Server Error: "The user could not be logged in"
+```json
+{
+  "message": ["Incorrect username or password. Please try again."]
+}
+```
 
-#### Cierre de sesión
+500 Internal Server Error:
 
-POST /auth/logout
+```json
+{
+  "message": "The user could not be logged in",
+  "data": "Error details"
+}
+```
 
-Cierra la sesión del usuario actualmente autenticado.
+Example Request:
+```bash
+curl -X POST https://api.itineraria.com/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "traveler2024",
+    "password": "Travel2024"
+  }
+```
 
-Solicitud:
-No requiere cuerpo.
+Notes: Upon successful login, a JWT token is set as an HTTP-only cookie.
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+#### User Logout
+
+HTTP Method & URL: POST /api/auth/logout
+
+Description: Logs out the currently authenticated user by invalidating their session.
+
+Request Body: None required
+
+Response Codes:
+
+200 OK: Logout successful
+401 Unauthorized: No valid authentication
+
+Response Body (Success - 200 OK):
+```json
 {
   "message": "User logged out"
 }
 ```
-Notas:
 
-Este endpoint elimina la cookie del token de autenticación.
+Error Responses:
 
-#### Obtener Perfil de Usuario
+500 Internal Server Error:
 
-POST /auth/profile
+```json
+{
+   message: "Internal server error during logout"
+}
+```
 
-Obtiene la información del perfil del usuario autenticado.
+Example Request:
+```bash
+curl -X POST https://api.itineraria.com/auth/logout \
+  -H "Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+```
 
-Solicitud:
-No requiere cuerpo.
+Notes: This endpoint clears the authentication token cookie.
 
-Headers:
-Requiere token de autenticación en cookie.
+#### Get User Profile
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+HTTP Method & URL: POST /auth/profile
+
+Description: Retrieves the profile information of the currently authenticated user.
+
+Request Body: None required
+
+Response Codes:
+
+200 OK: Profile successfully retrieved
+400 Bad Request: User not found
+500 Internal Server Error: Profile retrieval failed
+
+Response Body (Success - 200 OK):
+```json
 {
   "message": "User profile found",
   "data": {
-    "user": {...}
+    "user": {
+      "id": "string",
+      "username": "string",
+      "names": "string",
+      "lastName": "string",
+      "dateOfBirth": "2024-04-24",
+      "mail": "string",
+      "phoneNumber": "string",
+      "isAdmin": false
+    }
   }
 }
 ```
 
-Errores:
+Error Responses:
 
-400 Bad Request: "User not found"
-500 Internal Server Error: "The user profile could not be found"
+400 Bad Request:
 
-#### Verificar Token
+json{
+  "message": "User not found"
+}
 
-POST /auth/verify
+500 Internal Server Error:
 
-Verifica si el token de autenticación es válido y devuelve la información del usuario.
+json{
+  "message": "The user profile could not be found",
+  "data": "Error details"
+}
 
-Solicitud:
-No requiere cuerpo.
+Example Request:
+```bash
+curl -X POST https://api.itineraria.com/auth/profile \
+  -H "Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+```
 
-Headers:
-Requiere token de autenticación en cookie.
+#### Verify Token
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+HTTP Method & URL: POST /api/auth/verify
+
+Description: Verifies if the authentication token is valid and returns user information.
+
+Request Body: None required
+
+Response Codes:
+
+200 OK: Token is valid
+401 Unauthorized: Token is invalid or user not found
+
+Response Body (Success - 200 OK):
+```json
 {
   "message": "User found",
   "data": {
-    "user": {...}
+    "user": {
+      "id": "string",
+      "username": "string",
+      "names": "string",
+      "lastName": "string",
+      "dateOfBirth": "2024-04-24",
+      "mail": "string",
+      "phoneNumber": "string",
+      "isAdmin": false,
+      "itineraries": [],
+      "participants": []
+    }
   }
 }
 ```
 
+401 Unauthorized:
+```json
+{ message: "User not found", userFound: userFound }
+```
 
+Example Request:
+```bash
+curl -X POST https://api.itineraria.com/auth/verify \
+  -H "Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+```
 
-Errores:
+Notes: This endpoint is typically used to check if a user's session is still valid and to retrieve current user data.
 
-401 Unauthorized: Si el token no es válido o el usuario no existe
-
-### Usuarios
+### Users
 
 | Método | Ruta           | Descripción                      | Protegida |
 | ------ | -------------- | -------------------------------- | --------- |
-| GET    | /users         | Obtener todos los usuarios       | ❌        |
-| GET    | /users/:id         | Obtener un usuario específico    | ❌        |
-| POST   | /users         | Crear un nuevo usuario           | ❌        |
-| PUT    | /users/        | Actualizar un usuario completo   | ❌        |
-|PATCH   | /users/        | Actualizar campos específicos    | ❌        |
-|DELETE  | /users/        | Eliminar un usuario              | ❌        |
+| GET    | /api/users         | Get all users      | ❌        |
+| GET    | /api/users/:id         | Get a specific user    | ❌        |
+| POST   | /api/users         | Create a new user           | ❌        |
+| PUT    | /api/users/        |Update an entire user   | ❌        |
+|PATCH   | /api/users/        | Update specific user fields    | ❌        |
+|DELETE  | /api/users/        | Delete a user             | ❌        |
 
-#### Obtener todos los usuarios
+#### Get All Users
 
-GET /users
+HTTP Method & URL: GET /users
 
-Recupera todos los usuarios registrados en el sistema.
+Description: Retrieves all users registered in the system.
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Request Body: None
+
+Response Codes:
+
+200 OK: Users successfully retrieved
+500 Internal Server Error: Server error while retrieving users
+
+Response Body (Success - 200 OK):
+```json
 {
   "message": "Users found successfully",
   "data": [
@@ -538,22 +646,43 @@ jsonContent-Type: application/json
 }
 ```
 
-Errores:
+Error Responses:
 
-500 Internal Server Error: Error del servidor al buscar usuarios
+500 Internal Server Error:
 
-#### Obtener un usuario específico
+```json
+{
+  "message": "Server error while retrieving users"
+}
+```
+
+Example Request:
+```bash
+curl -X GET https://api.itineraria.com/users
+```
+
+#### Get Specific User
+
 
 GET /user/:id
 
-Recupera la información de un usuario específico según su ID.
+HTTP Method & URL: GET /users/:id
 
-Parámetros de ruta:
-id: Identificador único del usuario
+Description: Retrieves information for a specific user based on their ID.
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Request Parameters:
+
+id (path parameter): Unique identifier of the user
+
+Request Body: None
+
+Response Codes:
+
+200 OK: User successfully retrieved
+500 Internal Server Error: User not found or server error
+
+Response Body (Success - 200 OK):
+```json
 {
   "message": "User found successfully",
   "data": {
@@ -571,19 +700,29 @@ jsonContent-Type: application/json
 }
 ```
 
-Errores:
+Error Responses:
 
-500 Internal Server Error: Usuario no encontrado o error del servidor
+500 Internal Server Error:
 
-#### Crear un nuevo usuario
+```json
+{
+  "message": "User not found or server error"
+}
+```
 
-POST /users
+Example Request:
+```bash
+curl -X GET https://api.itineraria.com/users/60d21b4667d0d8992e610c85
+```
 
-Registra un nuevo usuario en el sistema.
+#### Create User
 
-Solicitud:
-```ts
-jsonContent-Type: application/json
+HTTP Method & URL: POST /users
+
+Description: Registers a new user in the system.
+
+Request Body:
+```json
 {
   "username": "string",
   "password": "string",
@@ -595,13 +734,16 @@ jsonContent-Type: application/json
 }
 ```
 
-Validación:
+Validation Notes:
+The sanitizeUserInput middleware cleans the data by removing undefined fields.
 
-El middleware sanitizeUserInput realiza una limpieza de los datos, eliminando campos indefinidos.
+Response Codes:
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+200 OK: User successfully created
+500 Internal Server Error: Error creating user
+
+Response Body (Success - 200 OK):
+```json
 {
   "message": "User logged successfully",
   "data": {
@@ -620,22 +762,43 @@ jsonContent-Type: application/json
 }
 ```
 
-Errores:
+Error Responses:
 
-500 Internal Server Error: Error al crear el usuario
+500 Internal Server Error:
 
-#### Actualizar un usuario (PUT)
+```json
+{
+  "message": "Error creating user"
+}
+```
 
-PUT /users/
+Example Request:
+```bash
+curl -X POST https://api.itineraria.com/users \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "traveler2024",
+    "password": "Travel2024",
+    "names": "John",
+    "lastName": "Doe",
+    "dateOfBirth": "1990-01-15",
+    "mail": "john.doe@example.com",
+    "phoneNumber": "1234567890"
+  }'
+```
 
-Actualiza todos los campos de un usuario existente.
+#### Update User (Complete)
 
-Parámetros de ruta:
-id: Identificador único del usuario
+HTTP Method & URL: PUT /users/
 
-Solicitud:
-```ts
-jsonContent-Type: application/json
+Description: Updates all fields of an existing user.
+
+Request Parameters:
+
+id (path parameter): Unique identifier of the user
+
+Request Body:
+```json
 {
   "username": "string",
   "password": "string",
@@ -652,7 +815,7 @@ jsonContent-Type: application/json
 }
 ```
 
-Validación:
+Validation Rules:
 
 - username:
 
@@ -690,9 +853,14 @@ Validación:
   - "Phone number is required"
 
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Response Codes:
+
+200 OK: User successfully updated
+400 Bad Request: Username or email already exists
+500 Internal Server Error: Error updating user
+
+Response Body (Success - 200 OK):
+```json
 {
   "message": "User updated successfully",
   "data": {
@@ -708,47 +876,77 @@ jsonContent-Type: application/json
 }
 ```
 
-Errores:
+Error Responses:
 
-400 Bad Request: "Username or email already exists"
-500 Internal Server Error: Error al actualizar el usuario
+400 Bad Request:
 
-#### Actualizar parcialmente un usuario (PATCH)
-
-PATCH /users/
-
-Actualiza campos específicos de un usuario existente.
-
-Parámetros de ruta:
-id: Identificador único del usuario
-
-Solicitud:
-```ts
-jsonContent-Type: application/json
+```json
 {
-  "username": "string", // opcional
-  "names": "string", // opcional
-  "lastName": "string", // opcional
-  "mail": "string", // opcional
-  "phoneNumber": "string", // opcional
+  "message": "Username or email already exists"
+}
+```
+
+500 Internal Server Error:
+
+```json
+{
+  "message": "Error updating user"
+}
+```
+
+Example Request:
+```bash
+curl -X PUT https://api.itineraria.com/users/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "traveler2024_updated",
+    "password": "Travel2024New",
+    "names": "John",
+    "lastName": "Doe",
+    "mail": "john.updated@example.com",
+    "phoneNumber": "9876543210",
+    "isAdmin": false
+  }'
+```
+
+#### Update User (Partial)
+HTTP Method & URL: PATCH /users/
+
+Description: Updates specific fields of an existing user.
+
+Request Parameters:
+
+id (path parameter): Unique identifier of the user
+
+Request Body:
+```json{
+  "username": "string", // optional
+  "names": "string", // optional
+  "lastName": "string", // optional
+  "mail": "string", // optional
+  "phoneNumber": "string", // optional
   "itineraries": [
     {
       "id": "string"
     }
-  ], // opcional
-  "isAdmin": boolean // opcional
+  ], // optional
+  "isAdmin": boolean // optional
 }
 ```
 
-Validación:
+Validation Notes:
 
-Cualquier campo que se incluya debe cumplir con las validaciones del schema del modelo
-El middleware sanitizeUserInput realiza una limpieza de los datos, eliminando campos indefinidos.
+Any included field must meet the validations of the model schema
+The sanitizeUserInput middleware cleans the data by removing undefined fields
 
+Response Codes:
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+200 OK: User successfully updated
+400 Bad Request: Username or email already exists
+500 Internal Server Error: Error updating user
+
+Response Body (Success - 200 OK):
+```json
 {
   "message": "User updated successfully",
   "data": {
@@ -764,52 +962,107 @@ jsonContent-Type: application/json
 }
 ```
 
-Errores:
+Error Responses:
 
-400 Bad Request: "Username or email already exists"
-500 Internal Server Error: Error al actualizar el usuario
+400 Bad Request:
 
-#### Eliminar un usuario
-
-DELETE /users/
-
-Elimina un usuario del sistema.
-
-Parámetros de ruta:
-id: Identificador único del usuario
-
-Respuesta:
-```ts
-jsonContent-Type: application/json
+```json
 {
+  "message": "Username or email already exists"
+}
+```
+
+500 Internal Server Error:
+
+```json
+{
+  "message": "Error updating user"
+}
+```
+
+Example Request:
+```bash
+curl -X PATCH https://api.itineraria.com/users/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "phoneNumber": "9876543210",
+    "mail": "john.updated@example.com"
+  }'
+```
+
+#### Delete User
+
+HTTP Method & URL: DELETE /users/
+
+Description: Removes a user from the system.
+
+Request Parameters:
+
+id (path parameter): Unique identifier of the user
+
+Request Body: None
+
+Response Codes:
+
+200 OK: User successfully deleted
+500 Internal Server Error: Error deleting user
+
+Response Body (Success - 200 OK):
+```json{
   "message": "User deleted successfully"
 }
 ```
 
-Errores:
+Error Responses:
 
-500 Internal Server Error: Error al eliminar el usuario
+500 Internal Server Error:
+
+```json
+{
+  "message": "Error deleting user"
+}
+```
+
+Example Request:
+```bash
+curl -X DELETE https://api.itineraria.com/users/60d21b4667d0d8992e610c85
+```
 
 ### Preferencias
 
 | Método | Ruta                | Descripción                          | Protegida |
 | ------ | --------------      | --------------------------------     | --------- |
-| GET    | /preferences        | Obtener todas las preferencias       | ✅ (Admin)|
-| GET    | /preferences/:id    | Obtener una preferencia específica   | ✅ (Admin)|
-| POST   | /preferences        | Crear una nueva preferencia          | ✅ (Admin)|
-| PUT    | /preferences /      | Actualizar una preferencia completa  | ✅ (Admin)|
-|PATCH   | /preferences/       | Actualizar campos específicos        | ✅ (Admin)|
-|DELETE  | /preferences/       | Eliminar una preferencia             | ✅ (Admin)|
+| GET    | /api/preferences        | Get all preferences       | ✅ (Admin)|
+| GET    | /api/preferences/:id    |Get a specific preference  | ✅ (Admin)|
+| POST   | /api/preferences        | Create a new preference          | ✅ (Admin)|
+| PUT    | /api/preferences /      | Update a complete preference  | ✅ (Admin)|
+|PATCH   | /api/preferences/       | Update specific preference fields       | ✅ (Admin)|
+|DELETE  | /api/preferences/       | Delete a preference            | ✅ (Admin)|
 
-#### Obtener todas las preferencias
+#### Get All Preferences
 
-GET /preferences
+HTTP Method & URL: GET /preferences
 
-Recupera todas las preferencias registradas en el sistema.
+Description: Retrieves all preferences registered in the system.
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Authentication Requirements:
+
+Admin access required
+Valid authentication token
+
+Request Parameters: None
+
+Request Body: None
+
+Response Codes:
+
+200 OK: Preferences successfully retrieved
+401 Unauthorized: Authentication issues
+403 Forbidden: Insufficient permissions
+500 Internal Server Error: Server error while fetching preferences
+
+Response Body (Success - 200 OK):
+```json
 {
   "data": [
     {
@@ -822,33 +1075,75 @@ jsonContent-Type: application/json
 }
 ```
 
-Respuesta (sin preferencias):
-```ts
-jsonContent-Type: application/json
+Response Body (No preferences - 200 OK):
+```json
 {
   "message": "Preferences not found"
 }
 ```
 
-Errores:
+Error Responses:
 
-401 Unauthorized: "No authorization token provided" o "Invalid token"
-403 Forbidden: "You are not authorized to access this resource"
-500 Internal Server Error: Error del servidor al buscar preferencias
-
-#### Obtener una preferencia específica
-
-GET /preferences/:id
-
-Recupera la información de una preferencia específica según su ID.
-
-Parámetros de ruta:
-id: Identificador único de la preferencia
-
-Respuesta:
-```ts
-jsonContent-Type: application/json
+401 Unauthorized:
+```json
 {
+  "message": "No authorization token provided"
+}
+```
+or
+```json
+{
+  "message": "Invalid token"
+}
+```
+
+403 Forbidden:
+```json
+{
+  "message": "You are not authorized to access this resource"
+}
+```
+
+500 Internal Server Error:
+```json
+{
+  "message": "Error fetching preferences"
+}
+```
+
+Example Request:
+```bash
+curl -X GET https://api.example.com/preferences \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+#### Get Specific Preference
+
+HTTP Method & URL: GET /preferences/
+
+Description: Retrieves information for a specific preference by its ID.
+
+Authentication Requirements:
+
+Admin access required
+Valid authentication token
+
+Request Parameters:
+
+id (path parameter): Unique identifier of the preference
+
+Request Body: None
+
+Response Codes:
+
+200 OK: Preference successfully retrieved
+401 Unauthorized: Authentication issues
+403 Forbidden: Insufficient permissions
+404 Not Found: Preference not found
+500 Internal Server Error: Server error while fetching preference
+
+Response Body (Success - 200 OK):
+```json{
   "data": {
     "id": "string",
     "name": "string",
@@ -858,35 +1153,81 @@ jsonContent-Type: application/json
 }
 ```
 
-Errores:
-
-401 Unauthorized: "No authorization token provided" o "Invalid token"
-403 Forbidden: "You are not authorized to access this resource"
-500 Internal Server Error: Preferencia no encontrada o error del servidor
-
-#### Crear una nueva preferencia
-
-POST /preferences
-
-Registra una nueva preferencia en el sistema.
-
-Solicitud:
-```ts
-jsonContent-Type: application/json
+Error Responses:
+401 Unauthorized:
+```json
 {
-  "name": "string",
-  "description": "string",
-  "itineraries": [...] // opcional
+  "message": "No authorization token provided"
+}
+```
+or
+```json{
+  "message": "Invalid token"
 }
 ```
 
-Validación:
+403 Forbidden:
+```json{
+  "message": "You are not authorized to access this resource"
+}
+```
 
-El middleware sanitizePreferenceInput realiza una limpieza de los datos, eliminando campos indefinidos.
+404 Not Found:
+```json
+{
+  "message": "Preference not found"
+}
+```
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+500 Internal Server Error:
+```json
+{
+  "message": "Error fetching preference"
+}
+```
+
+Example Request:
+```bash
+curl -X GET https://api.example.com/preferences/60d21b4667d0d8992e610c85 \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+#### Create Preference
+
+HTTP Method & URL: POST /preferences
+
+Description: Registers a new preference in the system.
+
+Authentication Requirements:
+
+Admin access required
+Valid authentication token
+
+Request Parameters: None
+
+Request Body:
+```json
+{
+  "name": "string",
+  "description": "string",
+  "itineraries": [...] // optional
+}
+```
+
+Validation Notes:
+
+The sanitizePreferenceInput middleware cleans the data by removing undefined fields
+
+Response Codes:
+
+201 Created: Preference successfully created
+400 Bad Request: Invalid input data
+401 Unauthorized: Authentication issues
+403 Forbidden: Insufficient permissions
+500 Internal Server Error: Server error while creating preference
+
+Response Body (Success - 201 Created):
+```json
 {
   "message": "Preference created successfully",
   "data": {
@@ -898,38 +1239,90 @@ jsonContent-Type: application/json
 }
 ```
 
-Errores:
+Error Responses:
+400 Bad Request:
+```json
+{
+  "message": "Invalid input data"
+}
+```
 
-401 Unauthorized: "No authorization token provided" o "Invalid token"
-403 Forbidden: "You are not authorized to access this resource"
-500 Internal Server Error: Error al crear la preferencia
+401 Unauthorized:
+```json
+{
+  "message": "No authorization token provided"
+}
+```
+or
+```json
+{
+  "message": "Invalid token"
+}
+```
 
-#### Actualizar una preferencia (PUT)
+403 Forbidden:
+```json
+{
+  "message": "You are not authorized to access this resource"
+}
+```
 
-PUT /preferences/
+500 Internal Server Error:
+```json
+{
+  "message": "Error creating preference"
+}
+```
 
-Actualiza todos los campos de una preferencia existente.
+Example Request:
+```bash
+curl -X POST https://api.example.com/preferences \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "name": "Early Morning",
+    "description": "Preference for early morning departures",
+    "itineraries": []
+  }'
+```
 
-Parámetros de ruta:
-id: Identificador único de la preferencia
+#### Update Preference (Complete)
 
-Solicitud:
-```ts
-jsonContent-Type: application/json
+HTTP Method & URL: PUT /preferences/
+Description: Updates all fields of an existing preference.
+Authentication Requirements:
+
+Admin access required
+Valid authentication token
+
+Request Parameters:
+
+id (path parameter): Unique identifier of the preference
+
+Request Body:
+```
 {
   "name": "string",
   "description": "string",
-  "itineraries": [...] // opcional
+  "itineraries": [...] // optional
 }
 ```
 
-Validación:
+Validation Notes:
 
-El middleware sanitizePreferenceInput realiza una limpieza de los datos, eliminando campos indefinidos.
+The sanitizePreferenceInput middleware cleans the data by removing undefined fields
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Response Codes:
+
+200 OK: Preference successfully updated
+400 Bad Request: Invalid input data
+401 Unauthorized: Authentication issues
+403 Forbidden: Insufficient permissions
+404 Not Found: Preference not found
+500 Internal Server Error: Server error while updating preference
+
+Response Body (Success - 200 OK):
+```json
 {
   "message": "Preference updated successfully",
   "data": {
@@ -941,39 +1334,94 @@ jsonContent-Type: application/json
 }
 ```
 
-Errores:
-
-401 Unauthorized: "No authorization token provided" o "Invalid token"
-403 Forbidden: "You are not authorized to access this resource"
-500 Internal Server Error: Error al actualizar la preferencia
-
-#### Actualizar parcialmente una preferencia (PATCH)
-
-PATCH /preferences/
-
-Actualiza campos específicos de una preferencia existente.
-
-Parámetros de ruta:
-id: Identificador único de la preferencia
-
-Solicitud:
-```ts
-jsonContent-Type: application/json
+Error Responses:
+400 Bad Request:
+```json
 {
-  "name": "string", // opcional
-  "description": "string", // opcional
-  "itineraries": [...] // opcional
+  "message": "Invalid input data"
 }
 ```
 
-Validación:
+401 Unauthorized:
+```json
+{
+  "message": "No authorization token provided"
+}
+```
+or
+```json
+{
+  "message": "Invalid token"
+}
+```
 
-Cualquier campo que se incluya debe cumplir con las validaciones del schema del modelo
-El middleware sanitizePreferenceInput realiza una limpieza de los datos, eliminando campos indefinidos.
+403 Forbidden:
+```json{
+  "message": "You are not authorized to access this resource"
+}
+```
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+404 Not Found:
+```json
+{
+  "message": "Preference not found"
+}
+```
+
+500 Internal Server Error:
+```json{
+  "message": "Error updating preference"
+}
+```
+
+Example Request:
+```bash
+curl -X PUT https://api.example.com/preferences/60d21b4667d0d8992e610c85 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "name": "Evening Departure",
+    "description": "Preference for evening departures"
+  }'
+```
+
+#### Update Preference (Partial)
+HTTP Method & URL: PATCH /preferences/
+Description: Updates specific fields of an existing preference.
+Authentication Requirements:
+
+Admin access required
+Valid authentication token
+
+Request Parameters:
+
+id (path parameter): Unique identifier of the preference
+
+Request Body:
+```json
+{
+  "name": "string", // optional
+  "description": "string", // optional
+  "itineraries": [...] // optional
+}
+```
+
+Validation Notes:
+
+Any included field must meet the validations of the model schema
+The sanitizePreferenceInput middleware cleans the data by removing undefined fields
+
+Response Codes:
+
+200 OK: Preference successfully updated
+400 Bad Request: Invalid input data
+401 Unauthorized: Authentication issues
+403 Forbidden: Insufficient permissions
+404 Not Found: Preference not found
+500 Internal Server Error: Server error while updating preference
+
+Response Body (Success - 200 OK):
+```json
 {
   "message": "Preference updated successfully",
   "data": {
@@ -985,24 +1433,85 @@ jsonContent-Type: application/json
 }
 ```
 
-Errores:
+Error Responses:
+400 Bad Request:
+```json
+{
+  "message": "Invalid input data"
+}
+```
+401 Unauthorized:
+```json
+{
+  "message": "No authorization token provided"
+}
+```
+or
+```json
+{
+  "message": "Invalid token"
+}
+```
 
-401 Unauthorized: "No authorization token provided" o "Invalid token"
-403 Forbidden: "You are not authorized to access this resource"
-500 Internal Server Error: Error al actualizar la preferencia
+403 Forbidden:
+```json
+{
+  "message": "You are not authorized to access this resource"
+}
+```
 
-#### Eliminar una preferencia
+404 Not Found:
+```json
+{
+  "message": "Preference not found"
+}
+```
 
-DELETE /preferences/
+500 Internal Server Error:
+```json
+{
+  "message": "Error updating preference"
+}
+```
 
-Elimina una preferencia del sistema.
+Example Request:
+```bash
+curl -X PATCH https://api.example.com/preferences/60d21b4667d0d8992e610c85 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "description": "Updated preference for afternoon departures"
+  }'
+```
 
-Parámetros de ruta:
-id: Identificador único de la preferencia
+#### Delete Preference
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+HTTP Method & URL: DELETE /preferences/
+
+Description: Removes a preference from the system.
+
+Authentication Requirements:
+
+Admin access required
+Valid authentication token
+
+Request Parameters:
+
+id (path parameter): Unique identifier of the preference
+
+Request Body: None
+
+Response Codes:
+
+200 OK: Preference successfully deleted
+400 Bad Request: Cannot delete preference with associated participants
+401 Unauthorized: Authentication issues
+403 Forbidden: Insufficient permissions
+404 Not Found: Preference not found
+500 Internal Server Error: Server error while deleting preference
+
+Response Body (Success - 200 OK):
+```json
 {
   "message": "Preference deleted",
   "data": {
@@ -1014,20 +1523,53 @@ jsonContent-Type: application/json
 }
 ```
 
-Respuesta (la preferencia tiene participantes asociados):
-```ts
-jsonContent-Type: application/json
+Error Responses:
+400 Bad Request:
+```json
 {
-  "message":'Cannot delete the preference because it has associated participants'
+  "message": "Cannot delete the preference because it has associated participants"
 }
 ```
 
-Errores:
+401 Unauthorized:
+```json
+{
+  "message": "No authorization token provided"
+}
+```
+or
+```json
+{
+  "message": "Invalid token"
+}
+```
 
-400 Bad Request: "Cannot delete the preference because it has associated participants"
-401 Unauthorized: "No authorization token provided" o "Invalid token"
-403 Forbidden: "You are not authorized to access this resource"
-500 Internal Server Error: Error al eliminar la preferencia
+403 Forbidden:
+```json
+{
+  "message": "You are not authorized to access this resource"
+}
+```
+
+404 Not Found:
+```json
+{
+  "message": "Preference not found"
+}
+```
+
+500 Internal Server Error:
+```json
+{
+  "message": "Error deleting preference"
+}
+```
+
+Example Request:
+```bash
+curl -X DELETE https://api.example.com/preferences/60d21b4667d0d8992e610c85 \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
 
 ### Places
 

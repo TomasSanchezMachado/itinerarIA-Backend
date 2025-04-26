@@ -1,115 +1,285 @@
-# Documentación Completa de la API de itinerarIA
+# itinerarIA API Documentation
 
-## Descripción General
+## Project Overview
 
-itinerarIA es una aplicación web que utiliza Inteligencia Artificial para crear itinerarios de viaje personalizados. Esta documentación describe en detalle la API backend que proporciona toda la funcionalidad para la aplicación. La API REST está construida con Node.js, Express, Zod y autenticación JWT. A continuación, se detalla el uso de la API incluyendo rutas, validaciones, y ejemplos.
+itinerarIA is a RESTful API that facilitates the creation and management of travel itineraries. The application allows users to register, create personalized itineraries with AI, add participants, add activities, specify locations, advertise external services, and so on. The system includes user authentication, authorization mechanisms, and comprehensive data validation.
 
 ## Base URL
 
 ## [itinerarIA](https://itineraria-backend.up.railway.app/)
 
-## Autenticación
+## Technology Stack
 
-La API utiliza autenticación basada en JWT (JSON Web Tokens). La mayoría de los endpoints requieren que el usuario esté autenticado.
+- Backend Framework: Node.js with Express
+- Database: MongoDB with MikroORM as the ODM (Object Document Mapper)
+- Authentication: JWT (JSON Web Tokens)
+- Validation: Zod schema validation
+- Testing: Vitest and Supertest
+- Containerization: Docker and Docker Compose
 
-### Headers de autenticación
+## Getting Started
 
-Para los endpoints protegidos, incluir el token JWT en el header de la solicitud:
+### System Requirements
 
-- **Formato JWT:** `Authorization: Bearer <token>`
-- **Rutas protegidas:**  
-  Requieren token. Incluye todas las rutas de usuarios, itinerarios, actividades y las rutas protegidas de servicios externos.
+- Node.js (v16+)
+- MongoDB (local or Atlas)
+- npm or yarn package manager
 
----
+### Installation
 
-## Validación de Datos
+#### Local Installation
 
-La API utiliza Zod para validar los datos de entrada. Esto asegura que todos los datos recibidos cumplan con el esquema esperado antes de ser procesados.
+1. Clone the repository:
+```bash
+git clone https://github.com/TomasSanchezMachado/itinerarIA-Backend.git
+cd itinerarIA-Backend
+```
 
-Ejemplo de validación para registro:
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Setup environment variables (create a .env file in the root directory):
+
+JWT_SECRET=your_jwt_secret
+MONGO_URI=your_mongodb_LOCAL_connection_string
+GEMINI_API_KEY=your_gemini_api_key
+
+NOTE: The variable MONGO_URI must contain the connection string to your LOCAL database.
+
+4. Docker Installation
+
+- Clone the repository and navigate to the project folder
+- Configure environment variables for Docker:
+
+  - MONGO_INITDB_ROOT_USERNAME=your_username
+  - MONGO_INITDB_ROOT_PASSWORD=your_password
+
+- Build and run with Docker Compose:
+```bash
+docker-compose up -d
+```
+
+#### Running the Application
+
+##### Development Mode
+```bash
+npm run start:dev
+```
+The local server is setted up to run with the database related to the variable MONGO_URI
+
+##### Production Mode
+The server in production mode is running always. There's no need of running it from the bash.
+It is already setted up to run with the cloud database.
+
+##### Test Environment
+Para ejecutar tests End to End
+```bash
+npm run test:e2e
+```
+
+Para ejecutar tests unitarios
+```bash
+npm run test:vitest
+```
+
+## Authentication
+
+The API uses JSON Web Tokens (JWT) for authentication. Tokens are stored in HTTP-only cookies for secure client-side storage.
+
+### Token Generation
+Tokens are generated using the jsonwebtoken library with the following configuration:
+
+- Expiration: 7 days
+- Secret key: Stored in .env file
+### Cookie Configuration
+Cookies are configured with the following security settings:
+
+- httpOnly: True in production (prevents JavaScript access)
+- secure: True in production (sent only over HTTPS)
+- sameSite: "none" in production, "lax" in development
+- maxAge: 24 hours (1 day)
+
+## Authorization
+The API implements role-based access control using middleware functions.
+
+### Middleware Functions
+#### authenticateJWT
+
+This middleware verifies the presence and validity of a JWT token in the request cookies:
+```ts
+function authenticateJWT(req, res, next) {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(401).json({ message: 'No authorization token provided' });
+  }
+  jwt.verify(token, secretKey, (err) => {
+    if (err) {
+      return res.status(403).json({ message: 'Failed to authenticate token' });
+    }
+    next();
+  });
+}
+```
+
+#### isAdmin
+This middleware checks if the authenticated user has administrator privileges:
 
 ```ts
-const registerSchema = z.object({
-  username: z
-    .string({
-      invalid_type_error: "Username must be a string",
-      required_error: "Username is required",
-    })
-    .regex(
-      /^[a-zA-Z0-9_-]{3,30}$/,
-      "Username must be between 3 and 30 characters and can only contain letters, numbers, underscores, and hyphens"
-    ),
-  password: z
-    .string({
-      invalid_type_error: "Password must be a string",
-      required_error: "Password is required",
-    })
-    .regex(
-      /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/,
-      "Password must be at least 8 characters long and contain at least one uppercase letter and one number"
-    ),
-  names: z
-    .string({
-      invalid_type_error: "First name must be a string",
-      required_error: "First name is required",
-    })
-    .min(3)
-    .regex(/^[A-Za-z ]+$/, "First name must contain only letters"),
-  lastName: z
-    .string({
-      invalid_type_error: "Last name must be a string",
-      required_error: "Last name is required",
-    })
-    .min(3)
-    .regex(/^[A-Za-z ]+$/, "Last name must contain only letters"),
-  mail: z
-    .string({
-      invalid_type_error: "Email must be a string",
-      required_error: "Email is required",
-    })
-    .email("Email must be in a valid format"),
-  phoneNumber: z
-    .string({
-      invalid_type_error: "Phone number must be a string",
-      required_error: "Phone number is required",
-    })
-    .min(7),
+const isAdmin = (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(401).json({ message: 'No authorization token provided' });
+  }
+  jwt.verify(token, secretKey, async (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+    const userId = decoded.id;
+    const user = await em.findOne(User, { id: userId.toString() });
+    if (user && user.isAdmin) {
+      return next();
+    }
+    return res.status(403).json({ message: "You are not authorized to access this resource" });
+  });
+};
+```
+
+#### validateToken
+This middleware validates tokens and attaches the payload to the request:
+```ts
+function validateToken(req, res, next) {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(401).json({ message: "Auth token is not supplied" });
+  }
+  try {
+    const payload = jwt.verify(token, jwtSecret);
+    req.body.payload = payload;
+    next();
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid token" });
+  }
+}
+```
+
+## Database Schema
+The application uses MikroORM with MongoDB to manage data. Below are the key entities and their relationships.
+
+### Base Entity
+All entities extend from a base entity providing common functionality:
+```ts
+abstract class BaseEntity {
+  @PrimaryKey()
+  _id?: ObjectId = new ObjectId();
+  
+  @SerializedPrimaryKey()
+  id!: string;
+}
+```
+### MongoDB Connection
+The application connects to MongoDB using the following configuration:
+```ts
+const orm = await MikroORM.init({
+  entities: ["./dist/**/*.entity.js"],
+  entitiesTs: ["./src/**/*.entity.ts"],
+  dbName: DB_NAME,
+  type: "mongo",
+  clientUrl: MONGO_ATLAS_URI,
+  highlighter: new MongoHighlighter(),
+  debug: false, // Set to false in production
 });
 ```
 
+## Middlewares
+### CORS Middleware
+The API implements CORS protection with the following configuration:
+```ts
+const ACCEPTED_ORIGINS = [
+  "http://localhost:5174",
+  "http://localhost:5173",
+  "https://itinerar-ia-frontend.vercel.app",
+];
+
+const corsMiddleware = ({ acceptedOrigins = ACCEPTED_ORIGINS } = {}) => {
+  const options: CorsOptions = {
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (acceptedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "Accept",
+    ],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    maxAge: 86400, // 24 hours
+  };
+  return cors(options);
+};
+```
+
+### Schema Validation Middleware
+Input validation is performed using Zod schemas:
+```ts
+const validateSchema = (schema: any) => (req: Request, res: Response, next: NextFunction) => {
+  try {
+    schema.parse(req.body.sanitizedInput);
+    next();
+  } catch (error) {
+    return res.status(400).json({ 
+      message: (error as any).errors.map((error: any) => error.message) 
+    });
+  }
+}
+```
+## Error Handling
+### Common HTTP Status Codes
+
+- 200 OK: Request was successful
+- 400 Bad Request: Invalid input data
+- 401 Unauthorized: Missing or invalid authentication
+- 403 Forbidden: Valid authentication but insufficient permissions
+- 404 Not Found: Resource not found
+- 500 Internal Server Error: Server-side error 
+
 ## Endpoints
 
----
-
-### Autenticación
+### Authentication
 
 | Método | Ruta           | Descripción                      | Protegida |
 | ------ | -------------- | -------------------------------- | --------- |
-| POST   | /auth/register | Registro de usuario              | ❌        |
-| POST   | /auth/login    | Inicio de sesión                 | ❌        |
-| POST   | /auth/logout   | Cierre de sesión            | ✅        |
-| POST   | /auth/profile  | Obtener perfil del usuario       | ✅        |
-| POST   | /auth/verify   | Verificar token de autenticación | ✅        |
+| POST   | /auth/register | Register a new user              | ❌        |
+| POST   | /auth/login    | User login              | ❌        |
+| POST   | /auth/logout   | User logout                | ✅        |
+| POST   | /auth/profile  | Get user profile      | ✅        |
+| POST   | /auth/verify   | Verify authentication token | ✅        |
 
-#### Registro de Usuario
+#### Register User
 
 POST /auth/register
 
-Registra un nuevo usuario en el sistema.
+Description: Registers a new user in the system.
 
-Solicitud:
+Request Body:
 
 ```ts
 Content-Type:application/json
 {
-  "username": string,
-    "password": string,
-    "names": string,
-    "lastName": string,
-    "dateOfBirth": "2024-04-24",
-    "mail": string,
-    "phoneNumber": string,
-    "isAdmin": bool
+  "username": "string",
+  "password": "string",
+  "names": "string",
+  "lastName": "string",
+  "dateOfBirth": "Date",
+  "mail": "string",
+  "phoneNumber": "string",
+  "isAdmin": boolean
 }
 ```
 
@@ -150,17 +320,61 @@ Validación:
   - "Phone number must be a string"
   - "Phone number is required"
 
-Respuesta:
+Response Codes:
+
+- 200 OK: User successfully registered
+- 400 Bad Request: Invalid input or user already exists
+- 500 Internal Server Error: Registration failed
+
+Response Body (Success - 200 OK):
 
 ```ts
 Content-Type:application/json
 {
   "message": "User logged successfully",
   "data": {
-    "user": {...},
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."}
+    "user": {
+      "id": "string",
+      "username": "string",
+      "names": "string",
+      "lastName": "string",
+      "dateOfBirth": "Date",
+      "mail": "string",
+      "phoneNumber": "string",
+      "isAdmin": false
+    }
+  },
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
+
+Error Responses:
+
+400 Bad Request:
+```json
+{
+  "message": ["User already exists"]
+}
+```
+OR
+```json
+{
+  "message": ["The email is already in use"]
+}
+```
+
+500 Internal Server Error:
+
+```json
+{
+  "message": "The user could not be registered",
+  "data": {
+    "message": "User already exists"
+  }
+}
+```
+
+
 
 #### Inicio de Sesión
 

@@ -253,7 +253,7 @@ const validateSchema = (schema: any) => (req: Request, res: Response, next: Next
 
 ### Authentication
 
-| Método | Ruta           | Descripción                      | Protegida |
+| HTTP Method | Route          | Description                     | Protected |
 | ------ | -------------- | -------------------------------- | --------- |
 | POST   | /auth/register | Register a new user              | ❌        |
 | POST   | /auth/login    | User login              | ❌        |
@@ -603,7 +603,7 @@ Notes: This endpoint is typically used to check if a user's session is still val
 
 ### Users
 
-| Método | Ruta           | Descripción                      | Protegida |
+| HTTP Method | Route          | Description                     | Protected |
 | ------ | -------------- | -------------------------------- | --------- |
 | GET    | /api/users         | Get all users      | ❌        |
 | GET    | /api/users/:id         | Get a specific user    | ❌        |
@@ -1030,7 +1030,7 @@ curl -X DELETE https://api.itineraria.com/users/60d21b4667d0d8992e610c85
 
 ### Preferencias
 
-| Método | Ruta                | Descripción                          | Protegida |
+| HTTP Method | Route               | Description                         | Protected |
 | ------ | --------------      | --------------------------------     | --------- |
 | GET    | /api/preferences        | Get all preferences       | ✅ (Admin)|
 | GET    | /api/preferences/:id    |Get a specific preference  | ✅ (Admin)|
@@ -1573,24 +1573,31 @@ curl -X DELETE https://api.example.com/preferences/60d21b4667d0d8992e610c85 \
 
 ### Places
 
-| Método | Ruta                | Descripción                          | Protegida |
+| HTTP Method | Route               | Description                         | Protected |
 | ------ | --------------      | --------------------------------     | --------- |
-| GET    | /places             | Obtener todos los lugares            | ❌        |
-| GET    | /places/:id         | Obtener un lugar específico          | ❌        |
-| POST   | /places             | Crear un nuevo lugar                 | ❌        |
-| PUT    | /places /           | Actualizar un lugar completo         | ❌        |
-|PATCH   | /places/            | Actualizar campos específicos        | ❌        |
-|DELETE  | /places/            | Eliminar un lugar                    | ❌        |
+| GET    | /api/places             | Get all places            | ❌        |
+| GET    | /api/places/:id         | Get a specific place         | ❌        |
+| POST   | /api/places             | Create a new place               | ❌        |
+| PUT    | /api/places /           | Update a place completely        | ❌        |
+|PATCH   | /api/places/            | Update specific fields        | ❌        |
+|DELETE  | /api/places/            | Delete a place                    | ❌        |
 
-#### Obtener todos los lugares
+#### Get All Places
 
-GET /places
+HTTP Method & URL: GET /api/places
 
-Recupera todos los lugares registrados en el sistema.
+Description
+Retrieves all places registered in the system. 
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Request Body: None
+
+Response Codes:
+
+200 OK: Places retrieved successfully
+500 Internal Server Error: Server error while retrieving places
+
+Response Body (Success - 200 OK)
+```json
 {
   "data": [
     {
@@ -1609,31 +1616,51 @@ jsonContent-Type: application/json
 }
 ```
 
-Respuesta (sin lugares):
-```ts
-jsonContent-Type: application/json
+Response Body (No places found - 200 OK)
+```json
 {
   "message": "No places found",
   "data": []
 }
 ```
 
-Errores:
+Error Responses
 
-500 Internal Server Error: Error del servidor al buscar lugares
+500 Internal Server Error:
+```json
+{
+  "message": "Error retrieving places"
+}
+```
 
-#### Obtener un lugar específico
+Example Request:
+```bash
+curl -X GET https://api.example.com/places
+```
 
-GET /places/:id 
+#### Get Specific Place
+HTTP Method & URL: GET /api/places/
 
-Recupera la información de un lugar específico según su ID.
+Description
+Retrieves information about a specific place based on its ID.
 
-Parámetros de ruta:
-id: Identificador único del lugar
+Authentication Requirements
+None
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Request Parameters
+
+id (path parameter): Unique identifier of the place
+
+Request Body: None
+
+Response Codes
+
+200 OK: Place retrieved successfully
+404 Not Found: Place not found
+500 Internal Server Error: Server error while retrieving the place
+
+Response Body (Success - 200 OK)
+```json
 {
   "data": {
     "id": "string",
@@ -1650,20 +1677,37 @@ jsonContent-Type: application/json
 }
 ```
 
-Errores:
-
-500 Internal Server Error: Lugar no encontrado o error del servidor
-
-#### Crear un nuevo lugar
-
-POST /places
-
-Registra un nuevo lugar en el sistema.
-
-Solicitud:
-```ts
-jsonContent-Type: application/json
+Error Responses
+404 Not Found:
+```json
 {
+  "message": "Place not found"
+}
+```
+
+500 Internal Server Error:
+```json
+{
+  "message": "Error retrieving place"
+}
+```
+
+Example Request
+```bash
+curl -X GET https://api.example.com/places/60d21b4667d0d8992e610c85
+```
+
+#### Create New Place
+
+HTTP Method & URL: POST /api/places
+
+Description
+Registers a new place in the system.
+
+Request Parameters: None
+
+Request Body
+```json{
   "name": "string",
   "latitude": number,
   "longitude": number,
@@ -1673,14 +1717,19 @@ jsonContent-Type: application/json
 }
 ```
 
-Validación:
+Validation Notes
 
-El middleware sanitizePlaceInput realiza una limpieza de los datos, eliminando campos indefinidos.
-El middleware validateSchema(postSchema) valida el formato de los datos enviados.
+The sanitizePlaceInput middleware cleans the data by removing undefined fields
+The validateSchema(postSchema) middleware validates the format of the submitted data
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Response Codes
+
+201 Created: Place successfully created
+400 Bad Request: Validation error or duplicate place
+500 Internal Server Error: Error creating place
+
+Response Body (Success - 201 Created)
+```json
 {
   "message": "Place created successfully",
   "data": {
@@ -1698,24 +1747,52 @@ jsonContent-Type: application/json
 }
 ```
 
-Errores:
+Error Responses
+400 Bad Request:
+```json
+{
+  "message": "There is already a place with the same coordinates"
+}
+```
+OR
+```json
+{
+  "message": "There is already a place with the same name, Province/State and Country"
+}
+```
 
-400 Bad Request: "There is already a place with the same coordinates"
-400 Bad Request: "There is already a place with the same name, Province/State and Country"
-500 Internal Server Error: Error al crear el lugar
+500 Internal Server Error:
+```json
+{
+  "message": "Error creating place"
+}
+```
 
-#### Actualizar un lugar (PUT)
+Example Request
+```bash
+curl -X POST https://api.example.com/places \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Central Park",
+    "latitude": 40.7829,
+    "longitude": -73.9654,
+    "zipCode": "10022",
+    "province": "New York",
+    "country": "United States"
+  }'
+```
 
-PUT /places/
+#### Update Place (Complete)
+HTTP Method & URL: PUT /api/places/
 
-Actualiza todos los campos de un lugar existente.
+Description: Updates all fields of an existing place.
 
-Parámetros de ruta:
-id: Identificador único del lugar
+Request Parameters
 
-Solicitud:
-```ts
-jsonContent-Type: application/json
+id (path parameter): Unique identifier of the place
+
+Request Body
+```json
 {
   "name": "string",
   "latitude": number,
@@ -1726,14 +1803,20 @@ jsonContent-Type: application/json
 }
 ```
 
-Validación:
+Validation Notes
 
-El middleware sanitizePlaceInput realiza una limpieza de los datos, eliminando campos indefinidos.
-El middleware validateSchema(putSchema) valida el formato de los datos enviados.
+The sanitizePlaceInput middleware cleans the data by removing undefined fields
+The validateSchema(putSchema) middleware validates the format of the submitted data
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Response Codes
+
+200 OK: Place successfully updated
+400 Bad Request: Validation error or duplicate place
+404 Not Found: Place not found
+500 Internal Server Error: Error updating place
+
+Response Body (Success - 200 OK)
+```json
 {
   "message": "Place updated successfully",
   "data": {
@@ -1751,43 +1834,84 @@ jsonContent-Type: application/json
 }
 ```
 
-Errores:
+Error Responses
 
-400 Bad Request: "There is already a place with the same coordinates!"
-400 Bad Request: "There is already a place with the same name, Province/State and Country"
-500 Internal Server Error: "Error updating place"
-
-#### Actualizar parcialmente un lugar (PATCH)
-
-PATCH /places/
-
-Actualiza campos específicos de un lugar existente.
-
-Parámetros de ruta:
-id: Identificador único del lugar
-
-Solicitud:
-```ts
-jsonContent-Type: application/json
+400 Bad Request:
+```json
 {
-  "name": "string", // opcional
-  "latitude": number, // opcional
-  "longitude": number, // opcional
-  "zipCode": "string", // opcional
-  "province": "string", // opcional
-  "country": "string" // opcional
+  "message": "There is already a place with the same coordinates!"
+}
+```
+OR
+```json
+{
+  "message": "There is already a place with the same name, Province/State and Country"
 }
 ```
 
-Validación:
+404 Not Found:
+```json
+{
+  "message": "Place not found"
+}
+```
 
-Cualquier campo que se incluya debe cumplir con las validaciones del schema del modelo
-El middleware sanitizePlaceInput realiza una limpieza de los datos, eliminando campos indefinidos.
+500 Internal Server Error:
+```json
+{
+  "message": "Error updating place"
+}
+```
 
+Example Request
+```bash
+curl -X PUT https://api.example.com/places/60d21b4667d0d8992e610c85 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Updated Park",
+    "latitude": 40.7829,
+    "longitude": -73.9654,
+    "zipCode": "10022",
+    "province": "New York",
+    "country": "United States"
+  }'
+```
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+#### Update Place (Partial)
+HTTP Method & URL: PATCH /api/places/
+
+Description: Updates specific fields of an existing place.
+
+Request Parameters
+
+id (path parameter): Unique identifier of the place
+
+Request Body
+```json
+{
+  "name": "string", // optional
+  "latitude": number, // optional
+  "longitude": number, // optional
+  "zipCode": "string", // optional
+  "province": "string", // optional
+  "country": "string" // optional
+}
+```
+
+Validation Notes
+
+Any included field must meet the validations of the model schema
+The sanitizePlaceInput middleware cleans the data by removing undefined fields
+
+Response Codes
+
+200 OK: Place successfully updated
+400 Bad Request: Validation error or duplicate place
+404 Not Found: Place not found
+500 Internal Server Error: Error updating place
+
+Response Body (Success - 200 OK)
+```json
 {
   "message": "Place updated successfully",
   "data": {
@@ -1805,24 +1929,67 @@ jsonContent-Type: application/json
 }
 ```
 
-Errores:
+Error Responses
 
-400 Bad Request: "There is already a place with the same coordinates!"
-400 Bad Request: "There is already a place with the same name, Province/State and Country"
-500 Internal Server Error: "Error updating place"
+400 Bad Request:
+```json
+{
+  "message": "There is already a place with the same coordinates!"
+}
+```
 
-#### Eliminar un lugar
+OR
 
-DELETE /places/
+```json
+{
+  "message": "There is already a place with the same name, Province/State and Country"
+}
+```
 
-Elimina un lugar del sistema.
+404 Not Found:
+```json
+{
+  "message": "Place not found"
+}
+```
 
-Parámetros de ruta:
-id: Identificador único del lugar
+500 Internal Server Error:
+```json
+{
+  "message": "Error updating place"
+}
+```
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Example Request
+```bash
+curl -X PATCH https://api.example.com/places/60d21b4667d0d8992e610c85 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Central Park Updated",
+    "zipCode": "10023"
+  }'
+```
+
+#### Delete Place
+HTTP Method & URL: DELETE /api/places/
+
+Description: Removes a place from the system.
+
+Request Parameters
+
+id (path parameter): Unique identifier of the place
+
+Request Body: None
+
+Response Codes
+
+200 OK: Place successfully deleted
+400 Bad Request: Cannot delete due to associated data
+404 Not Found: Place not found
+500 Internal Server Error: Error deleting place
+
+Response Body (Success - 200 OK)
+```json
 {
   "message": "Place deleted",
   "data": {
@@ -1840,36 +2007,71 @@ jsonContent-Type: application/json
 }
 ```
 
-Errores:
+Error Responses
 
-400 Bad Request: "Cannot delete the place because it has associated external services"
-400 Bad Request: "Cannot delete the place because it has associated itineraries"
-500 Internal Server Error: Error al eliminar el lugar
+400 Bad Request:
+```json{
+  "message": "Cannot delete the place because it has associated external services"
+}
+```
+OR
+```json
+{
+  "message": "Cannot delete the place because it has associated itineraries"
+}
+```
+
+404 Not Found:
+```json
+{
+  "message": "Place not found"
+}
+```
+
+500 Internal Server Error:
+```json
+{
+  "message": "Error deleting place"
+}
+
+Example Request
+```bash
+curl -X DELETE https://api.example.com/places/60d21b4667d0d8992e610c85
+```
 
 ### Participants
 
-| Método | Ruta                               | Descripción                                    | Protegida |
+| HTTP Method | Route                              | Description                                   | Protected |
 | ------ | --------------                     | --------------------------------               | --------- |
-| GET    | /api/participants/:userId          | Obtener todos los participantes de un usuario  | ✅        |
-| GET    | /api/participants/getone/:id       | Obtener un participante específico             | ✅        |
-| POST   | /api/participants                  | Crear un nuevo participante                    | ✅        |
-| POST   | /api/participants/favorite         | Añadir participante favorito                   | ✅        |
-| PUT    | /api/participants/                 | Actualizar un participante completo            | ✅        |
-|PATCH   | /api/participants/                 | Actualizar parcialmente un participante        | ✅        |
-|DELETE  | /api/participants/                 | Eliminar un participante                       | ✅        | 
+| GET    | /api/participants/:userId          | Get all participants for a user  | ✅        |
+| GET    | /api/participants/getone/          | Get a specific participant | ✅    | POST   | /api/participants                  | Get a specific participant                   | ✅        |
+| POST   | /api/participants        | Create a new participant                
+| POST   | /api/participants/favorite         | Add favorite participant                  | ✅        |
+| PUT    | /api/participants/                 | Update a participant completely            | ✅        |
+|PATCH   | /api/participants/                 | Update specific participant fields        | ✅        |
+|DELETE  | /api/participants/                 | Delete a participant                       | ✅        | 
 
-#### Obtener todos los participantes de un usuario
+#### Get All Participants for a User
+HTTP Method & URL: GET /api/participants/
 
-GET /api/participants/:userId
+Description
+Retrieves all participants associated with a specific user.
 
-Obtiene todos los participantes asociados a un usuario específico.
+Request Parameters
 
-Parámetros URL:
-userId: ID del usuario cuyos participantes se desean obtener
+userId (path parameter): ID of the user whose participants are being requested
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Request Body: None
+
+Response Codes
+
+200 OK: Participants retrieved successfully
+401 Unauthorized: Authentication required
+404 Not Found: User not found
+500 Internal Server Error: Server error while retrieving participants
+
+Response Body (Success - 200 OK)
+```json
 {
   "message": "Participants retrieved successfully",
   "data": [
@@ -1893,18 +2095,56 @@ jsonContent-Type: application/json
 }
 ```
 
-#### Obtener un participante específico
+Error Responses
 
-GET /api/participants/getone/:id
+401 Unauthorized:
+```json
+{
+  "message": "Authentication required"
+}
+```
 
-Obtiene información detallada de un participante específico.
+404 Not Found:
+```json
+{
+  "message": "User not found"
+}
+```
 
-Parámetros URL:
-id: ID del participante a consultar
+500 Internal Server Error:
+```json
+{
+  "message": "An error occurred while processing your request"
+}
+```
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Example Request
+```bash
+curl -X GET https://api.example.com/api/participants/66fc4785f2b5cf4ef633816a \
+  -H "Authorization: Bearer {your_token}"
+```
+
+#### Get Specific Participant
+HTTP Method & URL: GET /api/participants/getone/
+
+Description
+Retrieves detailed information about a specific participant.
+
+Request Parameters
+
+id (path parameter): ID of the participant to retrieve
+
+Request Body: None
+
+Response Codes
+
+200 OK: Participant retrieved successfully
+401 Unauthorized: Authentication required
+404 Not Found: Participant not found
+500 Internal Server Error: Server error while retrieving participant
+
+Response Body (Success - 200 OK)
+```json
 {
   "message": "Participant retrieved successfully",
   "data": {
@@ -1921,15 +2161,45 @@ jsonContent-Type: application/json
 }
 ```
 
-#### Crear un nuevo participante
+Error Responses
 
-POST /api/participants
+401 Unauthorized:
+```json
+{
+  "message": "Authentication required"
+}
+```
 
-Crea un nuevo participante en el sistema.
+404 Not Found:
+```json
+{
+  "message": "Participant not found"
+}
+```
 
-Solicitud:
-```ts
-jsonContent-Type: application/json
+500 Internal Server Error:
+```json
+{
+  "message": "An error occurred while processing your request"
+}
+```
+
+Example Request
+```bash
+curl -X GET https://api.example.com/api/participants/getone/670bd0cc60eb88e665c9fb90 \
+  -H "Authorization: Bearer {your_token}"
+```
+
+#### Create New Participant
+HTTP Method & URL: POST /api/participants
+
+Description
+Creates a new participant in the system.
+
+Request Parameters: None
+
+Request Body
+```json
 {
   "name": "Participant 2",
   "age": 20,
@@ -1939,7 +2209,7 @@ jsonContent-Type: application/json
 }
 ```
 
-Validación:
+Validation Notes
 
 - name:
   - 'Name must be a string'
@@ -1952,9 +2222,15 @@ Validación:
 - disability:
   - 'Disability must be a boolean'
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Response Codes
+
+201 Created: Participant successfully created
+400 Bad Request: Invalid participant data
+401 Unauthorized: Authentication required
+500 Internal Server Error: Error creating participant
+
+Response Body (Success - 201 Created)
+```json
 {
   "message": "Participant created successfully",
   "data": {
@@ -1968,15 +2244,56 @@ jsonContent-Type: application/json
 }
 ```
 
-#### Añadir participante favorito
+Error Responses
 
-POST /api/participants/favorite
+400 Bad Request:
+```json
+{
+  "message": "Invalid participant data",
+  "errors": [
+    "Name must be at least 3 characters"
+  ]
+}
+```
 
-Añade un participante como favorito.
+401 Unauthorized:
+```json
+{
+  "message": "Authentication required"
+}
+```
 
-Solicitud:
-```ts
-jsonContent-Type: application/json
+500 Internal Server Error:
+```json
+{
+  "message": "An error occurred while processing your request"
+}
+```
+
+Example Request
+```bash
+curl -X POST https://api.example.com/api/participants \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer {your_token}" \
+  -d '{
+    "name": "Participant 2",
+    "age": 20,
+    "disability": false,
+    "preferences": ["670bcc78732bbbc7b6926278"],
+    "user": "66fc4785f2b5cf4ef633816a"
+  }'
+```
+
+#### Add Favorite Participant
+HTTP Method & URL: POST /api/participants/favorite
+
+Description
+Adds a participant as a favorite.
+
+Request Parameters: None
+
+Request Body
+```json
 {
   "name": "Participant 1",
   "age": 20,
@@ -1986,13 +2303,17 @@ jsonContent-Type: application/json
 }
 ```
 
-Validación:
+Validation Notes
+The sanitizeParticipantInput middleware cleans the data by removing undefined fields.
+Response Codes
 
-El middleware sanitizeParticipantInput realiza una limpieza de los datos, eliminando campos indefinidos.
+201 Created: Favorite participant successfully added
+400 Bad Request: Invalid participant data
+401 Unauthorized: Authentication required
+500 Internal Server Error: Error adding favorite participant
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Response Body (Success - 201 Created)
+```json
 {
   "message": "Favorite participant added successfully",
   "data": {
@@ -2007,18 +2328,53 @@ jsonContent-Type: application/json
 }
 ```
 
-#### Actualizar un participante completo
+Error Responses
+400 Bad Request:
+```json
+{
+  "message": "Invalid participant data"
+}
+```
 
-PUT /api/participants/:id
+401 Unauthorized:
+```json
+{
+  "message": "Authentication required"
+}
+```
 
-Actualiza todos los datos de un participante existente.
+500 Internal Server Error:
+```json
+{
+  "message": "An error occurred while processing your request"
+}
 
-Parámetros URL:
-id: ID del participante a actualizar
+Example Request
+```bash
+curl -X POST https://api.example.com/api/participants/favorite \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer {your_token}" \
+  -d '{
+    "name": "Participant 1",
+    "age": 20,
+    "disability": true,
+    "preferences": ["670bce6416da0fb6e0947f31"],
+    "user": "66fc4785f2b5cf4ef633816a"
+  }'
+```
 
-Solicitud:
-```ts
-jsonContent-Type: application/json
+#### Update Participant (Complete)
+HTTP Method & URL: PUT /api/participants/
+
+Description
+Updates all the data of an existing participant.
+
+Request Parameters
+
+id (path parameter): ID of the participant to update
+
+Request Body
+```json
 {
   "name": "Facundo",
   "age": 24,
@@ -2029,8 +2385,7 @@ jsonContent-Type: application/json
   ]
 }
 ```
-
-Validación:
+Validation Notes
 
 - name:
   - 'Name must be a string'
@@ -2043,9 +2398,16 @@ Validación:
 - disability:
   - 'Disability must be a boolean'
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Response Codes
+
+200 OK: Participant successfully updated
+400 Bad Request: Invalid participant data
+401 Unauthorized: Authentication required
+404 Not Found: Participant not found
+500 Internal Server Error: Error updating participant
+
+Response Body (Success - 200 OK)
+```json
 {
   "message": "Participant updated successfully",
   "data": {
@@ -2062,32 +2424,87 @@ jsonContent-Type: application/json
 }
 ```
 
-#### Actualizar parcialmente un participante
+Error Responses
 
-PATCH /api/participants/:id
-
-Actualiza solo los campos específicos de un participante existente.
-
-Parámetros URL:
-id: ID del participante a actualizar parcialmente
-
-Solicitud:
-```ts
-jsonContent-Type: application/json
+400 Bad Request:
+```json
 {
-  "name": "Nicolás Escobar"
+  "message": "Invalid participant data",
+  "errors": [
+    "Name must be at least 3 characters"
+  ]
 }
 ```
 
-Validación:
+401 Unauthorized:
+```json
+{
+  "message": "Authentication required"
+}
+```
 
-Cualquier campo que se incluya debe cumplir con las validaciones del schema del modelo
-El middleware sanitizeParticipantInput realiza una limpieza de los datos, eliminando campos indefinidos.
+404 Not Found:
+```json
+{
+  "message": "Participant not found"
+}
+```
 
+500 Internal Server Error:
+```json
+{
+  "message": "An error occurred while processing your request"
+}
+```
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Example Request
+```bash
+curl -X PUT https://api.example.com/api/participants/670bd0cc60eb88e665c9fb90 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer {your_token}" \
+  -d '{
+    "name": "Facundo",
+    "age": 24,
+    "disability": false,
+    "preferences": [
+      {"id": "670bce8c16da0fb6e0947f33"},
+      {"id": "670bce6416da0fb6e0947f31"}
+    ]
+  }'
+```
+
+#### Update Participant (Partial)
+HTTP Method & URL: PATCH /api/participants/
+
+Description
+Updates only specific fields of an existing participant.
+
+Request Parameters
+
+id (path parameter): ID of the participant to partially update
+
+Request Body
+```json
+{
+  "name": "Nicolás Escobar" // optional field example
+}
+```
+
+Validation Notes
+
+Any included field must meet the validations of the model schema
+The sanitizeParticipantInput middleware cleans the data by removing undefined fields
+
+Response Codes
+
+200 OK: Participant successfully updated
+400 Bad Request: Invalid participant data
+401 Unauthorized: Authentication required
+404 Not Found: Participant not found
+500 Internal Server Error: Error updating participant
+
+Response Body (Success - 200 OK)
+```json
 {
   "message": "Participant updated successfully",
   "data": {
@@ -2101,18 +2518,66 @@ jsonContent-Type: application/json
 }
 ```
 
-#### Eliminar un participante
+Error Responses
+400 Bad Request:
+```json
+{
+  "message": "Invalid participant data"
+}
+```
 
-DELETE /api/participants/:id
+401 Unauthorized:
+```json
+{
+  "message": "Authentication required"
+}
+```
 
-Elimina un participante específico del sistema.
+404 Not Found:
+```json
+{
+  "message": "Participant not found"
+}
+```
 
-Parámetros URL:
-id: ID del participante a eliminar
+500 Internal Server Error:
+```json
+{
+  "message": "An error occurred while processing your request"
+}
+```
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Example Request
+```bash
+curl -X PATCH https://api.example.com/api/participants/66ff22aece8bda39a2e5be6c \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer {your_token}" \
+  -d '{
+    "name": "Nicolás Escobar"
+  }'
+```
+
+#### Delete Participant
+HTTP Method & URL: DELETE /api/participants/
+
+Description
+Removes a specific participant from the system.
+
+Request Parameters
+
+id (path parameter): ID of the participant to delete
+
+Request Body: None
+
+Response Codes
+
+200 OK: Participant successfully deleted
+401 Unauthorized: Authentication required
+404 Not Found: Participant not found
+500 Internal Server Error: Error deleting participant
+
+Response Body (Success - 200 OK)
+```json
 {
   "message": "Participant deleted successfully",
   "data": {
@@ -2126,41 +2591,71 @@ jsonContent-Type: application/json
 }
 ```
 
-Errores comunes:
+Error Responses
+401 Unauthorized:
+```json
+{
+  "message": "Authentication required"
+}
+```
 
-400 Bad Request: "Invalid participant data"
-404 Not Found: "Participant not found"
-401 Unauthorized: "Authentication required"
-500 Internal Server Error: "An error occurred while processing your request"
+404 Not Found:
+```json
+{
+  "message": "Participant not found"
+}
+```
+
+500 Internal Server Error:
+```json
+{
+  "message": "An error occurred while processing your request"
+}
+```
+
+Example Request
+```bash
+curl -X DELETE https://api.example.com/api/participants/66ff22aece8bda39a2e5be6c \
+  -H "Authorization: Bearer {your_token}"
+```
 
 ### Opinions
 
-| Método | Ruta                               | Descripción                           | Protegida |
+| HTTP Method | Route                              | Description                          | Protected |
 | ------ | --------------                     | --------------------------------      | --------- |
-| GET    | /api/itineraries                    | Obtener todas las opiniones           | ✅        |
-| GET    | /api/opiniones/                    | Obtener una opinión específica        | ✅        |
-| GET    | /api/opiniones/activity/           | Obtener opiniones por actividad       | ✅        |
-| POST   | /api/opiniones                     | Crear una nueva opinión               | ✅        |
-| PUT    | /api/opiniones/                    | Actualizar una opinión completa       | ✅        |
-|PATCH   | /api/opiniones/                    | Actualizar parcialmente una opinión   | ✅        |
-|DELETE  | /api/opiniones/                    | Eliminar una opinión                  | ✅        | 
+| GET    | /api/opinions                  | Get all opinions           | ✅        |
+| GET    | /api/opinions/                    | Get a specific opinion       | ✅        |
+| GET    | /api/opinions/activity/           | Get opinions by activity       | ✅        |
+| POST   | /api/opinions                     | Create a new opinion              | ✅        |
+| PUT    | /api/opinions/                    | Update an opinion completely      | ✅        |
+|PATCH   | /api/opinions/                    | Update specific opinion fields  | ✅        |
+|DELETE  | /api/opinions/                    | Delete an opinion                  | ✅        | 
 
-#### Obtener todas las opiniones
+#### Get All Opinions
+HTTP Method & URL: GET /api/opiniones
 
-GET /api/opiniones
+Description
+Retrieves all opinions registered in the system.
 
-Obtiene todas las opiniones registradas en el sistema.
+Request Parameters: None
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Request Body: None
+
+Response Codes
+
+200 OK: Opinions retrieved successfully
+401 Unauthorized: Authentication required
+500 Internal Server Error: Server error while retrieving opinions
+
+Response Body (Success - 200 OK)
+```json
 {
-  "message": "Todos las opiniones encontradas",
+  "message": "All opinions found",
   "data": [
- {
+    {
       "id": "670bd0cc60eb88e665c9fb90",
       "rating": 5,
-      "comment": "Excelente lugar para pasar el día",
+      "comment": "Excellent place to spend the day",
       "user": {...},
       "activity": {...}
     },
@@ -2169,63 +2664,123 @@ jsonContent-Type: application/json
 }
 ```
 
-Respuesta (no hay opiniones):
-```ts
-jsonContent-Type: application/json
-{ message: "No se encontraron opiniones" }
+Response Body (No opinions found - 200 OK)
+```json
+{
+  "message": "No opinions found",
+  "data": []
+}
 ```
 
-Errores:
-
-500 Internal Server Error: Error del servidor
-
-#### Obtener una opinión específica
-
-GET /api/opiniones/:id
-
-Obtiene información detallada de una opinión específica.
-
-Parámetros URL:
-id: ID de la opinión a consultar
-
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Error Responses
+401 Unauthorized:
+```json
 {
-  "message": "Opinion encontrada: ",
+  "message": "Authentication required"
+}
+```
+
+500 Internal Server Error:
+```json
+{
+  "message": "Server error"
+}
+```
+
+Example Request
+```bash
+curl -X GET https://api.example.com/api/opiniones \
+  -H "Authorization: Bearer {your_token}"
+```
+
+#### Get Specific Opinion
+HTTP Method & URL: GET /api/opiniones/
+
+Description
+Retrieves detailed information about a specific opinion.
+
+Request Parameters
+
+id (path parameter): ID of the opinion to retrieve
+
+Request Body: None
+
+Response Codes
+
+200 OK: Opinion retrieved successfully
+401 Unauthorized: Authentication required
+404 Not Found: Opinion not found
+500 Internal Server Error: Server error while retrieving the opinion
+
+Response Body (Success - 200 OK)
+```json
+{
+  "message": "Opinion found",
   "data": {
     "id": "670bd0cc60eb88e665c9fb90",
     "rating": 5,
-    "comment": "Excelente lugar para pasar el día",
+    "comment": "Excellent place to spend the day",
     "user": {...},
     "activity": {...}
   }
 }
 ```
 
-Errores:
-
-500 Internal Server Error: Error del servidor
-
-#### Obtener opiniones por actividad
-
-GET /api/opiniones/activity/:id
-
-Obtiene todas las opiniones asociadas a una actividad específica.
-
-Parámetros URL:
-id: ID de la actividad cuyos opiniones se desean obtener
-
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Error Responses
+401 Unauthorized:
+```json
 {
-  "message": "Todos las opiniones encontradas",
+  "message": "Authentication required"
+}
+
+404 Not Found:
+```json
+{
+  "message": "Opinion not found"
+}
+```
+
+500 Internal Server Error:
+```json
+{
+  "message": "Server error"
+}
+```
+
+Example Request
+```bash
+curl -X GET https://api.example.com/api/opiniones/670bd0cc60eb88e665c9fb90 \
+  -H "Authorization: Bearer {your_token}"
+```
+
+#### Get Opinions by Activity
+HTTP Method & URL: GET /api/opiniones/activity/
+
+Description
+Retrieves all opinions associated with a specific activity.
+
+Request Parameters
+
+id (path parameter): ID of the activity whose opinions are being requested
+
+Request Body: None
+
+Response Codes
+
+200 OK: Opinions retrieved successfully
+401 Unauthorized: Authentication required
+404 Not Found: Activity not found
+500 Internal Server Error: Server error while retrieving opinions
+
+Response Body (Success - 200 OK)
+```json
+{
+  "message": "All opinions found",
   "data": [
     {
       "id": "670bd0cc60eb88e665c9fb90",
       "rating": 5,
-      "comment": "Excelente lugar para pasar el día",
+      "comment": "Excellent place to spend the day",
       "user": {...},
       "activity": {...}
     },
@@ -2234,179 +2789,374 @@ jsonContent-Type: application/json
 }
 ```
 
-Respuesta (no hay opiniones):
-```ts
-jsonContent-Type: application/json
-{ message: "No se encontraron opiniones" }
+Response Body (No opinions found - 200 OK)
+```json
+{
+  "message": "No opinions found",
+  "data": []
+}
 ```
 
-Errores:
+Error Responses
+401 Unauthorized:
+```json
+{
+  "message": "Authentication required"
+}
+```
 
-500 Internal Server Error: Error del servidor
+404 Not Found:
+```json
+{
+  "message": "Activity not found"
+}
+```
 
-#### Crear una nueva opinión
+500 Internal Server Error:
+```json
+{
+  "message": "Server error"
+}
+```
 
-POST /api/opiniones
+Example Request
+```bash
+curl -X GET https://api.example.com/api/opiniones/activity/67178bbf8fec993032a05aa9 \
+  -H "Authorization: Bearer {your_token}"
+```
 
-Crea una nueva opinión en el sistema.
+#### Create New Opinion
+HTTP Method & URL: POST /api/opiniones
 
-Solicitud:
-```ts
-jsonContent-Type: application/json
+Description
+Creates a new opinion in the system.
+
+Request Parameters: None
+
+Request Body
+```json
 {
   "rating": 5,
-  "comment": "Excelente lugar para pasar el día",
+  "comment": "Excellent place to spend the day",
   "activity": "67178bbf8fec993032a05aa9",
   "user": "669d9a3503f535edd5c7aabe"
 }
 ```
 
-Validación:
+Validation Notes
 
 - rating:
 
-  - "La calificación debe ser un número"
-  - "La calificación es requerida"
-  - "La calificación debe ser un número entre 1 y 5"
+  - Must be a number
+  - Is required
+  - Must be a number between 1 and 5
 
 
 - comment:
 
-  - "El comentario debe ser un string"
-  - "El comentario es requerido"
-  - "El comentario debe tener entre 1 y 100 caracteres"
+  - Must be a string
+  - Is required
+  - Must be between 1 and 100 characters
 
 
-activity.id: ID de la actividad que se está valorando
-user.id: ID del usuario que crea la opinión
+- activity: ID of the activity being rated
+- user: ID of the user creating the opinion
 
-Respuesta:
-```ts
-jsonContent-Type: application/json
+
+Response Codes
+
+201 Created: Opinion successfully created
+400 Bad Request: Invalid opinion data
+401 Unauthorized: Authentication required
+404 Not Found: Activity or user not found
+500 Internal Server Error: Error creating opinion
+
+Response Body (Success - 201 Created)
+```json
 {
-  "message": "Opinion creada",
+  "message": "Opinion created",
   "data": {
     "id": "670bd0cc60eb88e665c9fb90",
     "rating": 5,
-    "comment": "Excelente lugar para pasar el día",
+    "comment": "Excellent place to spend the day",
     "activity": "67178bbf8fec993032a05aa9",
     "user": "669d9a3503f535edd5c7aabe"
   }
 }
 ```
 
-Errores:
-
-404 Not Found: "Actividad no encontrada" o "Usuario no encontrado"
-500 Internal Server Error: Error del servidor
-
-#### Actualizar una opinión completa
-
-PUT /api/opiniones/:id
-
-Actualiza todos los datos de una opinión existente.
-
-Parámetros URL:
-id: ID de la opinión a actualizar
-
-Solicitud:
-```ts
-jsonContent-Type: application/json
+Error Responses
+400 Bad Request:
+```json
 {
-  "rating": 4,
-  "comment": "Excelente lugar para pasar el día"
+  "message": "Invalid opinion data",
+  "errors": [
+    "Rating must be a number between 1 and 5"
+  ]
 }
 ```
 
-Validación:
-
-Los campos deben cumplir con las validaciones del schema del modelo. Se deben incluir todos los campos.
-El middleware sanitizeOpinionInput realiza una limpieza de los datos, eliminando campos indefinidos.
-
-Respuesta:
-```ts
-jsonContent-Type: application/json
+401 Unauthorized:
+```json
 {
-  "message": "Opinion actualizada",
+  "message": "Authentication required"
+}
+```
+
+404 Not Found:
+```json
+{
+  "message": "Activity not found"
+}
+```
+OR
+```json
+{
+  "message": "User not found"
+}
+```
+
+500 Internal Server Error:
+```json
+{
+  "message": "Server error"
+}
+```
+
+Example Request
+```bash
+curl -X POST https://api.example.com/api/opiniones \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer {your_token}" \
+  -d '{
+    "rating": 5,
+    "comment": "Excellent place to spend the day",
+    "activity": "67178bbf8fec993032a05aa9",
+    "user": "669d9a3503f535edd5c7aabe"
+  }'
+```
+
+#### Update Opinion (Complete)
+HTTP Method & URL: PUT /api/opiniones/
+
+Description
+Updates all the data of an existing opinion.
+
+Request Parameters
+
+id (path parameter): ID of the opinion to update
+
+Request Body
+```json
+{
+  "rating": 4,
+  "comment": "Excellent place to spend the day"
+}
+```
+
+Validation Notes
+
+All fields must comply with the validations of the model schema
+All fields must be included in the request
+The sanitizeOpinionInput middleware cleans the data by removing undefined fields
+
+Response Codes
+
+200 OK: Opinion successfully updated
+400 Bad Request: Invalid opinion data
+401 Unauthorized: Authentication required
+404 Not Found: Opinion not found
+500 Internal Server Error: Error updating opinion
+
+Response Body (Success - 200 OK)
+```json
+{
+  "message": "Opinion updated",
   "data": {
     "id": "670bd0cc60eb88e665c9fb90",
     "rating": 4,
-    "comment": "Excelente lugar para pasar el día",
+    "comment": "Excellent place to spend the day",
     "activity": "67178bbf8fec993032a05aa9",
     "user": "669d9a3503f535edd5c7aabe"
   }
 }
 ```
 
-Errores:
-
-500 Internal Server Error: Error del servidor
-
-#### Actualizar parcialmente una opinión
-
-PATCH /api/opiniones/:id
-
-Actualiza solo los campos específicos de una opinión existente.
-
-Parámetros URL:
-id: ID de la opinión a actualizar parcialmente
-
-Solicitud:
-```ts
-jsonContent-Type: application/json
+Error Responses
+400 Bad Request:
+```json
 {
-  "rating": 3
+  "message": "Invalid opinion data"
 }
 ```
 
-Validación:
-
-Cualquier campo que se incluya debe cumplir con las validaciones del schema del modelo
-El middleware sanitizeOpinionInput realiza una limpieza de los datos, eliminando campos indefinidos.
-
-Respuesta:
-```ts
-jsonContent-Type: application/json
+401 Unauthorized:
+```json
 {
-  "message": "Opinion actualizada",
+  "message": "Authentication required"
+}
+```
+
+404 Not Found:
+```json
+{
+  "message": "Opinion not found"
+}
+```
+
+500 Internal Server Error:
+```json
+{
+  "message": "Server error"
+}
+```
+
+Example Request
+```bash
+curl -X PUT https://api.example.com/api/opiniones/670bd0cc60eb88e665c9fb90 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer {your_token}" \
+  -d '{
+    "rating": 4,
+    "comment": "Excellent place to spend the day"
+  }'
+```
+
+#### Update Opinion (Partial)
+HTTP Method & URL: PATCH /api/opiniones/
+
+Description
+Updates only specific fields of an existing opinion.
+
+Request Parameters
+
+id (path parameter): ID of the opinion to partially update
+
+Request Body
+json{
+  "rating": 3
+}
+Validation Notes
+
+Any included field must meet the validations of the model schema
+The sanitizeOpinionInput middleware cleans the data by removing undefined fields
+
+Response Codes
+
+200 OK: Opinion successfully updated
+400 Bad Request: Invalid opinion data
+401 Unauthorized: Authentication required
+404 Not Found: Opinion not found
+500 Internal Server Error: Error updating opinion
+
+Response Body (Success - 200 OK)
+```json
+{
+  "message": "Opinion updated",
   "data": {
     "id": "670bd0cc60eb88e665c9fb90",
     "rating": 3,
-    "comment": "Excelente lugar para pasar el día",
+    "comment": "Excellent place to spend the day",
     "activity": "67178bbf8fec993032a05aa9",
     "user": "669d9a3503f535edd5c7aabe"
   }
 }
 ```
 
-Errores:
-
-500 Internal Server Error: Error del servidor
-
-#### Eliminar una opinión
-
-DELETE /api/opiniones/:id
-
-Elimina una opinión específica del sistema.
-
-Parámetros URL:
-id: ID de la opinión a eliminar
-
-Respuesta:
-```ts
-jsonContent-Type: application/json
+Error Responses
+400 Bad Request:
+```json
 {
-  "message": "Opinion eliminada"
+  "message": "Invalid opinion data"
+}
+```
+401 Unauthorized:
+```json
+{
+  "message": "Authentication required"
 }
 ```
 
-Errores:
+404 Not Found:
+```json
+{
+  "message": "Opinion not found"
+}
+```
 
-500 Internal Server Error: Error del servidor
+500 Internal Server Error:
+```json
+{
+  "message": "Server error"
+}
+```
+
+Example Request
+```bash
+curl -X PATCH https://api.example.com/api/opiniones/670bd0cc60eb88e665c9fb90 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer {your_token}" \
+  -d '{
+    "rating": 3
+  }'
+```
+
+#### Delete Opinion
+HTTP Method & URL: DELETE /api/opiniones/
+
+Description
+Removes a specific opinion from the system.
+
+Request Parameters
+
+id (path parameter): ID of the opinion to delete
+
+Request Body: None
+
+Response Codes
+
+200 OK: Opinion successfully deleted
+401 Unauthorized: Authentication required
+404 Not Found: Opinion not found
+500 Internal Server Error: Error deleting opinion
+
+Response Body (Success - 200 OK)
+```json
+{
+  "message": "Opinion deleted"
+}
+```
+
+Error Responses
+401 Unauthorized:
+```json
+{
+  "message": "Authentication required"
+}
+```
+404 Not Found:
+```json
+{
+  "message": "Opinion not found"
+}
+```
+
+500 Internal Server Error:
+```json
+{
+  "message": "Server error"
+}
+```
+
+Example Request
+```bash
+curl -X DELETE https://api.example.com/api/opiniones/670bd0cc60eb88e665c9fb90 \
+  -H "Authorization: Bearer {your_token}"
+```
 
 ### Itineraries
 
-| Método | Ruta                             | Descripción                                  | Protegida |
+| HTTP Method | Route                            | Description                                 | Protected |
 | ------ | --------------                   | --------------------------------             | --------- |
 | GET    | /api/itineraries                 | Obtener todos los itinerarios                | ✅        |
 | GET    | /api/itineraries/user/:id        | Obtener itinerarios por usuario              | ✅        |
@@ -2769,7 +3519,7 @@ ExternalService
   - ACTIVE: Status after admin approval or direct creation
   - CANCELED: Service has been canceled
 
-| Método | Ruta                               | Descripción                           | Protegida |
+| HTTP Method | Route                              | Description                          | Protected |
 | ------ | --------------                     | --------------------------------      | --------- |
 | POST   | /api/publicity                    | Submit a publicity request               | ❌        |
 | GET    | /api/publicity/places                   | Get all external services          | ❌       |
@@ -3290,7 +4040,7 @@ Activity
 {
   id: string;               // Identificador único
   name: string;             // Nombre de la actividad
-  description: string;      // Descripción de la actividad
+  description: string;      // Descriptionde la actividad
   outdoor: boolean;         // Indica si la actividad es al aire libre
   transport?: boolean;      // Indica si se necesita transporte (opcional)
   scheduleStart: string;    // Hora de inicio (formato HH:MM)
@@ -3303,7 +4053,7 @@ Activity
 }
 ```
 
-| Método | Ruta                               | Descripción                                    | Protegida |
+| HTTP Method | Route                              | Description                                   | Protected |
 | ------ | --------------                     | --------------------------------               | --------- |
 | GET    | /api/activities         | Obtener todas las actividades  | ✅        |
 | GET    | /api/activities/:id     | Obtener una actividad por ID             | ✅        |

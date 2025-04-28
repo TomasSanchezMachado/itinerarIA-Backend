@@ -63,7 +63,7 @@ export async function findOne(req: Request, res: Response) {
     );
     return res.status(200).json({ data: participant });
   } catch (error: any) {
-    return res.status(500).json({ message: [error.message], req: "hola" });
+    return res.status(500).json({ message: [error.message] });
   }
 }
 
@@ -87,12 +87,7 @@ export async function add(req: Request, res: Response) {
       user: userFound.id,
     });
 
-    //agrego el participante al itinerario ya que el owner del participante es el itinerario
-    // if (itineraries.length !== 0) {
-    //   const itinerary = await em.findOneOrFail(Itinerary, { id: itineraries[0] });
-    //   itinerary.participants.add(participant);
-    //   await em.persistAndFlush(itinerary);
-    // }
+
     await em.persistAndFlush(participant);
     return res.status(201).json({
       message: "Participant created successfully",
@@ -128,11 +123,6 @@ export async function addFavorite(req: Request, res: Response) {
     });
     await em.persistAndFlush(participant);
 
-    // const savedParticipant = await em.findOneOrFail(
-    //   Participant,
-    //   { id: participant.id },
-    //   { populate: ["preferences", "user"] }
-    // );
 
     return res.status(201).json({
       message: "Participant created successfully",
@@ -152,7 +142,7 @@ export async function update(req: Request, res: Response) {
       req.body.sanitizedInput;
     const id = req.params.id;
 
-    // Asegúrate de que el participante existe
+    
     const participant = await em.findOneOrFail(Participant, id);
 
     // Obtener las preferencias correctamente

@@ -3,10 +3,10 @@ import { z } from 'zod';
 const scheduleRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 const scheduleSchema = z.string().regex(scheduleRegex, 'Invalid schedule format');
 
-const websiteRegex = /^www\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/ || "";
+const websiteRegex = /^www\.[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
 const websiteSchema = z.string().regex(websiteRegex, 'Invalid website format');
 
-const telRegex = /^\d{10}$/ || "";
+const telRegex = /^\d{10}$/;
 const telSchema = z.string().regex(telRegex, 'Invalid phone number format');
 
 export const postSchema = z.object({
@@ -22,7 +22,7 @@ export const postSchema = z.object({
     invalid_type_error: 'The description must be a string',
     required_error: 'The description is required',
   }).min(3, 'The description must have at least 3 characters'),
-  adress: z.string({
+  address: z.string({
     invalid_type_error: 'The address must be a string',
     required_error: 'The address is required',
   }).min(3, 'The address must have at least 3 characters'),
@@ -51,7 +51,7 @@ export const putSchema = z.object({
     invalid_type_error: 'The description must be a string',
     required_error: 'The description is required',
   }).min(3, 'The description must have at least 3 characters'),
-  adress: z.string({
+  address: z.string({
     invalid_type_error: 'The address must be a string',
     required_error: 'The address is required',
   }).min(3, 'The address must have at least 3 characters'),
@@ -73,7 +73,7 @@ export const patchSchema = z.object({
   description: z.string({
     invalid_type_error: 'The description must be a string',
   }).min(3, 'The description must have at least 3 characters').optional(),
-  adress: z.string({
+  address: z.string({
     invalid_type_error: 'The address must be a string',
   }).min(3, 'The address must have at least 3 characters').optional(),
   schedule: z.string({

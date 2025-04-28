@@ -30,12 +30,14 @@ itinerarIA is a RESTful API that facilitates the creation and management of trav
 #### Local Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/TomasSanchezMachado/itinerarIA-Backend.git
 cd itinerarIA-Backend
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
@@ -57,6 +59,7 @@ NOTE: The variable MONGO_URI must contain the connection string to your LOCAL da
   - MONGO_INITDB_ROOT_PASSWORD=your_password
 
 - Build and run with Docker Compose:
+
 ```bash
 docker-compose up -d
 ```
@@ -64,22 +67,28 @@ docker-compose up -d
 #### Running the Application
 
 ##### Development Mode
+
 ```bash
 npm run start:dev
 ```
+
 The local server is setted up to run with the database related to the variable MONGO_URI
 
 ##### Production Mode
+
 The server in production mode is running always. There's no need of running it from the bash.
 It is already setted up to run with the cloud database.
 
 ##### Test Environment
+
 Para ejecutar tests End to End
+
 ```bash
 npm run test:e2e
 ```
 
 Para ejecutar tests unitarios
+
 ```bash
 npm run test:vitest
 ```
@@ -89,11 +98,14 @@ npm run test:vitest
 The API uses JSON Web Tokens (JWT) for authentication. Tokens are stored in HTTP-only cookies for secure client-side storage.
 
 ### Token Generation
+
 Tokens are generated using the jsonwebtoken library with the following configuration:
 
 - Expiration: 7 days
 - Secret key: Stored in .env file
+
 ### Cookie Configuration
+
 Cookies are configured with the following security settings:
 
 - httpOnly: True in production (prevents JavaScript access)
@@ -102,21 +114,24 @@ Cookies are configured with the following security settings:
 - maxAge: 24 hours (1 day)
 
 ## Authorization
+
 The API implements role-based access control using middleware functions.
 
 ### Middleware Functions
+
 #### authenticateJWT
 
 This middleware verifies the presence and validity of a JWT token in the request cookies:
+
 ```ts
 function authenticateJWT(req, res, next) {
   const token = req.cookies.token;
   if (!token) {
-    return res.status(401).json({ message: 'No authorization token provided' });
+    return res.status(401).json({ message: "No authorization token provided" });
   }
   jwt.verify(token, secretKey, (err) => {
     if (err) {
-      return res.status(403).json({ message: 'Failed to authenticate token' });
+      return res.status(403).json({ message: "Failed to authenticate token" });
     }
     next();
   });
@@ -124,30 +139,35 @@ function authenticateJWT(req, res, next) {
 ```
 
 #### isAdmin
+
 This middleware checks if the authenticated user has administrator privileges:
 
 ```ts
 const isAdmin = (req, res, next) => {
   const token = req.cookies.token;
   if (!token) {
-    return res.status(401).json({ message: 'No authorization token provided' });
+    return res.status(401).json({ message: "No authorization token provided" });
   }
   jwt.verify(token, secretKey, async (err, decoded) => {
     if (err) {
-      return res.status(401).json({ message: 'Invalid token' });
+      return res.status(401).json({ message: "Invalid token" });
     }
     const userId = decoded.id;
     const user = await em.findOne(User, { id: userId.toString() });
     if (user && user.isAdmin) {
       return next();
     }
-    return res.status(403).json({ message: "You are not authorized to access this resource" });
+    return res
+      .status(403)
+      .json({ message: "You are not authorized to access this resource" });
   });
 };
 ```
 
 #### validateToken
+
 This middleware validates tokens and attaches the payload to the request:
+
 ```ts
 function validateToken(req, res, next) {
   const token = req.cookies.token;
@@ -165,21 +185,27 @@ function validateToken(req, res, next) {
 ```
 
 ## Database Schema
+
 The application uses MikroORM with MongoDB to manage data. Below are the key entities and their relationships.
 
 ### Base Entity
+
 All entities extend from a base entity providing common functionality:
+
 ```ts
 abstract class BaseEntity {
   @PrimaryKey()
   _id?: ObjectId = new ObjectId();
-  
+
   @SerializedPrimaryKey()
   id!: string;
 }
 ```
+
 ### MongoDB Connection
+
 The application connects to MongoDB using the following configuration:
+
 ```ts
 const orm = await MikroORM.init({
   entities: ["./dist/**/*.entity.js"],
@@ -193,8 +219,11 @@ const orm = await MikroORM.init({
 ```
 
 ## Middlewares
+
 ### CORS Middleware
+
 The API implements CORS protection with the following configuration:
+
 ```ts
 const ACCEPTED_ORIGINS = [
   "http://localhost:5174",
@@ -226,20 +255,25 @@ const corsMiddleware = ({ acceptedOrigins = ACCEPTED_ORIGINS } = {}) => {
 ```
 
 ### Schema Validation Middleware
+
 Input validation is performed using Zod schemas:
+
 ```ts
-const validateSchema = (schema: any) => (req: Request, res: Response, next: NextFunction) => {
-  try {
-    schema.parse(req.body.sanitizedInput);
-    next();
-  } catch (error) {
-    return res.status(400).json({ 
-      message: (error as any).errors.map((error: any) => error.message) 
-    });
-  }
-}
+const validateSchema =
+  (schema: any) => (req: Request, res: Response, next: NextFunction) => {
+    try {
+      schema.parse(req.body.sanitizedInput);
+      next();
+    } catch (error) {
+      return res.status(400).json({
+        message: (error as any).errors.map((error: any) => error.message),
+      });
+    }
+  };
 ```
+
 ## Error Handling
+
 ### Common HTTP Status Codes
 
 - 200 OK: Request was successful
@@ -247,19 +281,19 @@ const validateSchema = (schema: any) => (req: Request, res: Response, next: Next
 - 401 Unauthorized: Missing or invalid authentication
 - 403 Forbidden: Valid authentication but insufficient permissions
 - 404 Not Found: Resource not found
-- 500 Internal Server Error: Server-side error 
+- 500 Internal Server Error: Server-side error
 
 ## Endpoints
 
 ### Authentication
 
-| HTTP Method | Route          | Description                     | Protected |
-| ------ | -------------- | -------------------------------- | --------- |
-| POST   | /auth/register | Register a new user              | ❌        |
-| POST   | /auth/login    | User login              | ❌        |
-| POST   | /auth/logout   | User logout                | ✅        |
-| POST   | /auth/profile  | Get user profile      | ✅        |
-| POST   | /auth/verify   | Verify authentication token | ✅        |
+| HTTP Method | Route          | Description                 | Protected |
+| ----------- | -------------- | --------------------------- | --------- |
+| POST        | /auth/register | Register a new user         | ❌        |
+| POST        | /auth/login    | User login                  | ❌        |
+| POST        | /auth/logout   | User logout                 | ✅        |
+| POST        | /auth/profile  | Get user profile            | ✅        |
+| POST        | /auth/verify   | Verify authentication token | ✅        |
 
 #### Register User
 
@@ -351,12 +385,15 @@ Content-Type:application/json
 Error Responses:
 
 400 Bad Request:
+
 ```json
 {
   "message": ["User already exists"]
 }
 ```
+
 OR
+
 ```json
 {
   "message": ["The email is already in use"]
@@ -374,8 +411,6 @@ OR
 }
 ```
 
-
-
 #### User Login
 
 HTTP Method & URL: POST /api/auth/login
@@ -383,6 +418,7 @@ HTTP Method & URL: POST /api/auth/login
 Description: Authenticates a user and returns a session token.
 
 Request Body:
+
 ```json
 {
   "username": "string",
@@ -411,6 +447,7 @@ Response Codes:
 500 Internal Server Error: Login process failed
 
 Response Body (Success - 200 OK):
+
 ```json
 {
   "message": "User logged successfully",
@@ -431,6 +468,7 @@ Response Body (Success - 200 OK):
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
+
 Error Responses:
 
 400 Bad Request:
@@ -451,6 +489,7 @@ Error Responses:
 ```
 
 Example Request:
+
 ```bash
 curl -X POST https://api.itineraria.com/auth/login \
   -H "Content-Type: application/json" \
@@ -476,6 +515,7 @@ Response Codes:
 401 Unauthorized: No valid authentication
 
 Response Body (Success - 200 OK):
+
 ```json
 {
   "message": "User logged out"
@@ -488,11 +528,12 @@ Error Responses:
 
 ```json
 {
-   message: "Internal server error during logout"
+  "message": "Internal server error during logout"
 }
 ```
 
 Example Request:
+
 ```bash
 curl -X POST https://api.itineraria.com/auth/logout \
   -H "Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
@@ -515,6 +556,7 @@ Response Codes:
 500 Internal Server Error: Profile retrieval failed
 
 Response Body (Success - 200 OK):
+
 ```json
 {
   "message": "User profile found",
@@ -538,17 +580,18 @@ Error Responses:
 400 Bad Request:
 
 json{
-  "message": "User not found"
+"message": "User not found"
 }
 
 500 Internal Server Error:
 
 json{
-  "message": "The user profile could not be found",
-  "data": "Error details"
+"message": "The user profile could not be found",
+"data": "Error details"
 }
 
 Example Request:
+
 ```bash
 curl -X POST https://api.itineraria.com/auth/profile \
   -H "Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
@@ -568,6 +611,7 @@ Response Codes:
 401 Unauthorized: Token is invalid or user not found
 
 Response Body (Success - 200 OK):
+
 ```json
 {
   "message": "User found",
@@ -589,11 +633,13 @@ Response Body (Success - 200 OK):
 ```
 
 401 Unauthorized:
+
 ```json
 { message: "User not found", userFound: userFound }
 ```
 
 Example Request:
+
 ```bash
 curl -X POST https://api.itineraria.com/auth/verify \
   -H "Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
@@ -603,14 +649,14 @@ Notes: This endpoint is typically used to check if a user's session is still val
 
 ### Users
 
-| HTTP Method | Route          | Description                     | Protected |
-| ------ | -------------- | -------------------------------- | --------- |
-| GET    | /api/users         | Get all users      | ❌        |
-| GET    | /api/users/:id         | Get a specific user    | ❌        |
-| POST   | /api/users         | Create a new user           | ❌        |
-| PUT    | /api/users/        |Update an entire user   | ❌        |
-|PATCH   | /api/users/        | Update specific user fields    | ❌        |
-|DELETE  | /api/users/        | Delete a user             | ❌        |
+| HTTP Method | Route          | Description                 | Protected |
+| ----------- | -------------- | --------------------------- | --------- |
+| GET         | /api/users     | Get all users               | ❌        |
+| GET         | /api/users/:id | Get a specific user         | ❌        |
+| POST        | /api/users     | Create a new user           | ❌        |
+| PUT         | /api/users/    | Update an entire user       | ❌        |
+| PATCH       | /api/users/    | Update specific user fields | ❌        |
+| DELETE      | /api/users/    | Delete a user               | ❌        |
 
 #### Get All Users
 
@@ -626,6 +672,7 @@ Response Codes:
 500 Internal Server Error: Server error while retrieving users
 
 Response Body (Success - 200 OK):
+
 ```json
 {
   "message": "Users found successfully",
@@ -657,12 +704,12 @@ Error Responses:
 ```
 
 Example Request:
+
 ```bash
 curl -X GET https://api.itineraria.com/users
 ```
 
 #### Get Specific User
-
 
 GET /user/:id
 
@@ -682,6 +729,7 @@ Response Codes:
 500 Internal Server Error: User not found or server error
 
 Response Body (Success - 200 OK):
+
 ```json
 {
   "message": "User found successfully",
@@ -711,6 +759,7 @@ Error Responses:
 ```
 
 Example Request:
+
 ```bash
 curl -X GET https://api.itineraria.com/users/60d21b4667d0d8992e610c85
 ```
@@ -722,6 +771,7 @@ HTTP Method & URL: POST /users
 Description: Registers a new user in the system.
 
 Request Body:
+
 ```json
 {
   "username": "string",
@@ -743,6 +793,7 @@ Response Codes:
 500 Internal Server Error: Error creating user
 
 Response Body (Success - 200 OK):
+
 ```json
 {
   "message": "User logged successfully",
@@ -773,6 +824,7 @@ Error Responses:
 ```
 
 Example Request:
+
 ```bash
 curl -X POST https://api.itineraria.com/users \
   -H "Content-Type: application/json" \
@@ -798,6 +850,7 @@ Request Parameters:
 id (path parameter): Unique identifier of the user
 
 Request Body:
+
 ```json
 {
   "username": "string",
@@ -852,7 +905,6 @@ Validation Rules:
   - "Phone number must be a string"
   - "Phone number is required"
 
-
 Response Codes:
 
 200 OK: User successfully updated
@@ -860,6 +912,7 @@ Response Codes:
 500 Internal Server Error: Error updating user
 
 Response Body (Success - 200 OK):
+
 ```json
 {
   "message": "User updated successfully",
@@ -895,6 +948,7 @@ Error Responses:
 ```
 
 Example Request:
+
 ```bash
 curl -X PUT https://api.itineraria.com/users/ \
   -H "Content-Type: application/json" \
@@ -910,6 +964,7 @@ curl -X PUT https://api.itineraria.com/users/ \
 ```
 
 #### Update User (Partial)
+
 HTTP Method & URL: PATCH /users/
 
 Description: Updates specific fields of an existing user.
@@ -919,6 +974,7 @@ Request Parameters:
 id (path parameter): Unique identifier of the user
 
 Request Body:
+
 ```json{
   "username": "string", // optional
   "names": "string", // optional
@@ -946,6 +1002,7 @@ Response Codes:
 500 Internal Server Error: Error updating user
 
 Response Body (Success - 200 OK):
+
 ```json
 {
   "message": "User updated successfully",
@@ -981,6 +1038,7 @@ Error Responses:
 ```
 
 Example Request:
+
 ```bash
 curl -X PATCH https://api.itineraria.com/users/ \
   -H "Content-Type: application/json" \
@@ -1008,6 +1066,7 @@ Response Codes:
 500 Internal Server Error: Error deleting user
 
 Response Body (Success - 200 OK):
+
 ```json{
   "message": "User deleted successfully"
 }
@@ -1024,20 +1083,21 @@ Error Responses:
 ```
 
 Example Request:
+
 ```bash
 curl -X DELETE https://api.itineraria.com/users/60d21b4667d0d8992e610c85
 ```
 
 ### Preferencias
 
-| HTTP Method | Route               | Description                         | Protected |
-| ------ | --------------      | --------------------------------     | --------- |
-| GET    | /api/preferences        | Get all preferences       | ✅ (Admin)|
-| GET    | /api/preferences/:id    |Get a specific preference  | ✅ (Admin)|
-| POST   | /api/preferences        | Create a new preference          | ✅ (Admin)|
-| PUT    | /api/preferences /      | Update a complete preference  | ✅ (Admin)|
-|PATCH   | /api/preferences/       | Update specific preference fields       | ✅ (Admin)|
-|DELETE  | /api/preferences/       | Delete a preference            | ✅ (Admin)|
+| HTTP Method | Route                | Description                       | Protected  |
+| ----------- | -------------------- | --------------------------------- | ---------- |
+| GET         | /api/preferences     | Get all preferences               | ✅ (Admin) |
+| GET         | /api/preferences/:id | Get a specific preference         | ✅ (Admin) |
+| POST        | /api/preferences     | Create a new preference           | ✅ (Admin) |
+| PUT         | /api/preferences /   | Update a complete preference      | ✅ (Admin) |
+| PATCH       | /api/preferences/    | Update specific preference fields | ✅ (Admin) |
+| DELETE      | /api/preferences/    | Delete a preference               | ✅ (Admin) |
 
 #### Get All Preferences
 
@@ -1062,6 +1122,7 @@ Response Codes:
 500 Internal Server Error: Server error while fetching preferences
 
 Response Body (Success - 200 OK):
+
 ```json
 {
   "data": [
@@ -1076,6 +1137,7 @@ Response Body (Success - 200 OK):
 ```
 
 Response Body (No preferences - 200 OK):
+
 ```json
 {
   "message": "Preferences not found"
@@ -1085,12 +1147,15 @@ Response Body (No preferences - 200 OK):
 Error Responses:
 
 401 Unauthorized:
+
 ```json
 {
   "message": "No authorization token provided"
 }
 ```
+
 or
+
 ```json
 {
   "message": "Invalid token"
@@ -1098,6 +1163,7 @@ or
 ```
 
 403 Forbidden:
+
 ```json
 {
   "message": "You are not authorized to access this resource"
@@ -1105,6 +1171,7 @@ or
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "Error fetching preferences"
@@ -1112,6 +1179,7 @@ or
 ```
 
 Example Request:
+
 ```bash
 curl -X GET https://api.example.com/preferences \
   -H "Authorization: Bearer YOUR_TOKEN"
@@ -1143,6 +1211,7 @@ Response Codes:
 500 Internal Server Error: Server error while fetching preference
 
 Response Body (Success - 200 OK):
+
 ```json{
   "data": {
     "id": "string",
@@ -1155,24 +1224,29 @@ Response Body (Success - 200 OK):
 
 Error Responses:
 401 Unauthorized:
+
 ```json
 {
   "message": "No authorization token provided"
 }
 ```
+
 or
+
 ```json{
   "message": "Invalid token"
 }
 ```
 
 403 Forbidden:
+
 ```json{
   "message": "You are not authorized to access this resource"
 }
 ```
 
 404 Not Found:
+
 ```json
 {
   "message": "Preference not found"
@@ -1180,6 +1254,7 @@ or
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "Error fetching preference"
@@ -1187,6 +1262,7 @@ or
 ```
 
 Example Request:
+
 ```bash
 curl -X GET https://api.example.com/preferences/60d21b4667d0d8992e610c85 \
   -H "Authorization: Bearer YOUR_TOKEN"
@@ -1206,6 +1282,7 @@ Valid authentication token
 Request Parameters: None
 
 Request Body:
+
 ```json
 {
   "name": "string",
@@ -1227,6 +1304,7 @@ Response Codes:
 500 Internal Server Error: Server error while creating preference
 
 Response Body (Success - 201 Created):
+
 ```json
 {
   "message": "Preference created successfully",
@@ -1241,6 +1319,7 @@ Response Body (Success - 201 Created):
 
 Error Responses:
 400 Bad Request:
+
 ```json
 {
   "message": "Invalid input data"
@@ -1248,12 +1327,15 @@ Error Responses:
 ```
 
 401 Unauthorized:
+
 ```json
 {
   "message": "No authorization token provided"
 }
 ```
+
 or
+
 ```json
 {
   "message": "Invalid token"
@@ -1261,6 +1343,7 @@ or
 ```
 
 403 Forbidden:
+
 ```json
 {
   "message": "You are not authorized to access this resource"
@@ -1268,6 +1351,7 @@ or
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "Error creating preference"
@@ -1275,6 +1359,7 @@ or
 ```
 
 Example Request:
+
 ```bash
 curl -X POST https://api.example.com/preferences \
   -H "Content-Type: application/json" \
@@ -1300,6 +1385,7 @@ Request Parameters:
 id (path parameter): Unique identifier of the preference
 
 Request Body:
+
 ```
 {
   "name": "string",
@@ -1322,6 +1408,7 @@ Response Codes:
 500 Internal Server Error: Server error while updating preference
 
 Response Body (Success - 200 OK):
+
 ```json
 {
   "message": "Preference updated successfully",
@@ -1336,6 +1423,7 @@ Response Body (Success - 200 OK):
 
 Error Responses:
 400 Bad Request:
+
 ```json
 {
   "message": "Invalid input data"
@@ -1343,12 +1431,15 @@ Error Responses:
 ```
 
 401 Unauthorized:
+
 ```json
 {
   "message": "No authorization token provided"
 }
 ```
+
 or
+
 ```json
 {
   "message": "Invalid token"
@@ -1356,12 +1447,14 @@ or
 ```
 
 403 Forbidden:
+
 ```json{
   "message": "You are not authorized to access this resource"
 }
 ```
 
 404 Not Found:
+
 ```json
 {
   "message": "Preference not found"
@@ -1369,12 +1462,14 @@ or
 ```
 
 500 Internal Server Error:
+
 ```json{
   "message": "Error updating preference"
 }
 ```
 
 Example Request:
+
 ```bash
 curl -X PUT https://api.example.com/preferences/60d21b4667d0d8992e610c85 \
   -H "Content-Type: application/json" \
@@ -1386,6 +1481,7 @@ curl -X PUT https://api.example.com/preferences/60d21b4667d0d8992e610c85 \
 ```
 
 #### Update Preference (Partial)
+
 HTTP Method & URL: PATCH /preferences/
 Description: Updates specific fields of an existing preference.
 Authentication Requirements:
@@ -1398,6 +1494,7 @@ Request Parameters:
 id (path parameter): Unique identifier of the preference
 
 Request Body:
+
 ```json
 {
   "name": "string", // optional
@@ -1421,6 +1518,7 @@ Response Codes:
 500 Internal Server Error: Server error while updating preference
 
 Response Body (Success - 200 OK):
+
 ```json
 {
   "message": "Preference updated successfully",
@@ -1435,18 +1533,23 @@ Response Body (Success - 200 OK):
 
 Error Responses:
 400 Bad Request:
+
 ```json
 {
   "message": "Invalid input data"
 }
 ```
+
 401 Unauthorized:
+
 ```json
 {
   "message": "No authorization token provided"
 }
 ```
+
 or
+
 ```json
 {
   "message": "Invalid token"
@@ -1454,6 +1557,7 @@ or
 ```
 
 403 Forbidden:
+
 ```json
 {
   "message": "You are not authorized to access this resource"
@@ -1461,6 +1565,7 @@ or
 ```
 
 404 Not Found:
+
 ```json
 {
   "message": "Preference not found"
@@ -1468,6 +1573,7 @@ or
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "Error updating preference"
@@ -1475,6 +1581,7 @@ or
 ```
 
 Example Request:
+
 ```bash
 curl -X PATCH https://api.example.com/preferences/60d21b4667d0d8992e610c85 \
   -H "Content-Type: application/json" \
@@ -1511,6 +1618,7 @@ Response Codes:
 500 Internal Server Error: Server error while deleting preference
 
 Response Body (Success - 200 OK):
+
 ```json
 {
   "message": "Preference deleted",
@@ -1525,6 +1633,7 @@ Response Body (Success - 200 OK):
 
 Error Responses:
 400 Bad Request:
+
 ```json
 {
   "message": "Cannot delete the preference because it has associated participants"
@@ -1532,12 +1641,15 @@ Error Responses:
 ```
 
 401 Unauthorized:
+
 ```json
 {
   "message": "No authorization token provided"
 }
 ```
+
 or
+
 ```json
 {
   "message": "Invalid token"
@@ -1545,6 +1657,7 @@ or
 ```
 
 403 Forbidden:
+
 ```json
 {
   "message": "You are not authorized to access this resource"
@@ -1552,6 +1665,7 @@ or
 ```
 
 404 Not Found:
+
 ```json
 {
   "message": "Preference not found"
@@ -1559,6 +1673,7 @@ or
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "Error deleting preference"
@@ -1566,6 +1681,7 @@ or
 ```
 
 Example Request:
+
 ```bash
 curl -X DELETE https://api.example.com/preferences/60d21b4667d0d8992e610c85 \
   -H "Authorization: Bearer YOUR_TOKEN"
@@ -1573,21 +1689,21 @@ curl -X DELETE https://api.example.com/preferences/60d21b4667d0d8992e610c85 \
 
 ### Places
 
-| HTTP Method | Route               | Description                         | Protected |
-| ------ | --------------      | --------------------------------     | --------- |
-| GET    | /api/places             | Get all places            | ❌        |
-| GET    | /api/places/:id         | Get a specific place         | ❌        |
-| POST   | /api/places             | Create a new place               | ❌        |
-| PUT    | /api/places /           | Update a place completely        | ❌        |
-|PATCH   | /api/places/            | Update specific fields        | ❌        |
-|DELETE  | /api/places/            | Delete a place                    | ❌        |
+| HTTP Method | Route           | Description               | Protected |
+| ----------- | --------------- | ------------------------- | --------- |
+| GET         | /api/places     | Get all places            | ❌        |
+| GET         | /api/places/:id | Get a specific place      | ❌        |
+| POST        | /api/places     | Create a new place        | ❌        |
+| PUT         | /api/places /   | Update a place completely | ❌        |
+| PATCH       | /api/places/    | Update specific fields    | ❌        |
+| DELETE      | /api/places/    | Delete a place            | ❌        |
 
 #### Get All Places
 
 HTTP Method & URL: GET /api/places
 
 Description
-Retrieves all places registered in the system. 
+Retrieves all places registered in the system.
 
 Request Body: None
 
@@ -1597,6 +1713,7 @@ Response Codes:
 500 Internal Server Error: Server error while retrieving places
 
 Response Body (Success - 200 OK)
+
 ```json
 {
   "data": [
@@ -1617,6 +1734,7 @@ Response Body (Success - 200 OK)
 ```
 
 Response Body (No places found - 200 OK)
+
 ```json
 {
   "message": "No places found",
@@ -1627,6 +1745,7 @@ Response Body (No places found - 200 OK)
 Error Responses
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "Error retrieving places"
@@ -1634,11 +1753,13 @@ Error Responses
 ```
 
 Example Request:
+
 ```bash
 curl -X GET https://api.example.com/places
 ```
 
 #### Get Specific Place
+
 HTTP Method & URL: GET /api/places/
 
 Description
@@ -1660,6 +1781,7 @@ Response Codes
 500 Internal Server Error: Server error while retrieving the place
 
 Response Body (Success - 200 OK)
+
 ```json
 {
   "data": {
@@ -1679,6 +1801,7 @@ Response Body (Success - 200 OK)
 
 Error Responses
 404 Not Found:
+
 ```json
 {
   "message": "Place not found"
@@ -1686,6 +1809,7 @@ Error Responses
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "Error retrieving place"
@@ -1693,6 +1817,7 @@ Error Responses
 ```
 
 Example Request
+
 ```bash
 curl -X GET https://api.example.com/places/60d21b4667d0d8992e610c85
 ```
@@ -1707,6 +1832,7 @@ Registers a new place in the system.
 Request Parameters: None
 
 Request Body
+
 ```json{
   "name": "string",
   "latitude": number,
@@ -1729,6 +1855,7 @@ Response Codes
 500 Internal Server Error: Error creating place
 
 Response Body (Success - 201 Created)
+
 ```json
 {
   "message": "Place created successfully",
@@ -1749,12 +1876,15 @@ Response Body (Success - 201 Created)
 
 Error Responses
 400 Bad Request:
+
 ```json
 {
   "message": "There is already a place with the same coordinates"
 }
 ```
+
 OR
+
 ```json
 {
   "message": "There is already a place with the same name, Province/State and Country"
@@ -1762,6 +1892,7 @@ OR
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "Error creating place"
@@ -1769,6 +1900,7 @@ OR
 ```
 
 Example Request
+
 ```bash
 curl -X POST https://api.example.com/places \
   -H "Content-Type: application/json" \
@@ -1783,6 +1915,7 @@ curl -X POST https://api.example.com/places \
 ```
 
 #### Update Place (Complete)
+
 HTTP Method & URL: PUT /api/places/
 
 Description: Updates all fields of an existing place.
@@ -1792,6 +1925,7 @@ Request Parameters
 id (path parameter): Unique identifier of the place
 
 Request Body
+
 ```json
 {
   "name": "string",
@@ -1816,6 +1950,7 @@ Response Codes
 500 Internal Server Error: Error updating place
 
 Response Body (Success - 200 OK)
+
 ```json
 {
   "message": "Place updated successfully",
@@ -1837,12 +1972,15 @@ Response Body (Success - 200 OK)
 Error Responses
 
 400 Bad Request:
+
 ```json
 {
   "message": "There is already a place with the same coordinates!"
 }
 ```
+
 OR
+
 ```json
 {
   "message": "There is already a place with the same name, Province/State and Country"
@@ -1850,6 +1988,7 @@ OR
 ```
 
 404 Not Found:
+
 ```json
 {
   "message": "Place not found"
@@ -1857,6 +1996,7 @@ OR
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "Error updating place"
@@ -1864,6 +2004,7 @@ OR
 ```
 
 Example Request
+
 ```bash
 curl -X PUT https://api.example.com/places/60d21b4667d0d8992e610c85 \
   -H "Content-Type: application/json" \
@@ -1878,6 +2019,7 @@ curl -X PUT https://api.example.com/places/60d21b4667d0d8992e610c85 \
 ```
 
 #### Update Place (Partial)
+
 HTTP Method & URL: PATCH /api/places/
 
 Description: Updates specific fields of an existing place.
@@ -1887,6 +2029,7 @@ Request Parameters
 id (path parameter): Unique identifier of the place
 
 Request Body
+
 ```json
 {
   "name": "string", // optional
@@ -1911,6 +2054,7 @@ Response Codes
 500 Internal Server Error: Error updating place
 
 Response Body (Success - 200 OK)
+
 ```json
 {
   "message": "Place updated successfully",
@@ -1932,6 +2076,7 @@ Response Body (Success - 200 OK)
 Error Responses
 
 400 Bad Request:
+
 ```json
 {
   "message": "There is already a place with the same coordinates!"
@@ -1947,6 +2092,7 @@ OR
 ```
 
 404 Not Found:
+
 ```json
 {
   "message": "Place not found"
@@ -1954,6 +2100,7 @@ OR
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "Error updating place"
@@ -1961,6 +2108,7 @@ OR
 ```
 
 Example Request
+
 ```bash
 curl -X PATCH https://api.example.com/places/60d21b4667d0d8992e610c85 \
   -H "Content-Type: application/json" \
@@ -1971,6 +2119,7 @@ curl -X PATCH https://api.example.com/places/60d21b4667d0d8992e610c85 \
 ```
 
 #### Delete Place
+
 HTTP Method & URL: DELETE /api/places/
 
 Description: Removes a place from the system.
@@ -1989,6 +2138,7 @@ Response Codes
 500 Internal Server Error: Error deleting place
 
 Response Body (Success - 200 OK)
+
 ```json
 {
   "message": "Place deleted",
@@ -2010,11 +2160,14 @@ Response Body (Success - 200 OK)
 Error Responses
 
 400 Bad Request:
+
 ```json{
   "message": "Cannot delete the place because it has associated external services"
 }
 ```
+
 OR
+
 ```json
 {
   "message": "Cannot delete the place because it has associated itineraries"
@@ -2022,6 +2175,7 @@ OR
 ```
 
 404 Not Found:
+
 ```json
 {
   "message": "Place not found"
@@ -2029,7 +2183,8 @@ OR
 ```
 
 500 Internal Server Error:
-```json
+
+````json
 {
   "message": "Error deleting place"
 }
@@ -2037,21 +2192,22 @@ OR
 Example Request
 ```bash
 curl -X DELETE https://api.example.com/places/60d21b4667d0d8992e610c85
-```
+````
 
 ### Participants
 
-| HTTP Method | Route                              | Description                                   | Protected |
-| ------ | --------------                     | --------------------------------               | --------- |
-| GET    | /api/participants/:userId          | Get all participants for a user  | ✅        |
-| GET    | /api/participants/getone/          | Get a specific participant | ✅    | POST   | /api/participants                  | Get a specific participant                   | ✅        |
-| POST   | /api/participants        | Create a new participant                
-| POST   | /api/participants/favorite         | Add favorite participant                  | ✅        |
-| PUT    | /api/participants/                 | Update a participant completely            | ✅        |
-|PATCH   | /api/participants/                 | Update specific participant fields        | ✅        |
-|DELETE  | /api/participants/                 | Delete a participant                       | ✅        | 
+| HTTP Method | Route                      | Description                        | Protected |
+| ----------- | -------------------------- | ---------------------------------- | --------- | ---- | ----------------- | -------------------------- | --- |
+| GET         | /api/participants/:userId  | Get all participants for a user    | ✅        |
+| GET         | /api/participants/getone/  | Get a specific participant         | ✅        | POST | /api/participants | Get a specific participant | ✅  |
+| POST        | /api/participants          | Create a new participant           |
+| POST        | /api/participants/favorite | Add favorite participant           | ✅        |
+| PUT         | /api/participants/         | Update a participant completely    | ✅        |
+| PATCH       | /api/participants/         | Update specific participant fields | ✅        |
+| DELETE      | /api/participants/         | Delete a participant               | ✅        |
 
 #### Get All Participants for a User
+
 HTTP Method & URL: GET /api/participants/
 
 Description
@@ -2071,6 +2227,7 @@ Response Codes
 500 Internal Server Error: Server error while retrieving participants
 
 Response Body (Success - 200 OK)
+
 ```json
 {
   "message": "Participants retrieved successfully",
@@ -2098,6 +2255,7 @@ Response Body (Success - 200 OK)
 Error Responses
 
 401 Unauthorized:
+
 ```json
 {
   "message": "Authentication required"
@@ -2105,6 +2263,7 @@ Error Responses
 ```
 
 404 Not Found:
+
 ```json
 {
   "message": "User not found"
@@ -2112,6 +2271,7 @@ Error Responses
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "An error occurred while processing your request"
@@ -2119,12 +2279,14 @@ Error Responses
 ```
 
 Example Request
+
 ```bash
 curl -X GET https://api.example.com/api/participants/66fc4785f2b5cf4ef633816a \
   -H "Authorization: Bearer {your_token}"
 ```
 
 #### Get Specific Participant
+
 HTTP Method & URL: GET /api/participants/getone/
 
 Description
@@ -2144,6 +2306,7 @@ Response Codes
 500 Internal Server Error: Server error while retrieving participant
 
 Response Body (Success - 200 OK)
+
 ```json
 {
   "message": "Participant retrieved successfully",
@@ -2153,8 +2316,8 @@ Response Body (Success - 200 OK)
     "age": 24,
     "disability": false,
     "preferences": [
-      {"id": "670bce8c16da0fb6e0947f33"},
-      {"id": "670bce6416da0fb6e0947f31"}
+      { "id": "670bce8c16da0fb6e0947f33" },
+      { "id": "670bce6416da0fb6e0947f31" }
     ],
     "user": "66fc4785f2b5cf4ef633816a"
   }
@@ -2164,6 +2327,7 @@ Response Body (Success - 200 OK)
 Error Responses
 
 401 Unauthorized:
+
 ```json
 {
   "message": "Authentication required"
@@ -2171,6 +2335,7 @@ Error Responses
 ```
 
 404 Not Found:
+
 ```json
 {
   "message": "Participant not found"
@@ -2178,6 +2343,7 @@ Error Responses
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "An error occurred while processing your request"
@@ -2185,12 +2351,14 @@ Error Responses
 ```
 
 Example Request
+
 ```bash
 curl -X GET https://api.example.com/api/participants/getone/670bd0cc60eb88e665c9fb90 \
   -H "Authorization: Bearer {your_token}"
 ```
 
 #### Create New Participant
+
 HTTP Method & URL: POST /api/participants
 
 Description
@@ -2199,6 +2367,7 @@ Creates a new participant in the system.
 Request Parameters: None
 
 Request Body
+
 ```json
 {
   "name": "Participant 2",
@@ -2216,6 +2385,7 @@ Validation Notes
   - 'Name is required'
   - 'Name must be at least 3 characters'
 - age:
+
   - 'Age must be a number'
   - 'age must be between 1 and 3 digits'
 
@@ -2230,6 +2400,7 @@ Response Codes
 500 Internal Server Error: Error creating participant
 
 Response Body (Success - 201 Created)
+
 ```json
 {
   "message": "Participant created successfully",
@@ -2247,16 +2418,16 @@ Response Body (Success - 201 Created)
 Error Responses
 
 400 Bad Request:
+
 ```json
 {
   "message": "Invalid participant data",
-  "errors": [
-    "Name must be at least 3 characters"
-  ]
+  "errors": ["Name must be at least 3 characters"]
 }
 ```
 
 401 Unauthorized:
+
 ```json
 {
   "message": "Authentication required"
@@ -2264,6 +2435,7 @@ Error Responses
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "An error occurred while processing your request"
@@ -2271,6 +2443,7 @@ Error Responses
 ```
 
 Example Request
+
 ```bash
 curl -X POST https://api.example.com/api/participants \
   -H "Content-Type: application/json" \
@@ -2285,6 +2458,7 @@ curl -X POST https://api.example.com/api/participants \
 ```
 
 #### Add Favorite Participant
+
 HTTP Method & URL: POST /api/participants/favorite
 
 Description
@@ -2293,6 +2467,7 @@ Adds a participant as a favorite.
 Request Parameters: None
 
 Request Body
+
 ```json
 {
   "name": "Participant 1",
@@ -2313,6 +2488,7 @@ Response Codes
 500 Internal Server Error: Error adding favorite participant
 
 Response Body (Success - 201 Created)
+
 ```json
 {
   "message": "Favorite participant added successfully",
@@ -2330,6 +2506,7 @@ Response Body (Success - 201 Created)
 
 Error Responses
 400 Bad Request:
+
 ```json
 {
   "message": "Invalid participant data"
@@ -2337,6 +2514,7 @@ Error Responses
 ```
 
 401 Unauthorized:
+
 ```json
 {
   "message": "Authentication required"
@@ -2344,7 +2522,8 @@ Error Responses
 ```
 
 500 Internal Server Error:
-```json
+
+````json
 {
   "message": "An error occurred while processing your request"
 }
@@ -2361,9 +2540,10 @@ curl -X POST https://api.example.com/api/participants/favorite \
     "preferences": ["670bce6416da0fb6e0947f31"],
     "user": "66fc4785f2b5cf4ef633816a"
   }'
-```
+````
 
 #### Update Participant (Complete)
+
 HTTP Method & URL: PUT /api/participants/
 
 Description
@@ -2374,17 +2554,19 @@ Request Parameters
 id (path parameter): ID of the participant to update
 
 Request Body
+
 ```json
 {
   "name": "Facundo",
   "age": 24,
   "disability": false,
   "preferences": [
-    {"id": "670bce8c16da0fb6e0947f33"},
-    {"id": "670bce6416da0fb6e0947f31"}
+    { "id": "670bce8c16da0fb6e0947f33" },
+    { "id": "670bce6416da0fb6e0947f31" }
   ]
 }
 ```
+
 Validation Notes
 
 - name:
@@ -2392,6 +2574,7 @@ Validation Notes
   - 'Name is required'
   - 'Name must be at least 3 characters'
 - age:
+
   - 'Age must be a number'
   - 'age must be between 1 and 3 digits'
 
@@ -2407,6 +2590,7 @@ Response Codes
 500 Internal Server Error: Error updating participant
 
 Response Body (Success - 200 OK)
+
 ```json
 {
   "message": "Participant updated successfully",
@@ -2416,8 +2600,8 @@ Response Body (Success - 200 OK)
     "age": 24,
     "disability": false,
     "preferences": [
-      {"id": "670bce8c16da0fb6e0947f33"},
-      {"id": "670bce6416da0fb6e0947f31"}
+      { "id": "670bce8c16da0fb6e0947f33" },
+      { "id": "670bce6416da0fb6e0947f31" }
     ],
     "user": "66fc4785f2b5cf4ef633816a"
   }
@@ -2427,16 +2611,16 @@ Response Body (Success - 200 OK)
 Error Responses
 
 400 Bad Request:
+
 ```json
 {
   "message": "Invalid participant data",
-  "errors": [
-    "Name must be at least 3 characters"
-  ]
+  "errors": ["Name must be at least 3 characters"]
 }
 ```
 
 401 Unauthorized:
+
 ```json
 {
   "message": "Authentication required"
@@ -2444,6 +2628,7 @@ Error Responses
 ```
 
 404 Not Found:
+
 ```json
 {
   "message": "Participant not found"
@@ -2451,6 +2636,7 @@ Error Responses
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "An error occurred while processing your request"
@@ -2458,6 +2644,7 @@ Error Responses
 ```
 
 Example Request
+
 ```bash
 curl -X PUT https://api.example.com/api/participants/670bd0cc60eb88e665c9fb90 \
   -H "Content-Type: application/json" \
@@ -2474,6 +2661,7 @@ curl -X PUT https://api.example.com/api/participants/670bd0cc60eb88e665c9fb90 \
 ```
 
 #### Update Participant (Partial)
+
 HTTP Method & URL: PATCH /api/participants/
 
 Description
@@ -2484,6 +2672,7 @@ Request Parameters
 id (path parameter): ID of the participant to partially update
 
 Request Body
+
 ```json
 {
   "name": "Nicolás Escobar" // optional field example
@@ -2504,6 +2693,7 @@ Response Codes
 500 Internal Server Error: Error updating participant
 
 Response Body (Success - 200 OK)
+
 ```json
 {
   "message": "Participant updated successfully",
@@ -2520,6 +2710,7 @@ Response Body (Success - 200 OK)
 
 Error Responses
 400 Bad Request:
+
 ```json
 {
   "message": "Invalid participant data"
@@ -2527,6 +2718,7 @@ Error Responses
 ```
 
 401 Unauthorized:
+
 ```json
 {
   "message": "Authentication required"
@@ -2534,6 +2726,7 @@ Error Responses
 ```
 
 404 Not Found:
+
 ```json
 {
   "message": "Participant not found"
@@ -2541,6 +2734,7 @@ Error Responses
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "An error occurred while processing your request"
@@ -2548,6 +2742,7 @@ Error Responses
 ```
 
 Example Request
+
 ```bash
 curl -X PATCH https://api.example.com/api/participants/66ff22aece8bda39a2e5be6c \
   -H "Content-Type: application/json" \
@@ -2558,6 +2753,7 @@ curl -X PATCH https://api.example.com/api/participants/66ff22aece8bda39a2e5be6c 
 ```
 
 #### Delete Participant
+
 HTTP Method & URL: DELETE /api/participants/
 
 Description
@@ -2577,6 +2773,7 @@ Response Codes
 500 Internal Server Error: Error deleting participant
 
 Response Body (Success - 200 OK)
+
 ```json
 {
   "message": "Participant deleted successfully",
@@ -2593,6 +2790,7 @@ Response Body (Success - 200 OK)
 
 Error Responses
 401 Unauthorized:
+
 ```json
 {
   "message": "Authentication required"
@@ -2600,6 +2798,7 @@ Error Responses
 ```
 
 404 Not Found:
+
 ```json
 {
   "message": "Participant not found"
@@ -2607,6 +2806,7 @@ Error Responses
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "An error occurred while processing your request"
@@ -2614,6 +2814,7 @@ Error Responses
 ```
 
 Example Request
+
 ```bash
 curl -X DELETE https://api.example.com/api/participants/66ff22aece8bda39a2e5be6c \
   -H "Authorization: Bearer {your_token}"
@@ -2621,17 +2822,18 @@ curl -X DELETE https://api.example.com/api/participants/66ff22aece8bda39a2e5be6c
 
 ### Opinions
 
-| HTTP Method | Route                              | Description                          | Protected |
-| ------ | --------------                     | --------------------------------      | --------- |
-| GET    | /api/opinions                  | Get all opinions           | ✅        |
-| GET    | /api/opinions/                    | Get a specific opinion       | ✅        |
-| GET    | /api/opinions/activity/           | Get opinions by activity       | ✅        |
-| POST   | /api/opinions                     | Create a new opinion              | ✅        |
-| PUT    | /api/opinions/                    | Update an opinion completely      | ✅        |
-|PATCH   | /api/opinions/                    | Update specific opinion fields  | ✅        |
-|DELETE  | /api/opinions/                    | Delete an opinion                  | ✅        | 
+| HTTP Method | Route                   | Description                    | Protected |
+| ----------- | ----------------------- | ------------------------------ | --------- |
+| GET         | /api/opinions           | Get all opinions               | ✅        |
+| GET         | /api/opinions/          | Get a specific opinion         | ✅        |
+| GET         | /api/opinions/activity/ | Get opinions by activity       | ✅        |
+| POST        | /api/opinions           | Create a new opinion           | ✅        |
+| PUT         | /api/opinions/          | Update an opinion completely   | ✅        |
+| PATCH       | /api/opinions/          | Update specific opinion fields | ✅        |
+| DELETE      | /api/opinions/          | Delete an opinion              | ✅        |
 
 #### Get All Opinions
+
 HTTP Method & URL: GET /api/opiniones
 
 Description
@@ -2648,6 +2850,7 @@ Response Codes
 500 Internal Server Error: Server error while retrieving opinions
 
 Response Body (Success - 200 OK)
+
 ```json
 {
   "message": "All opinions found",
@@ -2665,6 +2868,7 @@ Response Body (Success - 200 OK)
 ```
 
 Response Body (No opinions found - 200 OK)
+
 ```json
 {
   "message": "No opinions found",
@@ -2674,6 +2878,7 @@ Response Body (No opinions found - 200 OK)
 
 Error Responses
 401 Unauthorized:
+
 ```json
 {
   "message": "Authentication required"
@@ -2681,6 +2886,7 @@ Error Responses
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "Server error"
@@ -2688,12 +2894,14 @@ Error Responses
 ```
 
 Example Request
+
 ```bash
 curl -X GET https://api.example.com/api/opiniones \
   -H "Authorization: Bearer {your_token}"
 ```
 
 #### Get Specific Opinion
+
 HTTP Method & URL: GET /api/opiniones/
 
 Description
@@ -2713,6 +2921,7 @@ Response Codes
 500 Internal Server Error: Server error while retrieving the opinion
 
 Response Body (Success - 200 OK)
+
 ```json
 {
   "message": "Opinion found",
@@ -2728,7 +2937,8 @@ Response Body (Success - 200 OK)
 
 Error Responses
 401 Unauthorized:
-```json
+
+````json
 {
   "message": "Authentication required"
 }
@@ -2738,9 +2948,10 @@ Error Responses
 {
   "message": "Opinion not found"
 }
-```
+````
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "Server error"
@@ -2748,12 +2959,14 @@ Error Responses
 ```
 
 Example Request
+
 ```bash
 curl -X GET https://api.example.com/api/opiniones/670bd0cc60eb88e665c9fb90 \
   -H "Authorization: Bearer {your_token}"
 ```
 
 #### Get Opinions by Activity
+
 HTTP Method & URL: GET /api/opiniones/activity/
 
 Description
@@ -2773,6 +2986,7 @@ Response Codes
 500 Internal Server Error: Server error while retrieving opinions
 
 Response Body (Success - 200 OK)
+
 ```json
 {
   "message": "All opinions found",
@@ -2790,6 +3004,7 @@ Response Body (Success - 200 OK)
 ```
 
 Response Body (No opinions found - 200 OK)
+
 ```json
 {
   "message": "No opinions found",
@@ -2799,6 +3014,7 @@ Response Body (No opinions found - 200 OK)
 
 Error Responses
 401 Unauthorized:
+
 ```json
 {
   "message": "Authentication required"
@@ -2806,6 +3022,7 @@ Error Responses
 ```
 
 404 Not Found:
+
 ```json
 {
   "message": "Activity not found"
@@ -2813,6 +3030,7 @@ Error Responses
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "Server error"
@@ -2820,12 +3038,14 @@ Error Responses
 ```
 
 Example Request
+
 ```bash
 curl -X GET https://api.example.com/api/opiniones/activity/67178bbf8fec993032a05aa9 \
   -H "Authorization: Bearer {your_token}"
 ```
 
 #### Create New Opinion
+
 HTTP Method & URL: POST /api/opiniones
 
 Description
@@ -2834,6 +3054,7 @@ Creates a new opinion in the system.
 Request Parameters: None
 
 Request Body
+
 ```json
 {
   "rating": 5,
@@ -2851,17 +3072,14 @@ Validation Notes
   - Is required
   - Must be a number between 1 and 5
 
-
 - comment:
 
   - Must be a string
   - Is required
   - Must be between 1 and 100 characters
 
-
 - activity: ID of the activity being rated
 - user: ID of the user creating the opinion
-
 
 Response Codes
 
@@ -2872,6 +3090,7 @@ Response Codes
 500 Internal Server Error: Error creating opinion
 
 Response Body (Success - 201 Created)
+
 ```json
 {
   "message": "Opinion created",
@@ -2887,16 +3106,16 @@ Response Body (Success - 201 Created)
 
 Error Responses
 400 Bad Request:
+
 ```json
 {
   "message": "Invalid opinion data",
-  "errors": [
-    "Rating must be a number between 1 and 5"
-  ]
+  "errors": ["Rating must be a number between 1 and 5"]
 }
 ```
 
 401 Unauthorized:
+
 ```json
 {
   "message": "Authentication required"
@@ -2904,12 +3123,15 @@ Error Responses
 ```
 
 404 Not Found:
+
 ```json
 {
   "message": "Activity not found"
 }
 ```
+
 OR
+
 ```json
 {
   "message": "User not found"
@@ -2917,6 +3139,7 @@ OR
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "Server error"
@@ -2924,6 +3147,7 @@ OR
 ```
 
 Example Request
+
 ```bash
 curl -X POST https://api.example.com/api/opiniones \
   -H "Content-Type: application/json" \
@@ -2937,6 +3161,7 @@ curl -X POST https://api.example.com/api/opiniones \
 ```
 
 #### Update Opinion (Complete)
+
 HTTP Method & URL: PUT /api/opiniones/
 
 Description
@@ -2947,6 +3172,7 @@ Request Parameters
 id (path parameter): ID of the opinion to update
 
 Request Body
+
 ```json
 {
   "rating": 4,
@@ -2969,6 +3195,7 @@ Response Codes
 500 Internal Server Error: Error updating opinion
 
 Response Body (Success - 200 OK)
+
 ```json
 {
   "message": "Opinion updated",
@@ -2984,6 +3211,7 @@ Response Body (Success - 200 OK)
 
 Error Responses
 400 Bad Request:
+
 ```json
 {
   "message": "Invalid opinion data"
@@ -2991,6 +3219,7 @@ Error Responses
 ```
 
 401 Unauthorized:
+
 ```json
 {
   "message": "Authentication required"
@@ -2998,6 +3227,7 @@ Error Responses
 ```
 
 404 Not Found:
+
 ```json
 {
   "message": "Opinion not found"
@@ -3005,6 +3235,7 @@ Error Responses
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "Server error"
@@ -3012,6 +3243,7 @@ Error Responses
 ```
 
 Example Request
+
 ```bash
 curl -X PUT https://api.example.com/api/opiniones/670bd0cc60eb88e665c9fb90 \
   -H "Content-Type: application/json" \
@@ -3023,6 +3255,7 @@ curl -X PUT https://api.example.com/api/opiniones/670bd0cc60eb88e665c9fb90 \
 ```
 
 #### Update Opinion (Partial)
+
 HTTP Method & URL: PATCH /api/opiniones/
 
 Description
@@ -3034,7 +3267,7 @@ id (path parameter): ID of the opinion to partially update
 
 Request Body
 json{
-  "rating": 3
+"rating": 3
 }
 Validation Notes
 
@@ -3050,6 +3283,7 @@ Response Codes
 500 Internal Server Error: Error updating opinion
 
 Response Body (Success - 200 OK)
+
 ```json
 {
   "message": "Opinion updated",
@@ -3065,12 +3299,15 @@ Response Body (Success - 200 OK)
 
 Error Responses
 400 Bad Request:
+
 ```json
 {
   "message": "Invalid opinion data"
 }
 ```
+
 401 Unauthorized:
+
 ```json
 {
   "message": "Authentication required"
@@ -3078,6 +3315,7 @@ Error Responses
 ```
 
 404 Not Found:
+
 ```json
 {
   "message": "Opinion not found"
@@ -3085,6 +3323,7 @@ Error Responses
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "Server error"
@@ -3092,6 +3331,7 @@ Error Responses
 ```
 
 Example Request
+
 ```bash
 curl -X PATCH https://api.example.com/api/opiniones/670bd0cc60eb88e665c9fb90 \
   -H "Content-Type: application/json" \
@@ -3102,6 +3342,7 @@ curl -X PATCH https://api.example.com/api/opiniones/670bd0cc60eb88e665c9fb90 \
 ```
 
 #### Delete Opinion
+
 HTTP Method & URL: DELETE /api/opiniones/
 
 Description
@@ -3121,6 +3362,7 @@ Response Codes
 500 Internal Server Error: Error deleting opinion
 
 Response Body (Success - 200 OK)
+
 ```json
 {
   "message": "Opinion deleted"
@@ -3129,12 +3371,15 @@ Response Body (Success - 200 OK)
 
 Error Responses
 401 Unauthorized:
+
 ```json
 {
   "message": "Authentication required"
 }
 ```
+
 404 Not Found:
+
 ```json
 {
   "message": "Opinion not found"
@@ -3142,6 +3387,7 @@ Error Responses
 ```
 
 500 Internal Server Error:
+
 ```json
 {
   "message": "Server error"
@@ -3149,6 +3395,7 @@ Error Responses
 ```
 
 Example Request
+
 ```bash
 curl -X DELETE https://api.example.com/api/opiniones/670bd0cc60eb88e665c9fb90 \
   -H "Authorization: Bearer {your_token}"
@@ -3156,24 +3403,25 @@ curl -X DELETE https://api.example.com/api/opiniones/670bd0cc60eb88e665c9fb90 \
 
 ### Itineraries
 
-| HTTP Method | Route                            | Description                                 | Protected |
-| ------ | --------------                   | --------------------------------             | --------- |
-| GET    | /api/itineraries                 | Obtener todos los itinerarios                | ✅        |
-| GET    | /api/itineraries/user/:id        | Obtener itinerarios por usuario              | ✅        |
-| GET    | /api/itineraries/                | Obtener un itinerario específico             | ✅        |
-| POST   | /api/itineraries                 | Crear un nuevo itinerario                    | ✅        |
-| POST   | /api/itineraries/ia              | Crear un itinerario con IA                   | ✅        |
-| PUT    | /api/itineraries/                | Actualizar un itinerario completo            | ✅        |
-|PATCH   | /api/itineraries/                | Actualizar parcialmente un itinerario        | ✅        |
-|DELETE  | /api/itineraries/                | Eliminar un itinerario                       | ✅        | 
+| HTTP Method | Route                     | Description                           | Protected |
+| ----------- | ------------------------- | ------------------------------------- | --------- |
+| GET         | /api/itineraries          | Obtener todos los itinerarios         | ✅        |
+| GET         | /api/itineraries/user/:id | Obtener itinerarios por usuario       | ✅        |
+| GET         | /api/itineraries/         | Obtener un itinerario específico      | ✅        |
+| POST        | /api/itineraries          | Crear un nuevo itinerario             | ✅        |
+| POST        | /api/itineraries/ia       | Crear un itinerario con IA            | ✅        |
+| PUT         | /api/itineraries/         | Actualizar un itinerario completo     | ✅        |
+| PATCH       | /api/itineraries/         | Actualizar parcialmente un itinerario | ✅        |
+| DELETE      | /api/itineraries/         | Eliminar un itinerario                | ✅        |
 
-####  Obtener todos los itinerarios
+#### Obtener todos los itinerarios
 
 GET /api/itineraries
 
 Obtiene todos los itinerarios registrados en el sistema.
 
 Respuesta:
+
 ```ts
 jsonContent-Type: application/json
 {
@@ -3208,6 +3456,7 @@ Parámetros URL:
 id: ID del usuario cuyos itinerarios se desean obtener
 
 Respuesta:
+
 ```ts
 jsonContent-Type: application/json
 {
@@ -3239,6 +3488,7 @@ Parámetros URL:
 id: ID del itinerario a consultar
 
 Respuesta:
+
 ```ts
 jsonContent-Type: application/json
 {
@@ -3267,6 +3517,7 @@ POST /api/itineraries
 Crea un nuevo itinerario en el sistema.
 
 Solicitud:
+
 ```ts
 jsonContent-Type: application/json
 {
@@ -3290,25 +3541,21 @@ Validación:
   - "Title must have at least 3 characters"
   - "Title can have a maximum of 20 characters"
 
-
 - description:
 
   - "Description must be a string"
   - "Description must have at least 10 characters"
   - "Description can have a maximum of 100 characters"
 
-
 - place:
 
   - "Place must be a string"
   - "Place is required"
 
-
 - dayStart:
 
   - "Start day must be a valid date"
   - "Start day is required"
-
 
 - dayEnd:
 
@@ -3318,9 +3565,8 @@ Validación:
   - "Itinerary must last at least 2 days"
   - "Itinerary must not last more than 31 days"
 
-
-
 Respuesta:
+
 ```ts
 jsonContent-Type: application/json
 {
@@ -3351,6 +3597,7 @@ POST /api/itineraries/ia
 Crea un nuevo itinerario utilizando inteligencia artificial basado en las preferencias y participantes.
 
 Solicitud:
+
 ```ts
 jsonContent-Type: application/json
 {
@@ -3383,6 +3630,7 @@ Parámetros URL:
 id: ID del itinerario a actualizar
 
 Solicitud:
+
 ```ts
 jsonContent-Type: application/json
 {
@@ -3403,6 +3651,7 @@ Los campos deben cumplir con las validaciones del schema del modelo. Se deben 
 El middleware sanitizeItineraryInput realiza una limpieza de los datos, eliminando campos indefinidos.
 
 Respuesta:
+
 ```ts
 jsonContent-Type: application/json
 {
@@ -3433,6 +3682,7 @@ Parámetros URL:
 id: ID del itinerario a actualizar parcialmente
 
 Solicitud:
+
 ```ts
 jsonContent-Type: application/json
 {
@@ -3446,6 +3696,7 @@ Cualquier campo que se incluya debe cumplir con las validaciones del schema del
 El middleware sanitizeItineraryInput realiza una limpieza de los datos, eliminando campos indefinidos.
 
 Respuesta:
+
 ```ts
 jsonContent-Type: application/json
 {
@@ -3476,6 +3727,7 @@ Parámetros URL:
 id: ID del itinerario a eliminar
 
 Respuesta:
+
 ```ts
 jsonContent-Type: application/json
 {
@@ -3497,40 +3749,43 @@ Errores:
 ### External Services
 
 #### Data Models
+
 ExternalService
+
 ```ts
 {
-  id: string;                // Unique identifier
-  serviceType: string;       // Type of service
-  name: string;              // Service name (unique)
-  description: string;       // Service description
-  adress: string;            // Service address
-  schedule: string;          // Service schedule (optional)
-  website: string;           // Service website (optional)
-  phoneNumber: string;       // Service phone number (optional)
-  place: string | Place;     // Reference to a Place
-  status: string;            // PENDING, ACTIVE, or CANCELED
-  createdAt: Date;           // Creation timestamp
-  updatedAt: Date;           // Last update timestamp
+  id: string; // Unique identifier
+  serviceType: string; // Type of service
+  name: string; // Service name (unique)
+  description: string; // Service description
+  address: string; // Service address
+  schedule: string; // Service schedule (optional)
+  website: string; // Service website (optional)
+  phoneNumber: string; // Service phone number (optional)
+  place: string | Place; // Reference to a Place
+  status: string; // PENDING, ACTIVE, or CANCELED
+  createdAt: Date; // Creation timestamp
+  updatedAt: Date; // Last update timestamp
 }
 ```
+
 - Status Values
   - PENDING: Default status for new publicity requests
   - ACTIVE: Status after admin approval or direct creation
   - CANCELED: Service has been canceled
 
-| HTTP Method | Route                              | Description                          | Protected |
-| ------ | --------------                     | --------------------------------      | --------- |
-| POST   | /api/publicity                    | Submit a publicity request               | ❌        |
-| GET    | /api/publicity/places                   | Get all external services          | ❌       |
-| GET    | /api/externalServices                   | Get all external services          | ✅        |
-| GET    | /api/externalServices/                   | Get an external service by ID        | ✅        |
-| GET    | /api/externalServices/findByPlace/          | Get external services by place ID      | ✅        |
-| POST   | /api/externalServices                   | Create a new external service              | ✅        |
-| POST   | /api/externalServices/acceptRequest/                    | Accept a publicity request               | ✅        |
-| PUT    | /api/externalServices/                    | Update an external service       | ✅        |
-|PATCH   | /api/externalServices/                    | Partially update external service   | ✅        |
-|DELETE  | /api/externalServices/                  | Delete an external service               | ✅        |
+| HTTP Method | Route                                | Description                       | Protected |
+| ----------- | ------------------------------------ | --------------------------------- | --------- |
+| POST        | /api/publicity                       | Submit a publicity request        | ❌        |
+| GET         | /api/publicity/places                | Get all external services         | ❌        |
+| GET         | /api/externalServices                | Get all external services         | ✅        |
+| GET         | /api/externalServices/               | Get an external service by ID     | ✅        |
+| GET         | /api/externalServices/findByPlace/   | Get external services by place ID | ✅        |
+| POST        | /api/externalServices                | Create a new external service     | ✅        |
+| POST        | /api/externalServices/acceptRequest/ | Accept a publicity request        | ✅        |
+| PUT         | /api/externalServices/               | Update an external service        | ✅        |
+| PATCH       | /api/externalServices/               | Partially update external service | ✅        |
+| DELETE      | /api/externalServices/               | Delete an external service        | ✅        |
 
 #### Submit Publicity Request
 
@@ -3539,13 +3794,14 @@ POST /api/publicity
 Creates a new publicity request in pending status.
 
 Request:
+
 ```ts
 jsonContent-Type: application/json
 {
   "serviceType": "string",
   "name": "string",
   "description": "string",
-  "adress": "string",
+  "address": "string",
   "schedule": "string",
   "website": "string",
   "phoneNumber": "string",
@@ -3561,13 +3817,11 @@ Validation:
   - "The service type is required"
   - "The service type must have at least 3 characters"
 
-
 - name:
 
   - "The name must be a string"
   - "The name is required"
   - "The name must have at least 3 characters"
-
 
 - description:
 
@@ -3575,13 +3829,11 @@ Validation:
   - "The description is required"
   - "The description must have at least 3 characters"
 
-
-- adress:
+- address:
 
   - "The address must be a string"
   - "The address is required"
   - "The address must have at least 3 characters"
-
 
 - schedule:
 
@@ -3589,20 +3841,18 @@ Validation:
   - "The schedule is required"
   - "The schedule must have at least 3 characters"
 
-
 - website (optional):
 
   - "Invalid website format" (must match format: www.example.com)
-
 
 - phoneNumber (optional):
 
   - "Invalid phone number format" (must be 10 digits)
 
-
 - place: The place must be registered
 
 Response:
+
 ```ts
 jsonStatus: 201 Created
 Content-Type: application/json
@@ -3614,7 +3864,7 @@ Content-Type: application/json
     "serviceType": "string",
     "name": "string",
     "description": "string",
-    "adress": "string",
+    "address": "string",
     "schedule": "string",
     "website": "string",
     "phoneNumber": "string",
@@ -3639,6 +3889,7 @@ GET /api/publicity/places
 Returns all external services.
 
 Response:
+
 ```ts
 jsonStatus: 200 OK
 Content-Type: application/json
@@ -3651,7 +3902,7 @@ Content-Type: application/json
       "serviceType": "string",
       "name": "string",
       "description": "string",
-      "adress": "string",
+      "address": "string",
       "schedule": "string",
       "website": "string",
       "phoneNumber": "string",
@@ -3680,6 +3931,7 @@ GET /api/externalServices
 Returns all external services.
 
 Response:
+
 ```ts
 jsonStatus: 200 OK
 Content-Type: application/json
@@ -3692,7 +3944,7 @@ Content-Type: application/json
       "serviceType": "string",
       "name": "string",
       "description": "string",
-      "adress": "string",
+      "address": "string",
       "schedule": "string",
       "website": "string",
       "phoneNumber": "string",
@@ -3724,6 +3976,7 @@ Parameters:
 id: External service ID (path parameter)
 
 Response:
+
 ```ts
 jsonStatus: 200 OK
 Content-Type: application/json
@@ -3735,7 +3988,7 @@ Content-Type: application/json
     "serviceType": "string",
     "name": "string",
     "description": "string",
-    "adress": "string",
+    "address": "string",
     "schedule": "string",
     "website": "string",
     "phoneNumber": "string",
@@ -3765,6 +4018,7 @@ Parameters:
 id: Place ID (path parameter)
 
 Response:
+
 ```ts
 jsonStatus: 200 OK
 Content-Type: application/json
@@ -3777,7 +4031,7 @@ Content-Type: application/json
       "serviceType": "string",
       "name": "string",
       "description": "string",
-      "adress": "string",
+      "address": "string",
       "schedule": "string",
       "website": "string",
       "phoneNumber": "string",
@@ -3807,6 +4061,7 @@ POST /api/externalServices
 Creates a new external service with ACTIVE status.
 
 Request:
+
 ```ts
 jsonContent-Type: application/json
 
@@ -3814,7 +4069,7 @@ jsonContent-Type: application/json
   "serviceType": "string",
   "name": "string",
   "description": "string",
-  "adress": "string",
+  "address": "string",
   "schedule": "string",
   "website": "string",
   "phoneNumber": "string",
@@ -3827,6 +4082,7 @@ Validation:
 Los campos deben cumplir con las validaciones del schema del modelo. Website and PhoneNumber are optionals.
 
 Response:
+
 ```ts
 jsonStatus: 201 Created
 Content-Type: application/json
@@ -3838,7 +4094,7 @@ Content-Type: application/json
     "serviceType": "string",
     "name": "string",
     "description": "string",
-    "adress": "string",
+    "address": "string",
     "schedule": "string",
     "website": "string",
     "phoneNumber": "string",
@@ -3866,6 +4122,7 @@ Parameters:
 id: External service ID (path parameter)
 
 Response:
+
 ```ts
 jsonStatus: 200 OK
 Content-Type: application/json
@@ -3877,7 +4134,7 @@ Content-Type: application/json
     "serviceType": "string",
     "name": "string",
     "description": "string",
-    "adress": "string",
+    "address": "string",
     "schedule": "string",
     "website": "string",
     "phoneNumber": "string",
@@ -3903,6 +4160,7 @@ Parameters:
 id: External service ID (path parameter)
 
 Request:
+
 ```ts
 jsonContent-Type: application/json
 
@@ -3910,7 +4168,7 @@ jsonContent-Type: application/json
   "serviceType": "string",
   "name": "string",
   "description": "string",
-  "adress": "string",
+  "address": "string",
   "schedule": "string",
   "website": "string",
   "phoneNumber": "string",
@@ -3924,6 +4182,7 @@ Los campos deben cumplir con las validaciones del schema del modelo.
 El middleware sanitizeExternalServiceInput realiza una limpieza de los datos, eliminando campos indefinidos.
 
 Response:
+
 ```ts
 jsonStatus: 200 OK
 Content-Type: application/json
@@ -3935,7 +4194,7 @@ Content-Type: application/json
     "serviceType": "string",
     "name": "string",
     "description": "string",
-    "adress": "string",
+    "address": "string",
     "schedule": "string",
     "website": "string",
     "phoneNumber": "string",
@@ -3962,6 +4221,7 @@ Parameters:
 id: External service ID (path parameter)
 
 Request:
+
 ```ts
 jsonContent-Type: application/json
 
@@ -3970,7 +4230,7 @@ jsonContent-Type: application/json
   "serviceType": "string",
   "name": "string",
   "description": "string",
-  "adress": "string",
+  "address": "string",
   "schedule": "string",
   "website": "string",
   "phoneNumber": "string"
@@ -3980,6 +4240,7 @@ jsonContent-Type: application/json
 Validation:
 Same as PUT request but all fields are optional.
 Response:
+
 ```ts
 jsonStatus: 200 OK
 Content-Type: application/json
@@ -3991,7 +4252,7 @@ Content-Type: application/json
     "serviceType": "string",
     "name": "string",
     "description": "string",
-    "adress": "string",
+    "address": "string",
     "schedule": "string",
     "website": "string",
     "phoneNumber": "string",
@@ -4018,6 +4279,7 @@ Parameters:
 id: External service ID (path parameter)
 
 Response:
+
 ```ts
 jsonStatus: 200 OK
 Content-Type: application/json
@@ -4036,6 +4298,7 @@ Errors:
 ####Modelo de datos
 
 Activity
+
 ```ts
 {
   id: string;               // Identificador único
@@ -4053,14 +4316,14 @@ Activity
 }
 ```
 
-| HTTP Method | Route                              | Description                                   | Protected |
-| ------ | --------------                     | --------------------------------               | --------- |
-| GET    | /api/activities         | Obtener todas las actividades  | ✅        |
-| GET    | /api/activities/:id     | Obtener una actividad por ID             | ✅        |
-| POST   | /api/activities                | Crear una nueva actividad                    | ✅        |
-| PUT    | /api/activities/               | Actualizar una actividad por completo            | ✅        |
-|PATCH   | /api/activities/               | Actualizar parcialmente actividad     | ✅        |
-|DELETE  | /api/activities/               | Eliminar una actividad                  | ✅        | 
+| HTTP Method | Route               | Description                           | Protected |
+| ----------- | ------------------- | ------------------------------------- | --------- |
+| GET         | /api/activities     | Obtener todas las actividades         | ✅        |
+| GET         | /api/activities/:id | Obtener una actividad por ID          | ✅        |
+| POST        | /api/activities     | Crear una nueva actividad             | ✅        |
+| PUT         | /api/activities/    | Actualizar una actividad por completo | ✅        |
+| PATCH       | /api/activities/    | Actualizar parcialmente actividad     | ✅        |
+| DELETE      | /api/activities/    | Eliminar una actividad                | ✅        |
 
 #### Obtener todas las actividades
 
@@ -4069,6 +4332,7 @@ GET /api/activities
 Retorna todas las actividades existentes en el sistema.
 
 Respuesta:
+
 ```ts
 jsonContent-Type: application/json
 
@@ -4119,6 +4383,7 @@ Parámetros:
 id: ID de la actividad (parámetro de ruta)
 
 Respuesta:
+
 ```ts
 jsonContent-Type: application/json
 
@@ -4163,6 +4428,7 @@ POST /api/activities
 Crea una nueva actividad.
 
 Solicitud:
+
 ```ts
 jsonContent-Type: application/json
 
@@ -4212,19 +4478,18 @@ Validación:
   - "Schedule start is required"
   - "Schedule start must be in the format HH"
 
-
 - scheduleEnd:
 
   - "Schedule end must be a string"
   - "Schedule end is required"
   - "Schedule end must be in the format HH"
 
-
 - Validación adicional:
 
 "The activity must start before it ends" (scheduleStart debe ser anterior a scheduleEnd)
 
 Respuesta:
+
 ```ts
 jsonStatus: 201 Created
 Content-Type: application/json
@@ -4266,6 +4531,7 @@ Parámetros:
 id: ID de la actividad (parámetro de ruta)
 
 Solicitud:
+
 ```ts
 jsonContent-Type: application/json
 
@@ -4289,8 +4555,8 @@ Validación:
 
 Los campos deben cumplir con las validaciones del schema del modelo. Se deben incluir todos los campos.
 
-
 Respuesta:
+
 ```ts
 jsonStatus: 200 OK
 Content-Type: application/json
@@ -4332,6 +4598,7 @@ Parámetros:
 id: ID de la actividad (parámetro de ruta)
 
 Solicitud:
+
 ```ts
 jsonContent-Type: application/json
 
@@ -4357,6 +4624,7 @@ Validación:
 Same as PUT request but all fields are optional.
 
 Respuesta:
+
 ```ts
 jsonStatus: 200 OK
 Content-Type: application/json
@@ -4398,6 +4666,7 @@ Parámetros:
 id: ID de la actividad (parámetro de ruta)
 
 Respuesta:
+
 ```ts
 jsonStatus: 200 OK
 Content-Type: application/json

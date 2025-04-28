@@ -24,7 +24,7 @@ export class ExternalService extends BaseEntity{
   description!: string;
 
   @Property({nullable: false})
-  adress!: string;
+  address!: string;
 
   @Property({ nullable: true })
   schedule?: string;

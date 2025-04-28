@@ -18,14 +18,6 @@ export const activitySchema = z.object({
     transport: z.boolean({
         required_error: 'You must specify if the activity needs transport or not'
     }).optional(),
-    // schedule: z.string({
-    //     invalid_type_error: 'Schedule must be a string',
-    //     required_error: 'The schedule is required'
-    // }),
-    // itinerary: z.string({
-    //     invalid_type_error: 'Itinerary must be a string',
-    //     required_error: 'Itinerary is required'
-    // }),
     scheduleStart: z.string({
         invalid_type_error: 'Schedule start must be a string',
         required_error: 'Schedule start is required'
@@ -34,10 +26,7 @@ export const activitySchema = z.object({
         invalid_type_error: 'Schedule end must be a string',
         required_error: 'Schedule end is required'
     }).regex(/^\d{2}:\d{2}$/, 'Schedule end must be in the format HH:MM'),
-    /*place: z.string({
-        invalid_type_error: 'Place must be a string',
-        required_error: 'Place is required'
-    })*/})
+    })
     .refine((data) => {
         const { scheduleStart, scheduleEnd } = data;
       
@@ -70,9 +59,6 @@ export const patchActivitySchema = z.object({
     transport: z.boolean({
         invalid_type_error: 'You must specify if the activity has transport or not'
     }).optional(),
-    // schedule: z.string({
-    //     invalid_type_error: 'Schedule must be a string'
-    // }).optional(),
     itinerary: z.string({
         invalid_type_error: 'Itinerary must be a string'
     }).optional(),
@@ -105,8 +91,4 @@ export const patchActivitySchema = z.object({
       }, {
         message: 'scheduleStart must be before scheduleEnd',
         path: ['scheduleEnd'], // Enfocar el error en el campo de fin
-
-
-
-
 });

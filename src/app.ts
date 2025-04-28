@@ -48,7 +48,7 @@ const protectedRouter = Router();
 protectedRouter.use(authenticateJWT);
 protectedRouter.use("/api/itineraries", itineraryRouter);
 protectedRouter.use("/api/activities", actividadRouter);
-protectedRouter.use("/api/opiniones", opinionRouter);
+protectedRouter.use("/api/opinions", opinionRouter);
 protectedRouter.use("/api/participants", participantRouter);
 
 // Admin protected routes

@@ -30,11 +30,11 @@ async function findAll(req: Request, res: Response) {
       { populate: ["user", "activity"] }
     );
     if (opinion.length === 0) {
-      return res.status(200).json({ message: "No se encontraron opiniones" });
+      return res.status(200).json({ message: "No opinions found" });
     }
     res
       .status(200)
-      .json({ message: "Todos las opiniones encontradas", data: opinion });
+      .json({ message: "All opinions found", data: opinion });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -49,11 +49,11 @@ async function findAllByActivity(req: Request, res: Response) {
       { populate: ["user", "activity"] }
     );
     if (opinion.length === 0) {
-      return res.status(200).json({ message: "No se encontraron opiniones" });
+      return res.status(200).json({ message: "No opinions found" });
     }
     res
       .status(200)
-      .json({ message: "Todos las opiniones encontradas", data: opinion });
+      .json({ message: "All opinions found", data: opinion });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -63,7 +63,7 @@ async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id;
     const opinion = await em.findOneOrFail(Opinion, { id });
-    res.status(200).json({ message: "Opinion encontrada: ", data: opinion });
+    res.status(200).json({ message: "Opinion found: ", data: opinion });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -75,13 +75,13 @@ async function add(req: Request, res: Response) {
       id: req.body.sanitizedInput.activity.id,
     });
     if (!activity) {
-      return res.status(404).json({ message: "Actividad no encontrada" });
+      return res.status(404).json({ message: "Activity not found" });
     }
     const user = await em.findOneOrFail(User, {
       id: req.body.sanitizedInput.user.id,
     });
     if (!user) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
+      return res.status(404).json({ message: "User not found" });
     }
     const opinion = em.create(Opinion, {
       ...req.body.sanitizedInput,
@@ -89,7 +89,7 @@ async function add(req: Request, res: Response) {
       user: user.id,
     });
     await em.flush();
-    res.status(201).json({ message: "Opinion creada", data: opinion });
+    res.status(201).json({ message: "Opinion successfully created", data: opinion });
   } catch (error: any) {
     res
       .status(500)
@@ -103,7 +103,7 @@ async function update(req: Request, res: Response) {
     const opinion = await em.findOneOrFail(Opinion, { id });
     Object.assign(opinion, req.body.sanitizedInput);
     await em.flush();
-    res.status(200).json({ message: "Opinion actualizada", data: opinion });
+    res.status(200).json({ message: "Opinion updated", data: opinion });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -114,7 +114,7 @@ async function remove(req: Request, res: Response) {
     const id = req.params.id;
     const opinion = em.getReference(Opinion, id);
     em.removeAndFlush(opinion);
-    res.status(200).json({ message: "Opinion eliminada" });
+    res.status(200).json({ message: "Opinion deleted" });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

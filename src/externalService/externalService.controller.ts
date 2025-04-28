@@ -14,7 +14,7 @@ function sanitizeExternalServiceInput(
     serviceType: req.body.serviceType,
     name: req.body.name,
     description: req.body.description,
-    adress: req.body.adress,
+    address: req.body.address,
     schedule: req.body.schedule,
     website: req.body.website,
     phoneNumber: req.body.phoneNumber,

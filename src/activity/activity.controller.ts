@@ -41,11 +41,11 @@ async function findAll(req: Request, res: Response) {
       { populate: ["place", "itinerary", "opinions"] }
     );
     if (activity.length === 0) {
-      return res.status(200).json({ message: "No se encontraron activities" });
+      return res.status(200).json({ message: "No activities found" });
     }
     res
       .status(200)
-      .json({ message: "Todos las activities encontrados", data: activity });
+      .json({ message: "All activities found: ", data: activity });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -55,7 +55,7 @@ async function findOne(req: Request, res: Response) {
   try {
     const id = req.params.id;
     const activity = await em.findOneOrFail(Activity, { id });
-    res.status(200).json({ message: "Activity encontrada", data: activity });
+    res.status(200).json({ message: "Activity found", data: activity });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -69,7 +69,7 @@ async function add(req: Request, res: Response) {
       { populate: ["user"] }
     );
     if (!itinerary) {
-      return res.status(400).json({ message: ["Itinerario no encontrado"] });
+      return res.status(400).json({ message: ["Itinerary not found"] });
     }
     //Validacion que la activity no exista
     const actividadExistente = await em.findOne(Activity, {
@@ -78,7 +78,7 @@ async function add(req: Request, res: Response) {
       itinerary: itinerary.id,
     });
     if (actividadExistente) {
-      return res.status(400).json({ message: ["Activity ya existente"] });
+      return res.status(400).json({ message: ["Activity already exists"] });
     }
     req.body.sanitizedInput.itinerary = itinerary;
     const activity = em.create(Activity, {
@@ -86,7 +86,7 @@ async function add(req: Request, res: Response) {
       place: req.body.place.id,
     });
     await em.flush();
-    res.status(201).json({ message: "Actvidad creada", data: activity });
+    res.status(201).json({ message: "Activity created", data: activity });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -101,7 +101,7 @@ async function update(req: Request, res: Response) {
       itinerary: req.body.itinerary,
     });
     if (actividadExistente && actividadExistente.id !== id) {
-      return res.status(400).json({ message: ["Activity ya existente"] });
+      return res.status(400).json({ message: ["Activity already exists"] });
     }
     const activity = em.getReference(Activity, id);
     em.assign(activity, {
@@ -110,7 +110,7 @@ async function update(req: Request, res: Response) {
     });
     await em.flush();
     res.status(200).json({
-      message: "Activity actualizada",
+      message: "Activity updated",
       data: activity,
       itinerary: req.body.itinerary,
     });
@@ -124,7 +124,7 @@ async function remove(req: Request, res: Response) {
     const id = req.params.id;
     const activity = em.getReference(Activity, id);
     em.removeAndFlush(activity);
-    res.status(200).json({ message: "Activity eliminada", data: activity });
+    res.status(200).json({ message: "Activity deleted", data: activity });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

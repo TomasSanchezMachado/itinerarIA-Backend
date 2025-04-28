@@ -287,94 +287,85 @@ const validateSchema =
 
 ### Authentication
 
-| HTTP Method | Route          | Description                 | Protected |
-| ----------- | -------------- | --------------------------- | --------- |
-| POST        | /auth/register | Register a new user         | ❌        |
-| POST        | /auth/login    | User login                  | ❌        |
-| POST        | /auth/logout   | User logout                 | ✅        |
-| POST        | /auth/profile  | Get user profile            | ✅        |
-| POST        | /auth/verify   | Verify authentication token | ✅        |
+| HTTP Method | Route              | Description                 | Protected |
+| ----------- | ------------------ | --------------------------- | --------- |
+| POST        | /api/auth/register | Register a new user         | ❌        |
+| POST        | /api/auth/login    | User login                  | ❌        |
+| POST        | /api/auth/logout   | User logout                 | ✅        |
+| POST        | /api/auth/profile  | Get user profile            | ✅        |
+| POST        | /api/auth/verify   | Verify authentication token | ✅        |
 
-#### Register User
+### Register User
 
-HTTP Method & URL: POST /api/auth/register
+**HTTP Method & URL:** POST /api/auth/register
 
-Description: Registers a new user in the system.
+**Description:** Registers a new user in the system.
 
-Request Body:
+**Authentication Requirements:** No authentication required (Public endpoint)
 
-```ts
-Content-Type:application/json
+**Request Parameters:** None
+
+**Request Body:**
+
+```json
 {
-  "username": "string",
-  "password": "string",
-  "names": "string",
-  "lastName": "string",
-  "dateOfBirth": "Date",
-  "mail": "string",
-  "phoneNumber": "string",
-  "isAdmin": boolean
+  "username": "traveler2024",
+  "password": "Travel2024",
+  "names": "John",
+  "lastName": "Doe",
+  "dateOfBirth": "1990-01-01",
+  "mail": "john.doe@example.com",
+  "phoneNumber": "1234567890",
+  "isAdmin": false
 }
 ```
 
-Validación:
+**Validation Notes:**
 
 - username:
-
-  - "Username must be a string"
-  - "Username is required"
-  - "Username must be between 3 and 30 characters and can only contain letters, numbers, underscores, and hyphens"
-
+  - Must be a string
+  - Required
+  - Must be between 3 and 30 characters and can only contain letters, numbers, underscores, and hyphens
 - password:
-
-  - "Password must be a string"
-  - "Password is required"
-  - "Password must be at least 8 characters long and contain at least one uppercase letter and one number"
-
+  - Must be a string
+  - Required
+  - Must be at least 8 characters long and contain at least one uppercase letter and one number
 - names:
-
-  - "First name must be a string"
-  - "First name is required"
-  - "First name must contain only letters"
-
+  - Must be a string
+  - Required
+  - Must contain only letters
 - lastName:
-
-  - "Last name must be a string"
-  - "Last name is required"
-  - "Last name must contain only letters"
-
+  - Must be a string
+  - Required
+  - Must contain only letters
 - mail:
-
-  - "Email must be a string"
-  - "Email is required"
-  - "Email must be in a valid format"
-
+  - Must be a string
+  - Required
+  - Must be in a valid email format
 - phoneNumber:
+  - Must be a string
+  - Required
 
-  - "Phone number must be a string"
-  - "Phone number is required"
-
-Response Codes:
+**Response Codes:**
 
 - 200 OK: User successfully registered
 - 400 Bad Request: Invalid input or user already exists
 - 500 Internal Server Error: Registration failed
 
-Response Body (Success - 200 OK):
+**Response Body (Success - 200 OK):**
 
-```ts
-Content-Type:application/json
+```json
 {
   "message": "User logged successfully",
   "data": {
     "user": {
-      "id": "string",
-      "username": "string",
-      "names": "string",
-      "lastName": "string",
-      "dateOfBirth": "Date",
-      "mail": "string",
-      "phoneNumber": "string",
+      "id": "669d9a3503f535edd5c7aabe",
+      "username": "traveler2024",
+      "names": "John",
+      "lastName": "Doe",
+      "dateOfBirth": "1990-01-01",
+      "mail": "john.doe@example.com",
+      "phoneNumber": "1234567890",
       "isAdmin": false
     }
   },
@@ -382,7 +373,7 @@ Content-Type:application/json
 }
 ```
 
-Error Responses:
+**Error Responses:**
 
 400 Bad Request:
 
@@ -411,55 +402,73 @@ OR
 }
 ```
 
-#### User Login
+**Example Request:**
 
-HTTP Method & URL: POST /api/auth/login
+```bash
+curl -X POST https://itineraria-backend.up.railway.app/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "traveler2024",
+    "password": "Travel2024",
+    "names": "John",
+    "lastName": "Doe",
+    "dateOfBirth": "1990-01-01",
+    "mail": "john.doe@example.com",
+    "phoneNumber": "1234567890",
+    "isAdmin": false
+  }'
+```
 
-Description: Authenticates a user and returns a session token.
+### User Login
 
-Request Body:
+**HTTP Method & URL:** POST /api/auth/login
+
+**Description:** Authenticates a user and returns a session token.
+
+**Authentication Requirements:** No authentication required (Public endpoint)
+
+**Request Parameters:** None
+
+**Request Body:**
 
 ```json
 {
-  "username": "string",
-  "password": "string"
+  "username": "traveler2024",
+  "password": "Travel2024"
 }
 ```
 
-Validation Rules:
+**Validation Notes:**
 
 - username:
-
-  - "Username must be a string"
-  - "Username is required"
-  - "Username must be between 3 and 30 characters and can only contain letters, numbers, underscores, and hyphens"
-
+  - Must be a string
+  - Required
+  - Must be between 3 and 30 characters and can only contain letters, numbers, underscores, and hyphens
 - password:
+  - Must be a string
+  - Required
+  - Must be at least 8 characters long and contain at least one uppercase letter and one number
 
-  - "Password must be a string"
-  - "Password is required"
-  - "Password must be at least 8 characters long and contain at least one uppercase letter and one number"
+**Response Codes:**
 
-Response Codes:
+- 200 OK: Login successful
+- 400 Bad Request: Invalid credentials
+- 500 Internal Server Error: Login process failed
 
-200 OK: Login successful
-400 Bad Request: Invalid credentials
-500 Internal Server Error: Login process failed
-
-Response Body (Success - 200 OK):
+**Response Body (Success - 200 OK):**
 
 ```json
 {
   "message": "User logged successfully",
   "data": {
     "user": {
-      "id": "string",
-      "username": "string",
-      "names": "string",
-      "lastName": "string",
-      "dateOfBirth": "2024-04-24",
-      "mail": "string",
-      "phoneNumber": "string",
+      "id": "669d9a3503f535edd5c7aabe",
+      "username": "traveler2024",
+      "names": "John",
+      "lastName": "Doe",
+      "dateOfBirth": "1990-01-01",
+      "mail": "john.doe@example.com",
+      "phoneNumber": "1234567890",
       "isAdmin": false,
       "itineraries": [],
       "participants": []
@@ -469,7 +478,7 @@ Response Body (Success - 200 OK):
 }
 ```
 
-Error Responses:
+**Error Responses:**
 
 400 Bad Request:
 
@@ -488,33 +497,38 @@ Error Responses:
 }
 ```
 
-Example Request:
+**Example Request:**
 
 ```bash
-curl -X POST https://api.itineraria.com/auth/login \
+curl -X POST https://itineraria-backend.up.railway.app/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "username": "traveler2024",
     "password": "Travel2024"
-  }
+  }'
 ```
 
-Notes: Upon successful login, a JWT token is set as an HTTP-only cookie.
+**Notes:** Upon successful login, a JWT token is set as an HTTP-only cookie.
 
-#### User Logout
+### User Logout
 
-HTTP Method & URL: POST /api/auth/logout
+**HTTP Method & URL:** POST /api/auth/logout
 
-Description: Logs out the currently authenticated user by invalidating their session.
+**Description:** Logs out the currently authenticated user by invalidating their session.
 
-Request Body: None required
+**Authentication Requirements:** Authentication required (Protected endpoint)
 
-Response Codes:
+**Request Parameters:** None
 
-200 OK: Logout successful
-401 Unauthorized: No valid authentication
+**Request Body:** None
 
-Response Body (Success - 200 OK):
+**Response Codes:**
+
+- 200 OK: Logout successful
+- 401 Unauthorized: No valid authentication
+- 500 Internal Server Error: Logout process failed
+
+**Response Body (Success - 200 OK):**
 
 ```json
 {
@@ -522,7 +536,15 @@ Response Body (Success - 200 OK):
 }
 ```
 
-Error Responses:
+**Error Responses:**
+
+401 Unauthorized:
+
+```json
+{
+  "message": "Authentication required"
+}
+```
 
 500 Internal Server Error:
 
@@ -532,98 +554,119 @@ Error Responses:
 }
 ```
 
-Example Request:
+**Example Request:**
 
 ```bash
-curl -X POST https://api.itineraria.com/auth/logout \
-  -H "Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+curl -X POST https://itineraria-backend.up.railway.app/api/auth/logout \
+  -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-Notes: This endpoint clears the authentication token cookie.
+**Notes:** This endpoint clears the authentication token cookie.
 
-#### Get User Profile
+### Get User Profile
 
-HTTP Method & URL: POST /auth/profile
+**HTTP Method & URL:** POST /api/auth/profile
 
-Description: Retrieves the profile information of the currently authenticated user.
+**Description:** Retrieves the profile information of the currently authenticated user.
 
-Request Body: None required
+**Authentication Requirements:** Authentication required (Protected endpoint)
 
-Response Codes:
+**Request Parameters:** None
 
-200 OK: Profile successfully retrieved
-400 Bad Request: User not found
-500 Internal Server Error: Profile retrieval failed
+**Request Body:** None
 
-Response Body (Success - 200 OK):
+**Response Codes:**
+
+- 200 OK: Profile successfully retrieved
+- 400 Bad Request: User not found
+- 401 Unauthorized: Authentication required
+- 500 Internal Server Error: Profile retrieval failed
+
+**Response Body (Success - 200 OK):**
 
 ```json
 {
   "message": "User profile found",
   "data": {
     "user": {
-      "id": "string",
-      "username": "string",
-      "names": "string",
-      "lastName": "string",
-      "dateOfBirth": "2024-04-24",
-      "mail": "string",
-      "phoneNumber": "string",
+      "id": "669d9a3503f535edd5c7aabe",
+      "username": "traveler2024",
+      "names": "John",
+      "lastName": "Doe",
+      "dateOfBirth": "1990-01-01",
+      "mail": "john.doe@example.com",
+      "phoneNumber": "1234567890",
       "isAdmin": false
     }
   }
 }
 ```
 
-Error Responses:
+**Error Responses:**
 
 400 Bad Request:
 
-json{
-"message": "User not found"
+```json
+{
+  "message": "User not found"
 }
+```
+
+401 Unauthorized:
+
+```json
+{
+  "message": "Authentication required"
+}
+```
 
 500 Internal Server Error:
 
-json{
-"message": "The user profile could not be found",
-"data": "Error details"
+```json
+{
+  "message": "The user profile could not be found",
+  "data": "Error details"
 }
-
-Example Request:
-
-```bash
-curl -X POST https://api.itineraria.com/auth/profile \
-  -H "Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 ```
 
-#### Verify Token
+**Example Request:**
 
-HTTP Method & URL: POST /api/auth/verify
+```bash
+curl -X POST https://itineraria-backend.up.railway.app/api/auth/profile \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
 
-Description: Verifies if the authentication token is valid and returns user information.
+### Verify Token
 
-Request Body: None required
+**HTTP Method & URL:** POST /api/auth/verify
 
-Response Codes:
+**Description:** Verifies if the authentication token is valid and returns user information.
 
-200 OK: Token is valid
-401 Unauthorized: Token is invalid or user not found
+**Authentication Requirements:** Authentication required (Protected endpoint)
 
-Response Body (Success - 200 OK):
+**Request Parameters:** None
+
+**Request Body:** None
+
+**Response Codes:**
+
+- 200 OK: Token is valid
+- 401 Unauthorized: Token is invalid or user not found
+
+**Response Body (Success - 200 OK):**
 
 ```json
 {
   "message": "User found",
   "data": {
     "user": {
-      "id": "string",
-      "username": "string",
-      "names": "string",
-      "lastName": "string",
-      "dateOfBirth": "2024-04-24",
-      "mail": "string",
-      "phoneNumber": "string",
+      "id": "669d9a3503f535edd5c7aabe",
+      "username": "traveler2024",
+      "names": "John",
+      "lastName": "Doe",
+      "dateOfBirth": "1990-01-01",
+      "mail": "john.doe@example.com",
+      "phoneNumber": "1234567890",
       "isAdmin": false,
       "itineraries": [],
       "participants": []
@@ -632,68 +675,97 @@ Response Body (Success - 200 OK):
 }
 ```
 
+**Error Responses:**
+
 401 Unauthorized:
 
 ```json
-{ message: "User not found", userFound: userFound }
+{
+  "message": "User not found",
+  "userFound": false
+}
 ```
 
-Example Request:
+**Example Request:**
 
 ```bash
-curl -X POST https://api.itineraria.com/auth/verify \
-  -H "Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+curl -X POST https://itineraria-backend.up.railway.app/api/auth/verify \
+  -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-Notes: This endpoint is typically used to check if a user's session is still valid and to retrieve current user data.
+**Notes:** This endpoint is typically used to check if a user's session is still valid and to retrieve current user data.
 
 ### Users
+
+### Data Model
+
+**User**
+
+```ts
+{
+  id: string;                // Unique identifier
+  username: string;          // Username for authentication
+  names: string;             // First name(s)
+  lastName: string;          // Last name
+  dateOfBirth: Date;         // Date of birth
+  mail: string;              // Email address
+  phoneNumber: string;       // Contact phone number
+  isAdmin: boolean;          // Admin status flag
+  itineraries?: Itinerary[]; // References to associated Itineraries
+  participants?: Participant[]; // References to associated Participants
+}
+```
 
 | HTTP Method | Route          | Description                 | Protected |
 | ----------- | -------------- | --------------------------- | --------- |
 | GET         | /api/users     | Get all users               | ❌        |
 | GET         | /api/users/:id | Get a specific user         | ❌        |
 | POST        | /api/users     | Create a new user           | ❌        |
-| PUT         | /api/users/    | Update an entire user       | ❌        |
-| PATCH       | /api/users/    | Update specific user fields | ❌        |
-| DELETE      | /api/users/    | Delete a user               | ❌        |
+| PUT         | /api/users/:id | Update a user completely    | ❌        |
+| PATCH       | /api/users/:id | Update specific user fields | ❌        |
+| DELETE      | /api/users/:id | Delete a user               | ❌        |
 
-#### Get All Users
+### Get All Users
 
-HTTP Method & URL: GET /users
+**HTTP Method & URL:** GET /api/users
 
-Description: Retrieves all users registered in the system.
+**Description:** Retrieves all users registered in the system.
 
-Request Body: None
+**Authentication Requirements:** None (Public endpoint)
 
-Response Codes:
+**Request Parameters:** None
 
-200 OK: Users successfully retrieved
-500 Internal Server Error: Server error while retrieving users
+**Request Body:** None
 
-Response Body (Success - 200 OK):
+**Response Codes:**
+
+- 200 OK: Successfully retrieved users
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
 
 ```json
 {
   "message": "Users found successfully",
   "data": [
     {
-      "_id": "string",
-      "username": "string",
-      "names": "string",
-      "lastName": "string",
-      "dateOfBirth": "2024-04-24",
-      "mail": "string",
-      "phoneNumber": "string",
-      "isAdmin": boolean,
+      "id": "60d21b4667d0d8992e610c85",
+      "username": "traveler2024",
+      "names": "John",
+      "lastName": "Doe",
+      "dateOfBirth": "1990-01-15",
+      "mail": "john.doe@example.com",
+      "phoneNumber": "1234567890",
+      "isAdmin": false,
       "itineraries": [...],
       "participants": [...]
-    }
+    },
+    // Additional users
   ]
 }
 ```
 
-Error Responses:
+**Error Responses:**
 
 500 Internal Server Error:
 
@@ -703,109 +775,148 @@ Error Responses:
 }
 ```
 
-Example Request:
+**Example Request:**
 
 ```bash
-curl -X GET https://api.itineraria.com/users
+curl -X GET https://itineraria-backend.up.railway.app/api/users
 ```
 
-#### Get Specific User
+### Get User by ID
 
-GET /user/:id
+**HTTP Method & URL:** GET /api/users/:id
 
-HTTP Method & URL: GET /users/:id
+**Description:** Retrieves detailed information about a specific user.
 
-Description: Retrieves information for a specific user based on their ID.
+**Authentication Requirements:** None (Public endpoint)
 
-Request Parameters:
+**Request Parameters:**
 
-id (path parameter): Unique identifier of the user
+- id (path parameter): Unique identifier of the user to retrieve
 
-Request Body: None
+**Request Body:** None
 
-Response Codes:
+**Response Codes:**
 
-200 OK: User successfully retrieved
-500 Internal Server Error: User not found or server error
+- 200 OK: Successfully retrieved the user
+- 404 Not Found: User not found
+- 500 Internal Server Error: Server error
 
-Response Body (Success - 200 OK):
+**Response Body (Success - 200 OK):**
 
 ```json
 {
   "message": "User found successfully",
   "data": {
-    "_id": "string",
-    "username": "string",
-    "names": "string",
-    "lastName": "string",
-    "dateOfBirth": "2024-04-24",
-    "mail": "string",
-    "phoneNumber": "string",
-    "isAdmin": boolean,
+    "id": "60d21b4667d0d8992e610c85",
+    "username": "traveler2024",
+    "names": "John",
+    "lastName": "Doe",
+    "dateOfBirth": "1990-01-15",
+    "mail": "john.doe@example.com",
+    "phoneNumber": "1234567890",
+    "isAdmin": false,
     "itineraries": [...],
     "participants": [...]
   }
 }
 ```
 
-Error Responses:
+**Error Responses:**
+
+404 Not Found:
+
+```json
+{
+  "message": "User not found"
+}
+```
 
 500 Internal Server Error:
 
 ```json
 {
-  "message": "User not found or server error"
+  "message": "Server error"
 }
 ```
 
-Example Request:
+**Example Request:**
 
 ```bash
-curl -X GET https://api.itineraria.com/users/60d21b4667d0d8992e610c85
+curl -X GET https://itineraria-backend.up.railway.app/api/users/60d21b4667d0d8992e610c85
 ```
 
-#### Create User
+### Create User
 
-HTTP Method & URL: POST /users
+**HTTP Method & URL:** POST /api/users
 
-Description: Registers a new user in the system.
+**Description:** Registers a new user in the system and returns authentication token.
 
-Request Body:
+**Authentication Requirements:** None (Public endpoint)
+
+**Request Parameters:** None
+
+**Request Body:**
 
 ```json
 {
-  "username": "string",
-  "password": "string",
-  "names": "string",
-  "lastName": "string",
-  "dateOfBirth": "2024-04-24",
-  "mail": "string",
-  "phoneNumber": "string"
+  "username": "traveler2024",
+  "password": "Travel2024",
+  "names": "John",
+  "lastName": "Doe",
+  "dateOfBirth": "1990-01-15",
+  "mail": "john.doe@example.com",
+  "phoneNumber": "1234567890"
 }
 ```
 
-Validation Notes:
-The sanitizeUserInput middleware cleans the data by removing undefined fields.
+**Validation Notes:**
 
-Response Codes:
+- username:
+  - Must be a string
+  - Required
+  - Must be between 3 and 30 characters
+  - Can only contain letters, numbers, underscores, and hyphens
+- password:
+  - Must be a string
+  - Required
+  - Must be at least 8 characters long
+  - Must contain at least one uppercase letter and one number
+- names:
+  - Must be a string
+  - Required
+  - Must contain only letters
+- lastName:
+  - Must be a string
+  - Required
+  - Must contain only letters
+- mail:
+  - Must be a string
+  - Required
+  - Must be in a valid email format
+- phoneNumber:
+  - Must be a string
+  - Required
 
-200 OK: User successfully created
-500 Internal Server Error: Error creating user
+**Response Codes:**
 
-Response Body (Success - 200 OK):
+- 200 OK: User successfully created and logged in
+- 400 Bad Request: Invalid user data or username/email already exists
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
 
 ```json
 {
   "message": "User logged successfully",
   "data": {
     "user": {
-      "_id": "string",
-      "username": "string",
-      "names": "string",
-      "lastName": "string",
-      "dateOfBirth": "2024-04-24",
-      "mail": "string",
-      "phoneNumber": "string",
+      "id": "60d21b4667d0d8992e610c85",
+      "username": "traveler2024",
+      "names": "John",
+      "lastName": "Doe",
+      "dateOfBirth": "1990-01-15",
+      "mail": "john.doe@example.com",
+      "phoneNumber": "1234567890",
       "isAdmin": false
     }
   },
@@ -813,7 +924,24 @@ Response Body (Success - 200 OK):
 }
 ```
 
-Error Responses:
+**Error Responses:**
+
+400 Bad Request:
+
+```json
+{
+  "message": "Username or email already exists"
+}
+```
+
+OR
+
+```json
+{
+  "message": "Invalid user data",
+  "errors": ["Username must be between 3 and 30 characters"]
+}
+```
 
 500 Internal Server Error:
 
@@ -823,10 +951,10 @@ Error Responses:
 }
 ```
 
-Example Request:
+**Example Request:**
 
 ```bash
-curl -X POST https://api.itineraria.com/users \
+curl -X POST https://itineraria-backend.up.railway.app/api/users \
   -H "Content-Type: application/json" \
   -d '{
     "username": "traveler2024",
@@ -839,103 +967,86 @@ curl -X POST https://api.itineraria.com/users \
   }'
 ```
 
-#### Update User (Complete)
+### Update User (Complete)
 
-HTTP Method & URL: PUT /users/
+**HTTP Method & URL:** PUT /api/users/:id
 
-Description: Updates all fields of an existing user.
+**Description:** Updates all fields of an existing user.
 
-Request Parameters:
+**Authentication Requirements:** None (Public endpoint)
 
-id (path parameter): Unique identifier of the user
+**Request Parameters:**
 
-Request Body:
+- id (path parameter): Unique identifier of the user to update
+
+**Request Body:**
 
 ```json
 {
-  "username": "string",
-  "password": "string",
-  "names": "string",
-  "lastName": "string",
-  "mail": "string",
-  "phoneNumber": "string",
-  "itineraries": [
-    {
-      "id": "string"
-    }
-  ],
-  "isAdmin": boolean
+  "username": "traveler2024_updated",
+  "password": "Travel2024New",
+  "names": "John",
+  "lastName": "Doe",
+  "mail": "john.updated@example.com",
+  "phoneNumber": "9876543210",
+  "isAdmin": false,
+  "itineraries": [{ "id": "60d21b4667d0d8992e610c86" }]
 }
 ```
 
-Validation Rules:
+**Validation Notes:**
 
-- username:
+- All fields must comply with the model schema validations as listed in Create User
+- The sanitizeUserInput middleware cleans the data by removing undefined fields
 
-  - "Username must be a string"
-  - "Username is required"
-  - "Username must be between 3 and 30 characters and can only contain letters, numbers, underscores, and hyphens"
+**Response Codes:**
 
-- password:
+- 200 OK: User successfully updated
+- 400 Bad Request: Invalid user data or username/email already exists
+- 404 Not Found: User not found
+- 500 Internal Server Error: Server error
 
-  - "Password must be a string"
-  - "Password is required"
-  - "Password must be at least 8 characters long and contain at least one uppercase letter and one number"
-
-- names:
-
-  - "First name must be a string"
-  - "First name is required"
-  - "First name must contain only letters"
-
-- lastName:
-
-  - "Last name must be a string"
-  - "Last name is required"
-  - "Last name must contain only letters"
-
-- mail:
-
-  - "Email must be a string"
-  - "Email is required"
-  - "Email must be in a valid format"
-
-- phoneNumber:
-
-  - "Phone number must be a string"
-  - "Phone number is required"
-
-Response Codes:
-
-200 OK: User successfully updated
-400 Bad Request: Username or email already exists
-500 Internal Server Error: Error updating user
-
-Response Body (Success - 200 OK):
+**Response Body (Success - 200 OK):**
 
 ```json
 {
   "message": "User updated successfully",
   "data": {
-    "_id": "string",
-    "username": "string",
-    "names": "string",
-    "lastName": "string",
-    "mail": "string",
-    "phoneNumber": "string",
-    "isAdmin": boolean,
+    "id": "60d21b4667d0d8992e610c85",
+    "username": "traveler2024_updated",
+    "names": "John",
+    "lastName": "Doe",
+    "mail": "john.updated@example.com",
+    "phoneNumber": "9876543210",
+    "isAdmin": false,
     "itineraries": [...]
   }
 }
 ```
 
-Error Responses:
+**Error Responses:**
 
 400 Bad Request:
 
 ```json
 {
   "message": "Username or email already exists"
+}
+```
+
+OR
+
+```json
+{
+  "message": "Invalid user data"
+}
+```
+
+404 Not Found:
+
+```json
+{
+  "message": "User not found"
 }
 ```
 
@@ -947,10 +1058,10 @@ Error Responses:
 }
 ```
 
-Example Request:
+**Example Request:**
 
 ```bash
-curl -X PUT https://api.itineraria.com/users/ \
+curl -X PUT https://itineraria-backend.up.railway.app/api/users/60d21b4667d0d8992e610c85 \
   -H "Content-Type: application/json" \
   -d '{
     "username": "traveler2024_updated",
@@ -963,69 +1074,81 @@ curl -X PUT https://api.itineraria.com/users/ \
   }'
 ```
 
-#### Update User (Partial)
+### Update User (Partial)
 
-HTTP Method & URL: PATCH /users/
+**HTTP Method & URL:** PATCH /api/users/:id
 
-Description: Updates specific fields of an existing user.
+**Description:** Updates only specific fields of an existing user.
 
-Request Parameters:
+**Authentication Requirements:** None (Public endpoint)
 
-id (path parameter): Unique identifier of the user
+**Request Parameters:**
 
-Request Body:
+- id (path parameter): Unique identifier of the user to partially update
 
-```json{
-  "username": "string", // optional
-  "names": "string", // optional
-  "lastName": "string", // optional
-  "mail": "string", // optional
-  "phoneNumber": "string", // optional
-  "itineraries": [
-    {
-      "id": "string"
-    }
-  ], // optional
-  "isAdmin": boolean // optional
+**Request Body:**
+
+```json
+{
+  "phoneNumber": "9876543210",
+  "mail": "john.updated@example.com"
 }
 ```
 
-Validation Notes:
+**Validation Notes:**
 
-Any included field must meet the validations of the model schema
-The sanitizeUserInput middleware cleans the data by removing undefined fields
+- Any included field must comply with the model schema validations
+- Fields are optional
+- The sanitizeUserInput middleware cleans the data by removing undefined fields
 
-Response Codes:
+**Response Codes:**
 
-200 OK: User successfully updated
-400 Bad Request: Username or email already exists
-500 Internal Server Error: Error updating user
+- 200 OK: User successfully updated
+- 400 Bad Request: Invalid user data or username/email already exists
+- 404 Not Found: User not found
+- 500 Internal Server Error: Server error
 
-Response Body (Success - 200 OK):
+**Response Body (Success - 200 OK):**
 
 ```json
 {
   "message": "User updated successfully",
   "data": {
-    "_id": "string",
-    "username": "string",
-    "names": "string",
-    "lastName": "string",
-    "mail": "string",
-    "phoneNumber": "string",
-    "isAdmin": boolean,
+    "id": "60d21b4667d0d8992e610c85",
+    "username": "traveler2024",
+    "names": "John",
+    "lastName": "Doe",
+    "mail": "john.updated@example.com",
+    "phoneNumber": "9876543210",
+    "isAdmin": false,
     "itineraries": [...]
   }
 }
 ```
 
-Error Responses:
+**Error Responses:**
 
 400 Bad Request:
 
 ```json
 {
   "message": "Username or email already exists"
+}
+```
+
+OR
+
+```json
+{
+  "message": "Invalid user data"
+}
+```
+
+404 Not Found:
+
+```json
+{
+  "message": "User not found"
 }
 ```
 
@@ -1037,10 +1160,10 @@ Error Responses:
 }
 ```
 
-Example Request:
+**Example Request:**
 
 ```bash
-curl -X PATCH https://api.itineraria.com/users/ \
+curl -X PATCH https://itineraria-backend.up.railway.app/api/users/60d21b4667d0d8992e610c85 \
   -H "Content-Type: application/json" \
   -d '{
     "phoneNumber": "9876543210",
@@ -1048,31 +1171,43 @@ curl -X PATCH https://api.itineraria.com/users/ \
   }'
 ```
 
-#### Delete User
+### Delete User
 
-HTTP Method & URL: DELETE /users/
+**HTTP Method & URL:** DELETE /api/users/:id
 
-Description: Removes a user from the system.
+**Description:** Removes a specific user from the system.
 
-Request Parameters:
+**Authentication Requirements:** None (Public endpoint)
 
-id (path parameter): Unique identifier of the user
+**Request Parameters:**
 
-Request Body: None
+- id (path parameter): Unique identifier of the user to delete
 
-Response Codes:
+**Request Body:** None
 
-200 OK: User successfully deleted
-500 Internal Server Error: Error deleting user
+**Response Codes:**
 
-Response Body (Success - 200 OK):
+- 200 OK: User successfully deleted
+- 404 Not Found: User not found
+- 500 Internal Server Error: Server error
 
-```json{
+**Response Body (Success - 200 OK):**
+
+```json
+{
   "message": "User deleted successfully"
 }
 ```
 
-Error Responses:
+**Error Responses:**
+
+404 Not Found:
+
+```json
+{
+  "message": "User not found"
+}
+```
 
 500 Internal Server Error:
 
@@ -1082,61 +1217,57 @@ Error Responses:
 }
 ```
 
-Example Request:
+**Example Request:**
 
 ```bash
-curl -X DELETE https://api.itineraria.com/users/60d21b4667d0d8992e610c85
+curl -X DELETE https://itineraria-backend.up.railway.app/api/users/60d21b4667d0d8992e610c85
 ```
-
-### Preferencias
 
 | HTTP Method | Route                | Description                       | Protected  |
 | ----------- | -------------------- | --------------------------------- | ---------- |
 | GET         | /api/preferences     | Get all preferences               | ✅ (Admin) |
 | GET         | /api/preferences/:id | Get a specific preference         | ✅ (Admin) |
 | POST        | /api/preferences     | Create a new preference           | ✅ (Admin) |
-| PUT         | /api/preferences /   | Update a complete preference      | ✅ (Admin) |
-| PATCH       | /api/preferences/    | Update specific preference fields | ✅ (Admin) |
-| DELETE      | /api/preferences/    | Delete a preference               | ✅ (Admin) |
+| PUT         | /api/preferences/:id | Update a preference completely    | ✅ (Admin) |
+| PATCH       | /api/preferences/:id | Update specific preference fields | ✅ (Admin) |
+| DELETE      | /api/preferences/:id | Delete a preference               | ✅ (Admin) |
 
-#### Get All Preferences
+### Get All Preferences
 
-HTTP Method & URL: GET /preferences
+**HTTP Method & URL:** GET /api/preferences
 
-Description: Retrieves all preferences registered in the system.
+**Description:** Retrieves all preferences registered in the system.
 
-Authentication Requirements:
+**Authentication Requirements:** Admin access required (Protected endpoint)
 
-Admin access required
-Valid authentication token
+**Request Parameters:** None
 
-Request Parameters: None
+**Request Body:** None
 
-Request Body: None
+**Response Codes:**
 
-Response Codes:
+- 200 OK: Successfully retrieved preferences (also returned if no preferences found)
+- 401 Unauthorized: Authentication issues
+- 403 Forbidden: Insufficient permissions
+- 500 Internal Server Error: Server error
 
-200 OK: Preferences successfully retrieved
-401 Unauthorized: Authentication issues
-403 Forbidden: Insufficient permissions
-500 Internal Server Error: Server error while fetching preferences
-
-Response Body (Success - 200 OK):
+**Response Body (Success - 200 OK):**
 
 ```json
 {
   "data": [
     {
-      "id": "string",
-      "name": "string",
-      "description": "string",
+      "id": "60d21b4667d0d8992e610c85",
+      "name": "Early Morning",
+      "description": "Preference for early morning departures",
       "participants": [...]
-    }
+    },
+    // Additional preferences
   ]
 }
 ```
 
-Response Body (No preferences - 200 OK):
+**Response Body (No Preferences - 200 OK):**
 
 ```json
 {
@@ -1144,7 +1275,7 @@ Response Body (No preferences - 200 OK):
 }
 ```
 
-Error Responses:
+**Error Responses:**
 
 401 Unauthorized:
 
@@ -1154,7 +1285,7 @@ Error Responses:
 }
 ```
 
-or
+OR
 
 ```json
 {
@@ -1178,51 +1309,50 @@ or
 }
 ```
 
-Example Request:
+**Example Request:**
 
 ```bash
-curl -X GET https://api.example.com/preferences \
+curl -X GET https://itineraria-backend.up.railway.app/api/preferences \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-#### Get Specific Preference
+### Get Preference by ID
 
-HTTP Method & URL: GET /preferences/
+**HTTP Method & URL:** GET /api/preferences/:id
 
-Description: Retrieves information for a specific preference by its ID.
+**Description:** Retrieves detailed information about a specific preference.
 
-Authentication Requirements:
+**Authentication Requirements:** Admin access required (Protected endpoint)
 
-Admin access required
-Valid authentication token
+**Request Parameters:**
 
-Request Parameters:
+- id (path parameter): Unique identifier of the preference to retrieve
 
-id (path parameter): Unique identifier of the preference
+**Request Body:** None
 
-Request Body: None
+**Response Codes:**
 
-Response Codes:
+- 200 OK: Successfully retrieved the preference
+- 401 Unauthorized: Authentication issues
+- 403 Forbidden: Insufficient permissions
+- 404 Not Found: Preference not found
+- 500 Internal Server Error: Server error
 
-200 OK: Preference successfully retrieved
-401 Unauthorized: Authentication issues
-403 Forbidden: Insufficient permissions
-404 Not Found: Preference not found
-500 Internal Server Error: Server error while fetching preference
+**Response Body (Success - 200 OK):**
 
-Response Body (Success - 200 OK):
-
-```json{
+```json
+{
   "data": {
-    "id": "string",
-    "name": "string",
-    "description": "string",
+    "id": "60d21b4667d0d8992e610c85",
+    "name": "Early Morning",
+    "description": "Preference for early morning departures",
     "participants": [...]
   }
 }
 ```
 
-Error Responses:
+**Error Responses:**
+
 401 Unauthorized:
 
 ```json
@@ -1231,16 +1361,18 @@ Error Responses:
 }
 ```
 
-or
+OR
 
-```json{
+```json
+{
   "message": "Invalid token"
 }
 ```
 
 403 Forbidden:
 
-```json{
+```json
+{
   "message": "You are not authorized to access this resource"
 }
 ```
@@ -1261,63 +1393,68 @@ or
 }
 ```
 
-Example Request:
+**Example Request:**
 
 ```bash
-curl -X GET https://api.example.com/preferences/60d21b4667d0d8992e610c85 \
+curl -X GET https://itineraria-backend.up.railway.app/api/preferences/60d21b4667d0d8992e610c85 \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-#### Create Preference
+### Create Preference
 
-HTTP Method & URL: POST /preferences
+**HTTP Method & URL:** POST /api/preferences
 
-Description: Registers a new preference in the system.
+**Description:** Creates a new preference in the system.
 
-Authentication Requirements:
+**Authentication Requirements:** Admin access required (Protected endpoint)
 
-Admin access required
-Valid authentication token
+**Request Parameters:** None
 
-Request Parameters: None
-
-Request Body:
+**Request Body:**
 
 ```json
 {
-  "name": "string",
-  "description": "string",
-  "itineraries": [...] // optional
+  "name": "Early Morning",
+  "description": "Preference for early morning departures",
+  "participants": [] // optional
 }
 ```
 
-Validation Notes:
+**Validation Notes:**
 
-The sanitizePreferenceInput middleware cleans the data by removing undefined fields
+- name:
+  - Must be a string
+  - Required
+- description:
+  - Must be a string
+  - Required
+- participants:
+  - Optional array of participant references
 
-Response Codes:
+**Response Codes:**
 
-201 Created: Preference successfully created
-400 Bad Request: Invalid input data
-401 Unauthorized: Authentication issues
-403 Forbidden: Insufficient permissions
-500 Internal Server Error: Server error while creating preference
+- 201 Created: Preference successfully created
+- 400 Bad Request: Invalid preference data
+- 401 Unauthorized: Authentication issues
+- 403 Forbidden: Insufficient permissions
+- 500 Internal Server Error: Server error
 
-Response Body (Success - 201 Created):
+**Response Body (Success - 201 Created):**
 
 ```json
 {
   "message": "Preference created successfully",
   "data": {
-    "id": "string",
-    "name": "string",
-    "description": "string",
+    "id": "60d21b4667d0d8992e610c85",
+    "name": "Early Morning",
+    "description": "Preference for early morning departures",
     "participants": []
   }
 }
 ```
 
-Error Responses:
+**Error Responses:**
+
 400 Bad Request:
 
 ```json
@@ -1334,7 +1471,7 @@ Error Responses:
 }
 ```
 
-or
+OR
 
 ```json
 {
@@ -1358,70 +1495,69 @@ or
 }
 ```
 
-Example Request:
+**Example Request:**
 
 ```bash
-curl -X POST https://api.example.com/preferences \
+curl -X POST https://itineraria-backend.up.railway.app/api/preferences \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -d '{
     "name": "Early Morning",
-    "description": "Preference for early morning departures",
-    "itineraries": []
+    "description": "Preference for early morning departures"
   }'
 ```
 
-#### Update Preference (Complete)
+### Update Preference (Complete)
 
-HTTP Method & URL: PUT /preferences/
-Description: Updates all fields of an existing preference.
-Authentication Requirements:
+**HTTP Method & URL:** PUT /api/preferences/:id
 
-Admin access required
-Valid authentication token
+**Description:** Updates all fields of an existing preference.
 
-Request Parameters:
+**Authentication Requirements:** Admin access required (Protected endpoint)
 
-id (path parameter): Unique identifier of the preference
+**Request Parameters:**
 
-Request Body:
+- id (path parameter): Unique identifier of the preference to update
 
-```
+**Request Body:**
+
+```json
 {
-  "name": "string",
-  "description": "string",
-  "itineraries": [...] // optional
+  "name": "Evening Departure",
+  "description": "Preference for evening departures"
 }
 ```
 
-Validation Notes:
+**Validation Notes:**
 
-The sanitizePreferenceInput middleware cleans the data by removing undefined fields
+- All fields must comply with the model schema validations
+- The sanitizePreferenceInput middleware cleans the data by removing undefined fields
 
-Response Codes:
+**Response Codes:**
 
-200 OK: Preference successfully updated
-400 Bad Request: Invalid input data
-401 Unauthorized: Authentication issues
-403 Forbidden: Insufficient permissions
-404 Not Found: Preference not found
-500 Internal Server Error: Server error while updating preference
+- 200 OK: Preference successfully updated
+- 400 Bad Request: Invalid preference data
+- 401 Unauthorized: Authentication issues
+- 403 Forbidden: Insufficient permissions
+- 404 Not Found: Preference not found
+- 500 Internal Server Error: Server error
 
-Response Body (Success - 200 OK):
+**Response Body (Success - 200 OK):**
 
 ```json
 {
   "message": "Preference updated successfully",
   "data": {
-    "id": "string",
-    "name": "string",
-    "description": "string",
+    "id": "60d21b4667d0d8992e610c85",
+    "name": "Evening Departure",
+    "description": "Preference for evening departures",
     "participants": [...]
   }
 }
 ```
 
-Error Responses:
+**Error Responses:**
+
 400 Bad Request:
 
 ```json
@@ -1438,7 +1574,7 @@ Error Responses:
 }
 ```
 
-or
+OR
 
 ```json
 {
@@ -1448,7 +1584,8 @@ or
 
 403 Forbidden:
 
-```json{
+```json
+{
   "message": "You are not authorized to access this resource"
 }
 ```
@@ -1463,15 +1600,16 @@ or
 
 500 Internal Server Error:
 
-```json{
+```json
+{
   "message": "Error updating preference"
 }
 ```
 
-Example Request:
+**Example Request:**
 
 ```bash
-curl -X PUT https://api.example.com/preferences/60d21b4667d0d8992e610c85 \
+curl -X PUT https://itineraria-backend.up.railway.app/api/preferences/60d21b4667d0d8992e610c85 \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -d '{
@@ -1480,58 +1618,57 @@ curl -X PUT https://api.example.com/preferences/60d21b4667d0d8992e610c85 \
   }'
 ```
 
-#### Update Preference (Partial)
+### Update Preference (Partial)
 
-HTTP Method & URL: PATCH /preferences/
-Description: Updates specific fields of an existing preference.
-Authentication Requirements:
+**HTTP Method & URL:** PATCH /api/preferences/:id
 
-Admin access required
-Valid authentication token
+**Description:** Updates only specific fields of an existing preference.
 
-Request Parameters:
+**Authentication Requirements:** Admin access required (Protected endpoint)
 
-id (path parameter): Unique identifier of the preference
+**Request Parameters:**
 
-Request Body:
+- id (path parameter): Unique identifier of the preference to partially update
+
+**Request Body:**
 
 ```json
 {
-  "name": "string", // optional
-  "description": "string", // optional
-  "itineraries": [...] // optional
+  "description": "Updated preference for afternoon departures"
 }
 ```
 
-Validation Notes:
+**Validation Notes:**
 
-Any included field must meet the validations of the model schema
-The sanitizePreferenceInput middleware cleans the data by removing undefined fields
+- Any included field must comply with the model schema validations
+- Fields are optional
+- The sanitizePreferenceInput middleware cleans the data by removing undefined fields
 
-Response Codes:
+**Response Codes:**
 
-200 OK: Preference successfully updated
-400 Bad Request: Invalid input data
-401 Unauthorized: Authentication issues
-403 Forbidden: Insufficient permissions
-404 Not Found: Preference not found
-500 Internal Server Error: Server error while updating preference
+- 200 OK: Preference successfully updated
+- 400 Bad Request: Invalid preference data
+- 401 Unauthorized: Authentication issues
+- 403 Forbidden: Insufficient permissions
+- 404 Not Found: Preference not found
+- 500 Internal Server Error: Server error
 
-Response Body (Success - 200 OK):
+**Response Body (Success - 200 OK):**
 
 ```json
 {
   "message": "Preference updated successfully",
   "data": {
-    "id": "string",
-    "name": "string",
-    "description": "string",
+    "id": "60d21b4667d0d8992e610c85",
+    "name": "Evening Departure",
+    "description": "Updated preference for afternoon departures",
     "participants": [...]
   }
 }
 ```
 
-Error Responses:
+**Error Responses:**
+
 400 Bad Request:
 
 ```json
@@ -1548,7 +1685,7 @@ Error Responses:
 }
 ```
 
-or
+OR
 
 ```json
 {
@@ -1580,10 +1717,10 @@ or
 }
 ```
 
-Example Request:
+**Example Request:**
 
 ```bash
-curl -X PATCH https://api.example.com/preferences/60d21b4667d0d8992e610c85 \
+curl -X PATCH https://itineraria-backend.up.railway.app/api/preferences/60d21b4667d0d8992e610c85 \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -d '{
@@ -1591,47 +1728,45 @@ curl -X PATCH https://api.example.com/preferences/60d21b4667d0d8992e610c85 \
   }'
 ```
 
-#### Delete Preference
+### Delete Preference
 
-HTTP Method & URL: DELETE /preferences/
+**HTTP Method & URL:** DELETE /api/preferences/:id
 
-Description: Removes a preference from the system.
+**Description:** Removes a specific preference from the system.
 
-Authentication Requirements:
+**Authentication Requirements:** Admin access required (Protected endpoint)
 
-Admin access required
-Valid authentication token
+**Request Parameters:**
 
-Request Parameters:
+- id (path parameter): Unique identifier of the preference to delete
 
-id (path parameter): Unique identifier of the preference
+**Request Body:** None
 
-Request Body: None
+**Response Codes:**
 
-Response Codes:
+- 200 OK: Preference successfully deleted
+- 400 Bad Request: Cannot delete preference with associated participants
+- 401 Unauthorized: Authentication issues
+- 403 Forbidden: Insufficient permissions
+- 404 Not Found: Preference not found
+- 500 Internal Server Error: Server error
 
-200 OK: Preference successfully deleted
-400 Bad Request: Cannot delete preference with associated participants
-401 Unauthorized: Authentication issues
-403 Forbidden: Insufficient permissions
-404 Not Found: Preference not found
-500 Internal Server Error: Server error while deleting preference
-
-Response Body (Success - 200 OK):
+**Response Body (Success - 200 OK):**
 
 ```json
 {
   "message": "Preference deleted",
   "data": {
-    "id": "string",
-    "name": "string",
-    "description": "string",
+    "id": "60d21b4667d0d8992e610c85",
+    "name": "Evening Departure",
+    "description": "Updated preference for afternoon departures",
     "participants": []
   }
 }
 ```
 
-Error Responses:
+**Error Responses:**
+
 400 Bad Request:
 
 ```json
@@ -1648,7 +1783,7 @@ Error Responses:
 }
 ```
 
-or
+OR
 
 ```json
 {
@@ -1680,60 +1815,85 @@ or
 }
 ```
 
-Example Request:
+**Example Request:**
 
 ```bash
-curl -X DELETE https://api.example.com/preferences/60d21b4667d0d8992e610c85 \
+curl -X DELETE https://itineraria-backend.up.railway.app/api/preferences/60d21b4667d0d8992e610c85 \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
 ### Places
 
-| HTTP Method | Route           | Description               | Protected |
-| ----------- | --------------- | ------------------------- | --------- |
-| GET         | /api/places     | Get all places            | ❌        |
-| GET         | /api/places/:id | Get a specific place      | ❌        |
-| POST        | /api/places     | Create a new place        | ❌        |
-| PUT         | /api/places /   | Update a place completely | ❌        |
-| PATCH       | /api/places/    | Update specific fields    | ❌        |
-| DELETE      | /api/places/    | Delete a place            | ❌        |
+### Data Model
 
-#### Get All Places
+**Place**
 
-HTTP Method & URL: GET /api/places
+```ts
+{
+  id: string;                        // Unique identifier
+  name: string;                      // Name of the place
+  latitude: number;                  // Geographical latitude
+  longitude: number;                 // Geographical longitude
+  zipCode: string;                   // Postal/ZIP code
+  province: string;                  // Province/State
+  country: string;                   // Country
+  externalServices?: ExternalService[]; // Associated external services
+  activities?: Activity[];           // Associated activities
+  itineraries?: Itinerary[];         // Associated itineraries
+  createdAt?: Date;                  // Creation timestamp
+  updatedAt?: Date;                  // Last update timestamp
+}
+```
 
-Description
-Retrieves all places registered in the system.
+| HTTP Method | Route           | Description                  | Protected |
+| ----------- | --------------- | ---------------------------- | --------- |
+| GET         | /api/places     | Get all places               | ❌        |
+| GET         | /api/places/:id | Get a specific place         | ❌        |
+| POST        | /api/places     | Create a new place           | ❌        |
+| PUT         | /api/places/:id | Update a place completely    | ❌        |
+| PATCH       | /api/places/:id | Update specific place fields | ❌        |
+| DELETE      | /api/places/:id | Delete a place               | ❌        |
 
-Request Body: None
+### Get All Places
 
-Response Codes:
+**HTTP Method & URL:** GET /api/places
 
-200 OK: Places retrieved successfully
-500 Internal Server Error: Server error while retrieving places
+**Description:** Retrieves all places registered in the system.
 
-Response Body (Success - 200 OK)
+**Authentication Requirements:** None (Public endpoint)
+
+**Request Parameters:** None
+
+**Request Body:** None
+
+**Response Codes:**
+
+- 200 OK: Places retrieved successfully (also returned if no places found)
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
 
 ```json
 {
   "data": [
     {
-      "id": "string",
-      "name": "string",
-      "latitude": number,
-      "longitude": number,
-      "zipCode": "string",
-      "province": "string",
-      "country": "string",
+      "id": "60d21b4667d0d8992e610c85",
+      "name": "Central Park",
+      "latitude": 40.7829,
+      "longitude": -73.9654,
+      "zipCode": "10022",
+      "province": "New York",
+      "country": "United States",
       "externalServices": [...],
       "activities": [...],
       "itineraries": [...]
-    }
+    },
+    // Additional places
   ]
 }
 ```
 
-Response Body (No places found - 200 OK)
+**Response Body (No Places - 200 OK):**
 
 ```json
 {
@@ -1742,7 +1902,7 @@ Response Body (No places found - 200 OK)
 }
 ```
 
-Error Responses
+**Error Responses:**
 
 500 Internal Server Error:
 
@@ -1752,46 +1912,44 @@ Error Responses
 }
 ```
 
-Example Request:
+**Example Request:**
 
 ```bash
-curl -X GET https://api.example.com/places
+curl -X GET https://itineraria-backend.up.railway.app/api/places
 ```
 
-#### Get Specific Place
+### Get Specific Place
 
-HTTP Method & URL: GET /api/places/
+**HTTP Method & URL:** GET /api/places/:id
 
-Description
-Retrieves information about a specific place based on its ID.
+**Description:** Retrieves information about a specific place based on its ID.
 
-Authentication Requirements
-None
+**Authentication Requirements:** None (Public endpoint)
 
-Request Parameters
+**Request Parameters:**
 
-id (path parameter): Unique identifier of the place
+- id (path parameter): Unique identifier of the place to retrieve
 
-Request Body: None
+**Request Body:** None
 
-Response Codes
+**Response Codes:**
 
-200 OK: Place retrieved successfully
-404 Not Found: Place not found
-500 Internal Server Error: Server error while retrieving the place
+- 200 OK: Place retrieved successfully
+- 404 Not Found: Place not found
+- 500 Internal Server Error: Server error
 
-Response Body (Success - 200 OK)
+**Response Body (Success - 200 OK):**
 
 ```json
 {
   "data": {
-    "id": "string",
-    "name": "string",
-    "latitude": number,
-    "longitude": number,
-    "zipCode": "string",
-    "province": "string",
-    "country": "string",
+    "id": "60d21b4667d0d8992e610c85",
+    "name": "Central Park",
+    "latitude": 40.7829,
+    "longitude": -73.9654,
+    "zipCode": "10022",
+    "province": "New York",
+    "country": "United States",
     "externalServices": [...],
     "activities": [...],
     "itineraries": [...]
@@ -1799,7 +1957,8 @@ Response Body (Success - 200 OK)
 }
 ```
 
-Error Responses
+**Error Responses:**
+
 404 Not Found:
 
 ```json
@@ -1816,57 +1975,60 @@ Error Responses
 }
 ```
 
-Example Request
+**Example Request:**
 
 ```bash
-curl -X GET https://api.example.com/places/60d21b4667d0d8992e610c85
+curl -X GET https://itineraria-backend.up.railway.app/api/places/60d21b4667d0d8992e610c85
 ```
 
-#### Create New Place
+### Create New Place
 
-HTTP Method & URL: POST /api/places
+**HTTP Method & URL:** POST /api/places
 
-Description
-Registers a new place in the system.
+**Description:** Registers a new place in the system.
 
-Request Parameters: None
+**Authentication Requirements:** None (Public endpoint)
 
-Request Body
+**Request Parameters:** None
 
-```json{
-  "name": "string",
-  "latitude": number,
-  "longitude": number,
-  "zipCode": "string",
-  "province": "string",
-  "country": "string"
+**Request Body:**
+
+```json
+{
+  "name": "Central Park",
+  "latitude": 40.7829,
+  "longitude": -73.9654,
+  "zipCode": "10022",
+  "province": "New York",
+  "country": "United States"
 }
 ```
 
-Validation Notes
+**Validation Notes:**
 
-The sanitizePlaceInput middleware cleans the data by removing undefined fields
-The validateSchema(postSchema) middleware validates the format of the submitted data
+- The sanitizePlaceInput middleware cleans the data by removing undefined fields
+- The validateSchema(postSchema) middleware validates the format of the submitted data
+- System checks for duplicate places based on coordinates or name+province+country
 
-Response Codes
+**Response Codes:**
 
-201 Created: Place successfully created
-400 Bad Request: Validation error or duplicate place
-500 Internal Server Error: Error creating place
+- 201 Created: Place successfully created
+- 400 Bad Request: Validation error or duplicate place
+- 500 Internal Server Error: Server error
 
-Response Body (Success - 201 Created)
+**Response Body (Success - 201 Created):**
 
 ```json
 {
   "message": "Place created successfully",
   "data": {
-    "id": "string",
-    "name": "string",
-    "latitude": number,
-    "longitude": number,
-    "zipCode": "string",
-    "province": "string",
-    "country": "string",
+    "id": "60d21b4667d0d8992e610c85",
+    "name": "Central Park",
+    "latitude": 40.7829,
+    "longitude": -73.9654,
+    "zipCode": "10022",
+    "province": "New York",
+    "country": "United States",
     "externalServices": [],
     "activities": [],
     "itineraries": []
@@ -1874,8 +2036,9 @@ Response Body (Success - 201 Created)
 }
 ```
 
-Error Responses
-400 Bad Request:
+**Error Responses:**
+
+400 Bad Request (Duplicate Coordinates):
 
 ```json
 {
@@ -1883,7 +2046,7 @@ Error Responses
 }
 ```
 
-OR
+400 Bad Request (Duplicate Name/Location):
 
 ```json
 {
@@ -1899,10 +2062,10 @@ OR
 }
 ```
 
-Example Request
+**Example Request:**
 
 ```bash
-curl -X POST https://api.example.com/places \
+curl -X POST https://itineraria-backend.up.railway.app/api/places \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Central Park",
@@ -1914,54 +2077,57 @@ curl -X POST https://api.example.com/places \
   }'
 ```
 
-#### Update Place (Complete)
+### Update Place (Complete)
 
-HTTP Method & URL: PUT /api/places/
+**HTTP Method & URL:** PUT /api/places/:id
 
-Description: Updates all fields of an existing place.
+**Description:** Updates all fields of an existing place.
 
-Request Parameters
+**Authentication Requirements:** None (Public endpoint)
 
-id (path parameter): Unique identifier of the place
+**Request Parameters:**
 
-Request Body
+- id (path parameter): Unique identifier of the place to update
+
+**Request Body:**
 
 ```json
 {
-  "name": "string",
-  "latitude": number,
-  "longitude": number,
-  "zipCode": "string",
-  "province": "string",
-  "country": "string"
+  "name": "Updated Park",
+  "latitude": 40.7829,
+  "longitude": -73.9654,
+  "zipCode": "10022",
+  "province": "New York",
+  "country": "United States"
 }
 ```
 
-Validation Notes
+**Validation Notes:**
 
-The sanitizePlaceInput middleware cleans the data by removing undefined fields
-The validateSchema(putSchema) middleware validates the format of the submitted data
+- The sanitizePlaceInput middleware cleans the data by removing undefined fields
+- The validateSchema(putSchema) middleware validates the format of the submitted data
+- System checks for duplicate places based on coordinates or name+province+country
 
-Response Codes
+**Response Codes:**
 
-200 OK: Place successfully updated
-400 Bad Request: Validation error or duplicate place
-404 Not Found: Place not found
-500 Internal Server Error: Error updating place
+- 200 OK: Place successfully updated
+- 400 Bad Request: Validation error or duplicate place
+- 404 Not Found: Place not found
+- 500 Internal Server Error: Server error
 
-Response Body (Success - 200 OK)
+**Response Body (Success - 200 OK):**
 
 ```json
 {
   "message": "Place updated successfully",
   "data": {
-    "id": "string",
-    "name": "string",
-    "latitude": number,
-    "longitude": number,
-    "zipCode": "string",
-    "province": "string",
-    "country": "string",
+    "id": "60d21b4667d0d8992e610c85",
+    "name": "Updated Park",
+    "latitude": 40.7829,
+    "longitude": -73.9654,
+    "zipCode": "10022",
+    "province": "New York",
+    "country": "United States",
     "externalServices": [...],
     "activities": [...],
     "itineraries": [...]
@@ -1969,9 +2135,9 @@ Response Body (Success - 200 OK)
 }
 ```
 
-Error Responses
+**Error Responses:**
 
-400 Bad Request:
+400 Bad Request (Duplicate Coordinates):
 
 ```json
 {
@@ -1979,7 +2145,7 @@ Error Responses
 }
 ```
 
-OR
+400 Bad Request (Duplicate Name/Location):
 
 ```json
 {
@@ -2003,10 +2169,10 @@ OR
 }
 ```
 
-Example Request
+**Example Request:**
 
 ```bash
-curl -X PUT https://api.example.com/places/60d21b4667d0d8992e610c85 \
+curl -X PUT https://itineraria-backend.up.railway.app/api/places/60d21b4667d0d8992e610c85 \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Updated Park",
@@ -2018,54 +2184,53 @@ curl -X PUT https://api.example.com/places/60d21b4667d0d8992e610c85 \
   }'
 ```
 
-#### Update Place (Partial)
+### Update Place (Partial)
 
-HTTP Method & URL: PATCH /api/places/
+**HTTP Method & URL:** PATCH /api/places/:id
 
-Description: Updates specific fields of an existing place.
+**Description:** Updates specific fields of an existing place.
 
-Request Parameters
+**Authentication Requirements:** None (Public endpoint)
 
-id (path parameter): Unique identifier of the place
+**Request Parameters:**
 
-Request Body
+- id (path parameter): Unique identifier of the place to partially update
+
+**Request Body:**
 
 ```json
 {
-  "name": "string", // optional
-  "latitude": number, // optional
-  "longitude": number, // optional
-  "zipCode": "string", // optional
-  "province": "string", // optional
-  "country": "string" // optional
+  "name": "Central Park Updated",
+  "zipCode": "10023"
 }
 ```
 
-Validation Notes
+**Validation Notes:**
 
-Any included field must meet the validations of the model schema
-The sanitizePlaceInput middleware cleans the data by removing undefined fields
+- Any included field must meet the validations of the model schema
+- The sanitizePlaceInput middleware cleans the data by removing undefined fields
+- System checks for duplicate places based on coordinates or name+province+country if those fields are included
 
-Response Codes
+**Response Codes:**
 
-200 OK: Place successfully updated
-400 Bad Request: Validation error or duplicate place
-404 Not Found: Place not found
-500 Internal Server Error: Error updating place
+- 200 OK: Place successfully updated
+- 400 Bad Request: Validation error or duplicate place
+- 404 Not Found: Place not found
+- 500 Internal Server Error: Server error
 
-Response Body (Success - 200 OK)
+**Response Body (Success - 200 OK):**
 
 ```json
 {
   "message": "Place updated successfully",
   "data": {
-    "id": "string",
-    "name": "string",
-    "latitude": number,
-    "longitude": number,
-    "zipCode": "string",
-    "province": "string",
-    "country": "string",
+    "id": "60d21b4667d0d8992e610c85",
+    "name": "Central Park Updated",
+    "latitude": 40.7829,
+    "longitude": -73.9654,
+    "zipCode": "10023",
+    "province": "New York",
+    "country": "United States",
     "externalServices": [...],
     "activities": [...],
     "itineraries": [...]
@@ -2073,9 +2238,9 @@ Response Body (Success - 200 OK)
 }
 ```
 
-Error Responses
+**Error Responses:**
 
-400 Bad Request:
+400 Bad Request (Duplicate Coordinates):
 
 ```json
 {
@@ -2083,7 +2248,7 @@ Error Responses
 }
 ```
 
-OR
+400 Bad Request (Duplicate Name/Location):
 
 ```json
 {
@@ -2107,10 +2272,10 @@ OR
 }
 ```
 
-Example Request
+**Example Request:**
 
 ```bash
-curl -X PATCH https://api.example.com/places/60d21b4667d0d8992e610c85 \
+curl -X PATCH https://itineraria-backend.up.railway.app/api/places/60d21b4667d0d8992e610c85 \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Central Park Updated",
@@ -2118,38 +2283,40 @@ curl -X PATCH https://api.example.com/places/60d21b4667d0d8992e610c85 \
   }'
 ```
 
-#### Delete Place
+### Delete Place
 
-HTTP Method & URL: DELETE /api/places/
+**HTTP Method & URL:** DELETE /api/places/:id
 
-Description: Removes a place from the system.
+**Description:** Removes a place from the system.
 
-Request Parameters
+**Authentication Requirements:** None (Public endpoint)
 
-id (path parameter): Unique identifier of the place
+**Request Parameters:**
 
-Request Body: None
+- id (path parameter): Unique identifier of the place to delete
 
-Response Codes
+**Request Body:** None
 
-200 OK: Place successfully deleted
-400 Bad Request: Cannot delete due to associated data
-404 Not Found: Place not found
-500 Internal Server Error: Error deleting place
+**Response Codes:**
 
-Response Body (Success - 200 OK)
+- 200 OK: Place successfully deleted
+- 400 Bad Request: Cannot delete due to associated data
+- 404 Not Found: Place not found
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
 
 ```json
 {
   "message": "Place deleted",
   "data": {
-    "id": "string",
-    "name": "string",
-    "latitude": number,
-    "longitude": number,
-    "zipCode": "string",
-    "province": "string",
-    "country": "string",
+    "id": "60d21b4667d0d8992e610c85",
+    "name": "Central Park",
+    "latitude": 40.7829,
+    "longitude": -73.9654,
+    "zipCode": "10022",
+    "province": "New York",
+    "country": "United States",
     "externalServices": [],
     "activities": [],
     "itineraries": []
@@ -2157,16 +2324,17 @@ Response Body (Success - 200 OK)
 }
 ```
 
-Error Responses
+**Error Responses:**
 
-400 Bad Request:
+400 Bad Request (Has External Services):
 
-```json{
+```json
+{
   "message": "Cannot delete the place because it has associated external services"
 }
 ```
 
-OR
+400 Bad Request (Has Itineraries):
 
 ```json
 {
@@ -2184,49 +2352,50 @@ OR
 
 500 Internal Server Error:
 
-````json
+```json
 {
   "message": "Error deleting place"
 }
+```
 
-Example Request
+**Example Request:**
+
 ```bash
-curl -X DELETE https://api.example.com/places/60d21b4667d0d8992e610c85
-````
+curl -X DELETE https://itineraria-backend.up.railway.app/api/places/60d21b4667d0d8992e610c85
+```
 
-### Participants
+| HTTP Method | Route                        | Description                        | Protected |
+| ----------- | ---------------------------- | ---------------------------------- | --------- |
+| GET         | /api/participants/:userId    | Get all participants for a user    | ✅        |
+| GET         | /api/participants/getone/:id | Get a specific participant         | ✅        |
+| POST        | /api/participants            | Create a new participant           | ✅        |
+| POST        | /api/participants/favorite   | Add favorite participant           | ✅        |
+| PUT         | /api/participants/:id        | Update a participant completely    | ✅        |
+| PATCH       | /api/participants/:id        | Update specific participant fields | ✅        |
+| DELETE      | /api/participants/:id        | Delete a participant               | ✅        |
 
-| HTTP Method | Route                      | Description                        | Protected |
-| ----------- | -------------------------- | ---------------------------------- | --------- | ---- | ----------------- | -------------------------- | --- |
-| GET         | /api/participants/:userId  | Get all participants for a user    | ✅        |
-| GET         | /api/participants/getone/  | Get a specific participant         | ✅        | POST | /api/participants | Get a specific participant | ✅  |
-| POST        | /api/participants          | Create a new participant           |
-| POST        | /api/participants/favorite | Add favorite participant           | ✅        |
-| PUT         | /api/participants/         | Update a participant completely    | ✅        |
-| PATCH       | /api/participants/         | Update specific participant fields | ✅        |
-| DELETE      | /api/participants/         | Delete a participant               | ✅        |
+### Get All Participants for a User
 
-#### Get All Participants for a User
+**HTTP Method & URL:** GET /api/participants/:userId
 
-HTTP Method & URL: GET /api/participants/
+**Description:** Retrieves all participants associated with a specific user.
 
-Description
-Retrieves all participants associated with a specific user.
+**Authentication Requirements:** Authentication required (Protected endpoint)
 
-Request Parameters
+**Request Parameters:**
 
-userId (path parameter): ID of the user whose participants are being requested
+- userId (path parameter): ID of the user whose participants are being requested
 
-Request Body: None
+**Request Body:** None
 
-Response Codes
+**Response Codes:**
 
-200 OK: Participants retrieved successfully
-401 Unauthorized: Authentication required
-404 Not Found: User not found
-500 Internal Server Error: Server error while retrieving participants
+- 200 OK: Participants retrieved successfully
+- 401 Unauthorized: Authentication required
+- 404 Not Found: User not found
+- 500 Internal Server Error: Server error
 
-Response Body (Success - 200 OK)
+**Response Body (Success - 200 OK):**
 
 ```json
 {
@@ -2241,7 +2410,7 @@ Response Body (Success - 200 OK)
       "user": "66fc4785f2b5cf4ef633816a"
     },
     {
-      "id": "...",
+      "id": "670bd1cc60eb88e665c9fb91",
       "name": "Participant 2",
       "age": 20,
       "disability": false,
@@ -2252,7 +2421,7 @@ Response Body (Success - 200 OK)
 }
 ```
 
-Error Responses
+**Error Responses:**
 
 401 Unauthorized:
 
@@ -2278,34 +2447,35 @@ Error Responses
 }
 ```
 
-Example Request
+**Example Request:**
 
 ```bash
-curl -X GET https://api.example.com/api/participants/66fc4785f2b5cf4ef633816a \
-  -H "Authorization: Bearer {your_token}"
+curl -X GET https://itineraria-backend.up.railway.app/api/participants/66fc4785f2b5cf4ef633816a \
+  -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-#### Get Specific Participant
+### Get Specific Participant
 
-HTTP Method & URL: GET /api/participants/getone/
+**HTTP Method & URL:** GET /api/participants/getone/:id
 
-Description
-Retrieves detailed information about a specific participant.
+**Description:** Retrieves detailed information about a specific participant.
 
-Request Parameters
+**Authentication Requirements:** Authentication required (Protected endpoint)
 
-id (path parameter): ID of the participant to retrieve
+**Request Parameters:**
 
-Request Body: None
+- id (path parameter): ID of the participant to retrieve
 
-Response Codes
+**Request Body:** None
 
-200 OK: Participant retrieved successfully
-401 Unauthorized: Authentication required
-404 Not Found: Participant not found
-500 Internal Server Error: Server error while retrieving participant
+**Response Codes:**
 
-Response Body (Success - 200 OK)
+- 200 OK: Participant retrieved successfully
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Participant not found
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
 
 ```json
 {
@@ -2324,7 +2494,7 @@ Response Body (Success - 200 OK)
 }
 ```
 
-Error Responses
+**Error Responses:**
 
 401 Unauthorized:
 
@@ -2350,23 +2520,24 @@ Error Responses
 }
 ```
 
-Example Request
+**Example Request:**
 
 ```bash
-curl -X GET https://api.example.com/api/participants/getone/670bd0cc60eb88e665c9fb90 \
-  -H "Authorization: Bearer {your_token}"
+curl -X GET https://itineraria-backend.up.railway.app/api/participants/getone/670bd0cc60eb88e665c9fb90 \
+  -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-#### Create New Participant
+### Create New Participant
 
-HTTP Method & URL: POST /api/participants
+**HTTP Method & URL:** POST /api/participants
 
-Description
-Creates a new participant in the system.
+**Description:** Creates a new participant in the system.
 
-Request Parameters: None
+**Authentication Requirements:** Authentication required (Protected endpoint)
 
-Request Body
+**Request Parameters:** None
+
+**Request Body:**
 
 ```json
 {
@@ -2378,28 +2549,27 @@ Request Body
 }
 ```
 
-Validation Notes
+**Validation Notes:**
 
 - name:
-  - 'Name must be a string'
-  - 'Name is required'
-  - 'Name must be at least 3 characters'
+  - Must be a string
+  - Must be at least 3 characters if provided
 - age:
-
-  - 'Age must be a number'
-  - 'age must be between 1 and 3 digits'
-
+  - Must be a number
+  - Required
+  - Must be between 1 and 3 digits
 - disability:
-  - 'Disability must be a boolean'
+  - Must be a boolean
+  - Required
 
-Response Codes
+**Response Codes:**
 
-201 Created: Participant successfully created
-400 Bad Request: Invalid participant data
-401 Unauthorized: Authentication required
-500 Internal Server Error: Error creating participant
+- 201 Created: Participant successfully created
+- 400 Bad Request: Invalid participant data
+- 401 Unauthorized: Authentication required
+- 500 Internal Server Error: Server error
 
-Response Body (Success - 201 Created)
+**Response Body (Success - 201 Created):**
 
 ```json
 {
@@ -2415,7 +2585,7 @@ Response Body (Success - 201 Created)
 }
 ```
 
-Error Responses
+**Error Responses:**
 
 400 Bad Request:
 
@@ -2442,12 +2612,12 @@ Error Responses
 }
 ```
 
-Example Request
+**Example Request:**
 
 ```bash
-curl -X POST https://api.example.com/api/participants \
+curl -X POST https://itineraria-backend.up.railway.app/api/participants \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer {your_token}" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
   -d '{
     "name": "Participant 2",
     "age": 20,
@@ -2457,16 +2627,17 @@ curl -X POST https://api.example.com/api/participants \
   }'
 ```
 
-#### Add Favorite Participant
+### Add Favorite Participant
 
-HTTP Method & URL: POST /api/participants/favorite
+**HTTP Method & URL:** POST /api/participants/favorite
 
-Description
-Adds a participant as a favorite.
+**Description:** Adds a participant as a favorite.
 
-Request Parameters: None
+**Authentication Requirements:** Authentication required (Protected endpoint)
 
-Request Body
+**Request Parameters:** None
+
+**Request Body:**
 
 ```json
 {
@@ -2478,16 +2649,19 @@ Request Body
 }
 ```
 
-Validation Notes
-The sanitizeParticipantInput middleware cleans the data by removing undefined fields.
-Response Codes
+**Validation Notes:**
 
-201 Created: Favorite participant successfully added
-400 Bad Request: Invalid participant data
-401 Unauthorized: Authentication required
-500 Internal Server Error: Error adding favorite participant
+- Same validations as creating a new participant
+- The sanitizeParticipantInput middleware cleans the data by removing undefined fields
 
-Response Body (Success - 201 Created)
+**Response Codes:**
+
+- 201 Created: Favorite participant successfully added
+- 400 Bad Request: Invalid participant data
+- 401 Unauthorized: Authentication required
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 201 Created):**
 
 ```json
 {
@@ -2504,7 +2678,8 @@ Response Body (Success - 201 Created)
 }
 ```
 
-Error Responses
+**Error Responses:**
+
 400 Bad Request:
 
 ```json
@@ -2523,16 +2698,18 @@ Error Responses
 
 500 Internal Server Error:
 
-````json
+```json
 {
   "message": "An error occurred while processing your request"
 }
+```
 
-Example Request
+**Example Request:**
+
 ```bash
-curl -X POST https://api.example.com/api/participants/favorite \
+curl -X POST https://itineraria-backend.up.railway.app/api/participants/favorite \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer {your_token}" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
   -d '{
     "name": "Participant 1",
     "age": 20,
@@ -2540,20 +2717,21 @@ curl -X POST https://api.example.com/api/participants/favorite \
     "preferences": ["670bce6416da0fb6e0947f31"],
     "user": "66fc4785f2b5cf4ef633816a"
   }'
-````
+```
 
-#### Update Participant (Complete)
+### Update Participant (Complete)
 
-HTTP Method & URL: PUT /api/participants/
+**HTTP Method & URL:** PUT /api/participants/:id
 
-Description
-Updates all the data of an existing participant.
+**Description:** Updates all the data of an existing participant.
 
-Request Parameters
+**Authentication Requirements:** Authentication required (Protected endpoint)
 
-id (path parameter): ID of the participant to update
+**Request Parameters:**
 
-Request Body
+- id (path parameter): ID of the participant to update
+
+**Request Body:**
 
 ```json
 {
@@ -2567,29 +2745,29 @@ Request Body
 }
 ```
 
-Validation Notes
+**Validation Notes:**
 
 - name:
-  - 'Name must be a string'
-  - 'Name is required'
-  - 'Name must be at least 3 characters'
+  - Must be a string
+  - Required
+  - Must be at least 3 characters
 - age:
-
-  - 'Age must be a number'
-  - 'age must be between 1 and 3 digits'
-
+  - Must be a number
+  - Required
+  - Must be between 1 and 3 digits
 - disability:
-  - 'Disability must be a boolean'
+  - Must be a boolean
+  - Required
 
-Response Codes
+**Response Codes:**
 
-200 OK: Participant successfully updated
-400 Bad Request: Invalid participant data
-401 Unauthorized: Authentication required
-404 Not Found: Participant not found
-500 Internal Server Error: Error updating participant
+- 200 OK: Participant successfully updated
+- 400 Bad Request: Invalid participant data
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Participant not found
+- 500 Internal Server Error: Server error
 
-Response Body (Success - 200 OK)
+**Response Body (Success - 200 OK):**
 
 ```json
 {
@@ -2608,7 +2786,7 @@ Response Body (Success - 200 OK)
 }
 ```
 
-Error Responses
+**Error Responses:**
 
 400 Bad Request:
 
@@ -2643,12 +2821,12 @@ Error Responses
 }
 ```
 
-Example Request
+**Example Request:**
 
 ```bash
-curl -X PUT https://api.example.com/api/participants/670bd0cc60eb88e665c9fb90 \
+curl -X PUT https://itineraria-backend.up.railway.app/api/participants/670bd0cc60eb88e665c9fb90 \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer {your_token}" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
   -d '{
     "name": "Facundo",
     "age": 24,
@@ -2660,39 +2838,41 @@ curl -X PUT https://api.example.com/api/participants/670bd0cc60eb88e665c9fb90 \
   }'
 ```
 
-#### Update Participant (Partial)
+### Update Participant (Partial)
 
-HTTP Method & URL: PATCH /api/participants/
+**HTTP Method & URL:** PATCH /api/participants/:id
 
-Description
-Updates only specific fields of an existing participant.
+**Description:** Updates only specific fields of an existing participant.
 
-Request Parameters
+**Authentication Requirements:** Authentication required (Protected endpoint)
 
-id (path parameter): ID of the participant to partially update
+**Request Parameters:**
 
-Request Body
+- id (path parameter): ID of the participant to partially update
+
+**Request Body:**
 
 ```json
 {
-  "name": "Nicolás Escobar" // optional field example
+  "name": "Nicolás Escobar"
 }
 ```
 
-Validation Notes
+**Validation Notes:**
 
-Any included field must meet the validations of the model schema
-The sanitizeParticipantInput middleware cleans the data by removing undefined fields
+- Any included field must meet the validations of the model schema
+- Fields are optional
+- The sanitizeParticipantInput middleware cleans the data by removing undefined fields
 
-Response Codes
+**Response Codes:**
 
-200 OK: Participant successfully updated
-400 Bad Request: Invalid participant data
-401 Unauthorized: Authentication required
-404 Not Found: Participant not found
-500 Internal Server Error: Error updating participant
+- 200 OK: Participant successfully updated
+- 400 Bad Request: Invalid participant data
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Participant not found
+- 500 Internal Server Error: Server error
 
-Response Body (Success - 200 OK)
+**Response Body (Success - 200 OK):**
 
 ```json
 {
@@ -2708,7 +2888,8 @@ Response Body (Success - 200 OK)
 }
 ```
 
-Error Responses
+**Error Responses:**
+
 400 Bad Request:
 
 ```json
@@ -2741,38 +2922,39 @@ Error Responses
 }
 ```
 
-Example Request
+**Example Request:**
 
 ```bash
-curl -X PATCH https://api.example.com/api/participants/66ff22aece8bda39a2e5be6c \
+curl -X PATCH https://itineraria-backend.up.railway.app/api/participants/66ff22aece8bda39a2e5be6c \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer {your_token}" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
   -d '{
     "name": "Nicolás Escobar"
   }'
 ```
 
-#### Delete Participant
+### Delete Participant
 
-HTTP Method & URL: DELETE /api/participants/
+**HTTP Method & URL:** DELETE /api/participants/:id
 
-Description
-Removes a specific participant from the system.
+**Description:** Removes a specific participant from the system.
 
-Request Parameters
+**Authentication Requirements:** Authentication required (Protected endpoint)
 
-id (path parameter): ID of the participant to delete
+**Request Parameters:**
 
-Request Body: None
+- id (path parameter): ID of the participant to delete
 
-Response Codes
+**Request Body:** None
 
-200 OK: Participant successfully deleted
-401 Unauthorized: Authentication required
-404 Not Found: Participant not found
-500 Internal Server Error: Error deleting participant
+**Response Codes:**
 
-Response Body (Success - 200 OK)
+- 200 OK: Participant successfully deleted
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Participant not found
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
 
 ```json
 {
@@ -2788,7 +2970,8 @@ Response Body (Success - 200 OK)
 }
 ```
 
-Error Responses
+**Error Responses:**
+
 401 Unauthorized:
 
 ```json
@@ -2813,43 +2996,42 @@ Error Responses
 }
 ```
 
-Example Request
+**Example Request:**
 
 ```bash
-curl -X DELETE https://api.example.com/api/participants/66ff22aece8bda39a2e5be6c \
-  -H "Authorization: Bearer {your_token}"
+curl -X DELETE https://itineraria-backend.up.railway.app/api/participants/66ff22aece8bda39a2e5be6c \
+  -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-### Opinions
+| HTTP Method | Route                      | Description                    | Protected |
+| ----------- | -------------------------- | ------------------------------ | --------- |
+| GET         | /api/opinions              | Get all opinions               | ✅        |
+| GET         | /api/opinions/:id          | Get a specific opinion         | ✅        |
+| GET         | /api/opinions/activity/:id | Get opinions by activity       | ✅        |
+| POST        | /api/opinions              | Create a new opinion           | ✅        |
+| PUT         | /api/opinions/:id          | Update an opinion completely   | ✅        |
+| PATCH       | /api/opinions/:id          | Update specific opinion fields | ✅        |
+| DELETE      | /api/opinions/:id          | Delete an opinion              | ✅        |
 
-| HTTP Method | Route                   | Description                    | Protected |
-| ----------- | ----------------------- | ------------------------------ | --------- |
-| GET         | /api/opinions           | Get all opinions               | ✅        |
-| GET         | /api/opinions/          | Get a specific opinion         | ✅        |
-| GET         | /api/opinions/activity/ | Get opinions by activity       | ✅        |
-| POST        | /api/opinions           | Create a new opinion           | ✅        |
-| PUT         | /api/opinions/          | Update an opinion completely   | ✅        |
-| PATCH       | /api/opinions/          | Update specific opinion fields | ✅        |
-| DELETE      | /api/opinions/          | Delete an opinion              | ✅        |
+### Get All Opinions
 
-#### Get All Opinions
+**HTTP Method & URL:** GET /api/opiniones
 
-HTTP Method & URL: GET /api/opiniones
+**Description:** Retrieves all opinions registered in the system.
 
-Description
-Retrieves all opinions registered in the system.
+**Authentication Requirements:** Authentication required (Protected endpoint)
 
-Request Parameters: None
+**Request Parameters:** None
 
-Request Body: None
+**Request Body:** None
 
-Response Codes
+**Response Codes:**
 
-200 OK: Opinions retrieved successfully
-401 Unauthorized: Authentication required
-500 Internal Server Error: Server error while retrieving opinions
+- 200 OK: Successfully retrieved opinions (also returned if no opinions found)
+- 401 Unauthorized: Authentication required
+- 500 Internal Server Error: Server error
 
-Response Body (Success - 200 OK)
+**Response Body (Success - 200 OK):**
 
 ```json
 {
@@ -2862,12 +3044,12 @@ Response Body (Success - 200 OK)
       "user": {...},
       "activity": {...}
     },
-    {...}
+    // Additional opinions
   ]
 }
 ```
 
-Response Body (No opinions found - 200 OK)
+**Response Body (No Opinions - 200 OK):**
 
 ```json
 {
@@ -2876,7 +3058,8 @@ Response Body (No opinions found - 200 OK)
 }
 ```
 
-Error Responses
+**Error Responses:**
+
 401 Unauthorized:
 
 ```json
@@ -2893,34 +3076,35 @@ Error Responses
 }
 ```
 
-Example Request
+**Example Request:**
 
 ```bash
-curl -X GET https://api.example.com/api/opiniones \
-  -H "Authorization: Bearer {your_token}"
+curl -X GET https://itineraria-backend.up.railway.app/api/opiniones \
+  -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-#### Get Specific Opinion
+### Get Opinion by ID
 
-HTTP Method & URL: GET /api/opiniones/
+**HTTP Method & URL:** GET /api/opiniones/:id
 
-Description
-Retrieves detailed information about a specific opinion.
+**Description:** Retrieves detailed information about a specific opinion.
 
-Request Parameters
+**Authentication Requirements:** Authentication required (Protected endpoint)
 
-id (path parameter): ID of the opinion to retrieve
+**Request Parameters:**
 
-Request Body: None
+- id (path parameter): Unique identifier of the opinion to retrieve
 
-Response Codes
+**Request Body:** None
 
-200 OK: Opinion retrieved successfully
-401 Unauthorized: Authentication required
-404 Not Found: Opinion not found
-500 Internal Server Error: Server error while retrieving the opinion
+**Response Codes:**
 
-Response Body (Success - 200 OK)
+- 200 OK: Successfully retrieved the opinion
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Opinion not found
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
 
 ```json
 {
@@ -2935,20 +3119,23 @@ Response Body (Success - 200 OK)
 }
 ```
 
-Error Responses
+**Error Responses:**
+
 401 Unauthorized:
 
-````json
+```json
 {
   "message": "Authentication required"
 }
+```
 
 404 Not Found:
+
 ```json
 {
   "message": "Opinion not found"
 }
-````
+```
 
 500 Internal Server Error:
 
@@ -2958,34 +3145,35 @@ Error Responses
 }
 ```
 
-Example Request
+**Example Request:**
 
 ```bash
-curl -X GET https://api.example.com/api/opiniones/670bd0cc60eb88e665c9fb90 \
-  -H "Authorization: Bearer {your_token}"
+curl -X GET https://itineraria-backend.up.railway.app/api/opiniones/670bd0cc60eb88e665c9fb90 \
+  -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-#### Get Opinions by Activity
+### Get Opinions by Activity ID
 
-HTTP Method & URL: GET /api/opiniones/activity/
+**HTTP Method & URL:** GET /api/opiniones/activity/:id
 
-Description
-Retrieves all opinions associated with a specific activity.
+**Description:** Retrieves all opinions associated with a specific activity.
 
-Request Parameters
+**Authentication Requirements:** Authentication required (Protected endpoint)
 
-id (path parameter): ID of the activity whose opinions are being requested
+**Request Parameters:**
 
-Request Body: None
+- id (path parameter): Unique identifier of the activity whose opinions are being requested
 
-Response Codes
+**Request Body:** None
 
-200 OK: Opinions retrieved successfully
-401 Unauthorized: Authentication required
-404 Not Found: Activity not found
-500 Internal Server Error: Server error while retrieving opinions
+**Response Codes:**
 
-Response Body (Success - 200 OK)
+- 200 OK: Successfully retrieved activity's opinions (also returned if no opinions found)
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Activity not found
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
 
 ```json
 {
@@ -2998,12 +3186,12 @@ Response Body (Success - 200 OK)
       "user": {...},
       "activity": {...}
     },
-    {...}
+    // Additional opinions
   ]
 }
 ```
 
-Response Body (No opinions found - 200 OK)
+**Response Body (No Opinions - 200 OK):**
 
 ```json
 {
@@ -3012,7 +3200,8 @@ Response Body (No opinions found - 200 OK)
 }
 ```
 
-Error Responses
+**Error Responses:**
+
 401 Unauthorized:
 
 ```json
@@ -3037,23 +3226,24 @@ Error Responses
 }
 ```
 
-Example Request
+**Example Request:**
 
 ```bash
-curl -X GET https://api.example.com/api/opiniones/activity/67178bbf8fec993032a05aa9 \
-  -H "Authorization: Bearer {your_token}"
+curl -X GET https://itineraria-backend.up.railway.app/api/opiniones/activity/67178bbf8fec993032a05aa9 \
+  -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-#### Create New Opinion
+### Create Opinion
 
-HTTP Method & URL: POST /api/opiniones
+**HTTP Method & URL:** POST /api/opiniones
 
-Description
-Creates a new opinion in the system.
+**Description:** Creates a new opinion in the system.
 
-Request Parameters: None
+**Authentication Requirements:** Authentication required (Protected endpoint)
 
-Request Body
+**Request Parameters:** None
+
+**Request Body:**
 
 ```json
 {
@@ -3064,32 +3254,32 @@ Request Body
 }
 ```
 
-Validation Notes
+**Validation Notes:**
 
 - rating:
-
   - Must be a number
-  - Is required
-  - Must be a number between 1 and 5
-
+  - Required
+  - Must be between 1 and 5
 - comment:
-
   - Must be a string
-  - Is required
+  - Required
   - Must be between 1 and 100 characters
+- activity:
+  - Must reference a valid activity ID
+  - Required
+- user:
+  - Must reference a valid user ID
+  - Required
 
-- activity: ID of the activity being rated
-- user: ID of the user creating the opinion
+**Response Codes:**
 
-Response Codes
+- 201 Created: Opinion successfully created
+- 400 Bad Request: Invalid opinion data
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Activity or user not found
+- 500 Internal Server Error: Server error
 
-201 Created: Opinion successfully created
-400 Bad Request: Invalid opinion data
-401 Unauthorized: Authentication required
-404 Not Found: Activity or user not found
-500 Internal Server Error: Error creating opinion
-
-Response Body (Success - 201 Created)
+**Response Body (Success - 201 Created):**
 
 ```json
 {
@@ -3104,7 +3294,8 @@ Response Body (Success - 201 Created)
 }
 ```
 
-Error Responses
+**Error Responses:**
+
 400 Bad Request:
 
 ```json
@@ -3146,12 +3337,12 @@ OR
 }
 ```
 
-Example Request
+**Example Request:**
 
 ```bash
-curl -X POST https://api.example.com/api/opiniones \
+curl -X POST https://itineraria-backend.up.railway.app/api/opiniones \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer {your_token}" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
   -d '{
     "rating": 5,
     "comment": "Excellent place to spend the day",
@@ -3160,18 +3351,19 @@ curl -X POST https://api.example.com/api/opiniones \
   }'
 ```
 
-#### Update Opinion (Complete)
+### Update Opinion
 
-HTTP Method & URL: PUT /api/opiniones/
+**HTTP Method & URL:** PUT /api/opiniones/:id
 
-Description
-Updates all the data of an existing opinion.
+**Description:** Updates all data of an existing opinion.
 
-Request Parameters
+**Authentication Requirements:** Authentication required (Protected endpoint)
 
-id (path parameter): ID of the opinion to update
+**Request Parameters:**
 
-Request Body
+- id (path parameter): Unique identifier of the opinion to update
+
+**Request Body:**
 
 ```json
 {
@@ -3180,21 +3372,21 @@ Request Body
 }
 ```
 
-Validation Notes
+**Validation Notes:**
 
-All fields must comply with the validations of the model schema
-All fields must be included in the request
-The sanitizeOpinionInput middleware cleans the data by removing undefined fields
+- All fields must comply with the model schema validations
+- All fields must be included in the request
+- The sanitizeOpinionInput middleware cleans the data by removing undefined fields
 
-Response Codes
+**Response Codes:**
 
-200 OK: Opinion successfully updated
-400 Bad Request: Invalid opinion data
-401 Unauthorized: Authentication required
-404 Not Found: Opinion not found
-500 Internal Server Error: Error updating opinion
+- 200 OK: Opinion successfully updated
+- 400 Bad Request: Invalid opinion data
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Opinion not found
+- 500 Internal Server Error: Server error
 
-Response Body (Success - 200 OK)
+**Response Body (Success - 200 OK):**
 
 ```json
 {
@@ -3209,7 +3401,8 @@ Response Body (Success - 200 OK)
 }
 ```
 
-Error Responses
+**Error Responses:**
+
 400 Bad Request:
 
 ```json
@@ -3242,47 +3435,53 @@ Error Responses
 }
 ```
 
-Example Request
+**Example Request:**
 
 ```bash
-curl -X PUT https://api.example.com/api/opiniones/670bd0cc60eb88e665c9fb90 \
+curl -X PUT https://itineraria-backend.up.railway.app/api/opiniones/670bd0cc60eb88e665c9fb90 \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer {your_token}" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
   -d '{
     "rating": 4,
     "comment": "Excellent place to spend the day"
   }'
 ```
 
-#### Update Opinion (Partial)
+### Update Opinion (Partial)
 
-HTTP Method & URL: PATCH /api/opiniones/
+**HTTP Method & URL:** PATCH /api/opiniones/:id
 
-Description
-Updates only specific fields of an existing opinion.
+**Description:** Updates only specific fields of an existing opinion.
 
-Request Parameters
+**Authentication Requirements:** Authentication required (Protected endpoint)
 
-id (path parameter): ID of the opinion to partially update
+**Request Parameters:**
 
-Request Body
-json{
-"rating": 3
+- id (path parameter): Unique identifier of the opinion to partially update
+
+**Request Body:**
+
+```json
+{
+  "rating": 3
 }
-Validation Notes
+```
 
-Any included field must meet the validations of the model schema
-The sanitizeOpinionInput middleware cleans the data by removing undefined fields
+**Validation Notes:**
 
-Response Codes
+- Any included field must comply with the model schema validations
+- Fields are optional
+- The sanitizeOpinionInput middleware cleans the data by removing undefined fields
 
-200 OK: Opinion successfully updated
-400 Bad Request: Invalid opinion data
-401 Unauthorized: Authentication required
-404 Not Found: Opinion not found
-500 Internal Server Error: Error updating opinion
+**Response Codes:**
 
-Response Body (Success - 200 OK)
+- 200 OK: Opinion successfully updated
+- 400 Bad Request: Invalid opinion data
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Opinion not found
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
 
 ```json
 {
@@ -3297,7 +3496,8 @@ Response Body (Success - 200 OK)
 }
 ```
 
-Error Responses
+**Error Responses:**
+
 400 Bad Request:
 
 ```json
@@ -3330,38 +3530,39 @@ Error Responses
 }
 ```
 
-Example Request
+**Example Request:**
 
 ```bash
-curl -X PATCH https://api.example.com/api/opiniones/670bd0cc60eb88e665c9fb90 \
+curl -X PATCH https://itineraria-backend.up.railway.app/api/opiniones/670bd0cc60eb88e665c9fb90 \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer {your_token}" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
   -d '{
     "rating": 3
   }'
 ```
 
-#### Delete Opinion
+### Delete Opinion
 
-HTTP Method & URL: DELETE /api/opiniones/
+**HTTP Method & URL:** DELETE /api/opiniones/:id
 
-Description
-Removes a specific opinion from the system.
+**Description:** Removes a specific opinion from the system.
 
-Request Parameters
+**Authentication Requirements:** Authentication required (Protected endpoint)
 
-id (path parameter): ID of the opinion to delete
+**Request Parameters:**
 
-Request Body: None
+- id (path parameter): Unique identifier of the opinion to delete
 
-Response Codes
+**Request Body:** None
 
-200 OK: Opinion successfully deleted
-401 Unauthorized: Authentication required
-404 Not Found: Opinion not found
-500 Internal Server Error: Error deleting opinion
+**Response Codes:**
 
-Response Body (Success - 200 OK)
+- 200 OK: Opinion successfully deleted
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Opinion not found
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
 
 ```json
 {
@@ -3369,7 +3570,8 @@ Response Body (Success - 200 OK)
 }
 ```
 
-Error Responses
+**Error Responses:**
+
 401 Unauthorized:
 
 ```json
@@ -3394,42 +3596,74 @@ Error Responses
 }
 ```
 
-Example Request
+**Example Request:**
 
 ```bash
-curl -X DELETE https://api.example.com/api/opiniones/670bd0cc60eb88e665c9fb90 \
-  -H "Authorization: Bearer {your_token}"
+curl -X DELETE https://itineraria-backend.up.railway.app/api/opiniones/670bd0cc60eb88e665c9fb90 \
+  -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-### Itineraries
+## Itineraries
 
-| HTTP Method | Route                     | Description                           | Protected |
-| ----------- | ------------------------- | ------------------------------------- | --------- |
-| GET         | /api/itineraries          | Obtener todos los itinerarios         | ✅        |
-| GET         | /api/itineraries/user/:id | Obtener itinerarios por usuario       | ✅        |
-| GET         | /api/itineraries/         | Obtener un itinerario específico      | ✅        |
-| POST        | /api/itineraries          | Crear un nuevo itinerario             | ✅        |
-| POST        | /api/itineraries/ia       | Crear un itinerario con IA            | ✅        |
-| PUT         | /api/itineraries/         | Actualizar un itinerario completo     | ✅        |
-| PATCH       | /api/itineraries/         | Actualizar parcialmente un itinerario | ✅        |
-| DELETE      | /api/itineraries/         | Eliminar un itinerario                | ✅        |
+### Data Model
 
-#### Obtener todos los itinerarios
-
-GET /api/itineraries
-
-Obtiene todos los itinerarios registrados en el sistema.
-
-Respuesta:
+**Itinerary**
 
 ```ts
-jsonContent-Type: application/json
 {
+  id: string;                   // Unique identifier
+  title: string;                // Title of the itinerary
+  description: string;          // Description of the itinerary
+  dayStart: Date;               // Start date of the itinerary
+  dayEnd: Date;                 // End date of the itinerary
+  activities: Activity[];       // Collection of activities in this itinerary
+  user: string | User;          // Reference to a User
+  participants: Participant[];  // Collection of participants for this itinerary
+  place: string | Place;        // Reference to a Place
+  createdAt?: Date;             // Creation timestamp
+  updatedAt?: Date;             // Last update timestamp
+}
+```
+
+| HTTP Method | Route                     | Description                      | Protected |
+| ----------- | ------------------------- | -------------------------------- | --------- |
+| GET         | /api/itineraries          | Get all itineraries              | ✅        |
+| GET         | /api/itineraries/:id      | Get a specific itinerary         | ✅        |
+| GET         | /api/itineraries/user/:id | Get itineraries by user          | ✅        |
+| POST        | /api/itineraries          | Create a new itinerary           | ✅        |
+| POST        | /api/itineraries/ia       | Create a new itinerary with AI   | ✅        |
+| PUT         | /api/itineraries/:id      | Update an itinerary completely   | ✅        |
+| PATCH       | /api/itineraries/:id      | Update specific itinerary fields | ✅        |
+| DELETE      | /api/itineraries/:id      | Delete an itinerary              | ✅        |
+
+### Get All Itineraries
+
+**HTTP Method & URL:** GET /api/itineraries
+
+**Description:** Retrieves all itineraries registered in the system.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:** None
+
+**Request Body:** None
+
+**Response Codes:**
+
+- 200 OK: Successfully retrieved itineraries (also returned if no itineraries found)
+- 401 Unauthorized: Authentication required
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
+
+```json
+{
+  "message": "All itineraries found",
   "data": [
     {
       "id": "670bd0cc60eb88e665c9fb90",
-      "title": "Itinerario 1111",
-      "description": "Itinerario hecho para 7 dias en Disney...",
+      "title": "Itinerary 1111",
+      "description": "Itinerary made for 7 days at Disney...",
       "dayStart": "2024-10-30T00:00:00.000Z",
       "dayEnd": "2024-11-23T00:00:00.000Z",
       "activities": [...],
@@ -3437,65 +3671,75 @@ jsonContent-Type: application/json
       "user": {...},
       "place": {...}
     },
-    {...}
+    // Additional itineraries
   ]
 }
 ```
 
-Errores:
+**Response Body (No Itineraries - 200 OK):**
 
-500 Internal Server Error: Error del servidor
-
-#### Obtener itinerarios por usuario
-
-GET /api/itineraries/user/:id
-
-Obtiene todos los itinerarios asociados a un usuario específico.
-
-Parámetros URL:
-id: ID del usuario cuyos itinerarios se desean obtener
-
-Respuesta:
-
-```ts
-jsonContent-Type: application/json
+```json
 {
-  "data": [
-    {
-      "id": "670bd0cc60eb88e665c9fb90",
-      "title": "Itinerario 1111",
-      "description": "Itinerario hecho para 7 dias en Disney...",
-      "dayStart": "2024-10-30T00:00:00.000Z",
-      "dayEnd": "2024-11-23T00:00:00.000Z",
-      "place": {...}
-    },
-    {...}
-  ]
+  "message": "No itineraries found",
+  "data": []
 }
 ```
 
-Errores:
+**Error Responses:**
 
-500 Internal Server Error: Error del servidor
+401 Unauthorized:
 
-#### Obtener un itinerario específico
-
-GET /api/itineraries/:id
-
-Obtiene información detallada de un itinerario específico.
-
-Parámetros URL:
-id: ID del itinerario a consultar
-
-Respuesta:
-
-```ts
-jsonContent-Type: application/json
+```json
 {
+  "message": "Authentication required"
+}
+```
+
+500 Internal Server Error:
+
+```json
+{
+  "message": "Server error"
+}
+```
+
+**Example Request:**
+
+```bash
+curl -X GET https://itineraria-backend.up.railway.app/api/itineraries \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+### Get Itinerary by ID
+
+**HTTP Method & URL:** GET /api/itineraries/:id
+
+**Description:** Retrieves detailed information about a specific itinerary.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:**
+
+- id (path parameter): Unique identifier of the itinerary to retrieve
+
+**Request Body:** None
+
+**Response Codes:**
+
+- 200 OK: Successfully retrieved the itinerary
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Itinerary not found
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
+
+```json
+{
+  "message": "Itinerary found",
   "data": {
     "id": "670bd0cc60eb88e665c9fb90",
-    "title": "Itinerario 1111",
-    "description": "Itinerario hecho para 7 dias en Disney...",
+    "title": "Itinerary 1111",
+    "description": "Itinerary made for 7 days at Disney...",
     "dayStart": "2024-10-30T00:00:00.000Z",
     "dayEnd": "2024-11-23T00:00:00.000Z",
     "activities": [...],
@@ -3506,23 +3750,137 @@ jsonContent-Type: application/json
 }
 ```
 
-Errores:
+**Error Responses:**
 
-500 Internal Server Error: Error del servidor
+401 Unauthorized:
 
-#### Crear un nuevo itinerario
-
-POST /api/itineraries
-
-Crea un nuevo itinerario en el sistema.
-
-Solicitud:
-
-```ts
-jsonContent-Type: application/json
+```json
 {
-  "title": "Itinerario 1111",
-  "description": "Itinerario hecho para 7 dias en Disney...",
+  "message": "Authentication required"
+}
+```
+
+404 Not Found:
+
+```json
+{
+  "message": "Itinerary not found"
+}
+```
+
+500 Internal Server Error:
+
+```json
+{
+  "message": "Server error"
+}
+```
+
+**Example Request:**
+
+```bash
+curl -X GET https://itineraria-backend.up.railway.app/api/itineraries/670bd0cc60eb88e665c9fb90 \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+### Get Itineraries by User
+
+**HTTP Method & URL:** GET /api/itineraries/user/:id
+
+**Description:** Retrieves all itineraries associated with a specific user.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:**
+
+- id (path parameter): Unique identifier of the user whose itineraries are requested
+
+**Request Body:** None
+
+**Response Codes:**
+
+- 200 OK: Successfully retrieved user's itineraries (also returned if no itineraries found)
+- 401 Unauthorized: Authentication required
+- 404 Not Found: User not found
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
+
+```json
+{
+  "message": "User itineraries found",
+  "data": [
+    {
+      "id": "670bd0cc60eb88e665c9fb90",
+      "title": "Itinerary 1111",
+      "description": "Itinerary made for 7 days at Disney...",
+      "dayStart": "2024-10-30T00:00:00.000Z",
+      "dayEnd": "2024-11-23T00:00:00.000Z",
+      "place": {...}
+    },
+    // Additional itineraries
+  ]
+}
+```
+
+**Response Body (No Itineraries - 200 OK):**
+
+```json
+{
+  "message": "No itineraries found for this user",
+  "data": []
+}
+```
+
+**Error Responses:**
+
+401 Unauthorized:
+
+```json
+{
+  "message": "Authentication required"
+}
+```
+
+404 Not Found:
+
+```json
+{
+  "message": "User not found"
+}
+```
+
+500 Internal Server Error:
+
+```json
+{
+  "message": "Server error"
+}
+```
+
+**Example Request:**
+
+```bash
+curl -X GET https://itineraria-backend.up.railway.app/api/itineraries/user/6722862eeed0a44e8abde61f \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+### Create Itinerary
+
+**HTTP Method & URL:** POST /api/itineraries
+
+**Description:** Creates a new itinerary in the system.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:** None
+
+**Request Body:**
+
+```json
+{
+  "title": "Itinerary 1111",
+  "description": "Itinerary made for 7 days at Disney...",
   "dayStart": "2024-10-30",
   "dayEnd": "2024-11-23",
   "user": "6722862eeed0a44e8abde61f",
@@ -3532,49 +3890,49 @@ jsonContent-Type: application/json
 }
 ```
 
-Validación:
+**Validation Notes:**
 
 - title:
-
-  - "Title must be a string"
-  - "Title is required"
-  - "Title must have at least 3 characters"
-  - "Title can have a maximum of 20 characters"
-
+  - Must be a string
+  - Required
+  - Minimum 3 characters
+  - Maximum 20 characters
 - description:
-
-  - "Description must be a string"
-  - "Description must have at least 10 characters"
-  - "Description can have a maximum of 100 characters"
-
+  - Must be a string
+  - Minimum 10 characters
+  - Maximum 100 characters
 - place:
-
-  - "Place must be a string"
-  - "Place is required"
-
+  - Must be a string referencing a valid place ID
+  - Required
+- user:
+  - Must be a string referencing a valid user ID
+  - Required
 - dayStart:
-
-  - "Start day must be a valid date"
-  - "Start day is required"
-
+  - Must be a valid date
+  - Required
 - dayEnd:
+  - Must be a valid date
+  - Required
+  - Must be after start day
+  - Itinerary must last at least 2 days
+  - Itinerary must not last more than 31 days
 
-  - "End day must be a valid date"
-  - "End day is required"
-  - "End day must be after start day"
-  - "Itinerary must last at least 2 days"
-  - "Itinerary must not last more than 31 days"
+**Response Codes:**
 
-Respuesta:
+- 201 Created: Itinerary successfully created
+- 400 Bad Request: Invalid itinerary data or user does not exist
+- 401 Unauthorized: Authentication required
+- 500 Internal Server Error: Server error
 
-```ts
-jsonContent-Type: application/json
+**Response Body (Success - 201 Created):**
+
+```json
 {
-  "message": "Itinerario creado con éxito",
+  "message": "Itinerary created successfully",
   "data": {
     "id": "670bd0cc60eb88e665c9fb90",
-    "title": "Itinerario 1111",
-    "description": "Itinerario hecho para 7 dias en Disney...",
+    "title": "Itinerary 1111",
+    "description": "Itinerary made for 7 days at Disney...",
     "dayStart": "2024-10-30T00:00:00.000Z",
     "dayEnd": "2024-11-23T00:00:00.000Z",
     "activities": [...],
@@ -3585,24 +3943,75 @@ jsonContent-Type: application/json
 }
 ```
 
-Errores:
+**Error Responses:**
 
-400 Bad Request: "El user ingresado no existe"
-500 Internal Server Error: Error del servidor
+400 Bad Request:
 
-#### Crear un itinerario con IA
+```json
+{
+  "message": "The entered user does not exist"
+}
+```
 
-POST /api/itineraries/ia
+OR
 
-Crea un nuevo itinerario utilizando inteligencia artificial basado en las preferencias y participantes.
+```json
+{
+  "message": "Invalid itinerary data",
+  "errors": ["Title is required", "DayEnd must be after DayStart"]
+}
+```
 
-Solicitud:
+401 Unauthorized:
 
-```ts
-jsonContent-Type: application/json
+```json
+{
+  "message": "Authentication required"
+}
+```
+
+500 Internal Server Error:
+
+```json
+{
+  "message": "Server error"
+}
+```
+
+**Example Request:**
+
+```bash
+curl -X POST https://itineraria-backend.up.railway.app/api/itineraries \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "title": "Itinerary 1111",
+    "description": "Itinerary made for 7 days at Disney...",
+    "dayStart": "2024-10-30",
+    "dayEnd": "2024-11-23",
+    "user": "6722862eeed0a44e8abde61f",
+    "place": "67157b64371c9028019e640c",
+    "activities": ["66fd97cb2e28ca23b47f2058", "66fd97cb2e28ca23b47f2058"],
+    "participants": []
+  }'
+```
+
+### Create Itinerary with AI
+
+**HTTP Method & URL:** POST /api/itineraries/ia
+
+**Description:** Creates a new itinerary using artificial intelligence based on preferences and participants.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:** None
+
+**Request Body:**
+
+```json
 {
   "title": "DISNEY",
-  "description": "Itinerario hecho para 7 dias en Disney...",
+  "description": "Itinerary made for 7 days at Disney...",
   "dayStart": "2024-10-30",
   "dayEnd": "2024-11-23",
   "user": "6722862eeed0a44e8abde61f",
@@ -3611,144 +4020,367 @@ jsonContent-Type: application/json
 }
 ```
 
-Validación:
+**Validation Notes:**
 
-Los campos deben cumplir con las validaciones del schema del modelo. Se deben incluir todos los campos.
+- All fields must comply with the model schema validations (same as regular itinerary creation)
+- All fields are required
+- AI will generate appropriate activities based on the participants and destination
 
-Errores:
+**Response Codes:**
 
-400 Bad Request: "El user ingresado no existe" o "El place ingresado no existe"
-500 Internal Server Error: Error del servidor
+- 201 Created: AI-generated itinerary successfully created
+- 400 Bad Request: Invalid input, user does not exist, or place does not exist
+- 401 Unauthorized: Authentication required
+- 500 Internal Server Error: Server error
 
-#### Actualizar un itinerario completo
+**Response Body (Success - 201 Created):**
 
-PUT /api/itineraries/:id
-
-Actualiza todos los datos de un itinerario existente.
-
-Parámetros URL:
-id: ID del itinerario a actualizar
-
-Solicitud:
-
-```ts
-jsonContent-Type: application/json
+```json
 {
-  "title": "Itinerario 2",
-  "description": "Itinerario hecho para 7 dias en Disney...",
+  "message": "AI-generated itinerary created successfully",
+  "data": {
+    "id": "670bd0cc60eb88e665c9fb90",
+    "title": "DISNEY",
+    "description": "Itinerary made for 7 days at Disney...",
+    "dayStart": "2024-10-30T00:00:00.000Z",
+    "dayEnd": "2024-11-23T00:00:00.000Z",
+    "activities": [...],
+    "participants": ["6724d5e367bf8ca176f0b7ca", "6724d5ee67bf8ca176f0b7cb"],
+    "user": "6722862eeed0a44e8abde61f",
+    "place": "67236e6e1706dd5a0709c4df"
+  }
+}
+```
+
+**Error Responses:**
+
+400 Bad Request:
+
+```json
+{
+  "message": "The entered user does not exist"
+}
+```
+
+OR
+
+```json
+{
+  "message": "The entered place does not exist"
+}
+```
+
+401 Unauthorized:
+
+```json
+{
+  "message": "Authentication required"
+}
+```
+
+500 Internal Server Error:
+
+```json
+{
+  "message": "Server error"
+}
+```
+
+**Example Request:**
+
+```bash
+curl -X POST https://itineraria-backend.up.railway.app/api/itineraries/ia \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "title": "DISNEY",
+    "description": "Itinerary made for 7 days at Disney...",
+    "dayStart": "2024-10-30",
+    "dayEnd": "2024-11-23",
+    "user": "6722862eeed0a44e8abde61f",
+    "place": "67236e6e1706dd5a0709c4df",
+    "participants": ["6724d5e367bf8ca176f0b7ca", "6724d5ee67bf8ca176f0b7cb"]
+  }'
+```
+
+### Update Itinerary
+
+**HTTP Method & URL:** PUT /api/itineraries/:id
+
+**Description:** Updates all data of an existing itinerary.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:**
+
+- id (path parameter): Unique identifier of the itinerary to update
+
+**Request Body:**
+
+```json
+{
+  "title": "Itinerary 2",
+  "description": "Itinerary made for 7 days at Disney...",
   "dayStart": "2024-10-30",
   "dayEnd": "2024-11-23",
   "place": {
     "id": "67157b64371c9028019e640c"
   },
-  "participants": [...]
+  "participants": []
 }
 ```
 
-Validación:
+**Validation Notes:**
 
-Los campos deben cumplir con las validaciones del schema del modelo. Se deben incluir todos los campos.
-El middleware sanitizeItineraryInput realiza una limpieza de los datos, eliminando campos indefinidos.
+- All fields must comply with the model schema validations
+- All fields must be included in the request
+- The sanitizeItineraryInput middleware cleans the data by removing undefined fields
 
-Respuesta:
+**Response Codes:**
 
-```ts
-jsonContent-Type: application/json
+- 200 OK: Itinerary successfully updated
+- 400 Bad Request: Invalid itinerary data
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Itinerary not found
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
+
+```json
 {
-  "message": "Itinerario actualizado con exito",
+  "message": "Itinerary updated successfully",
   "data": {
     "id": "670bd0cc60eb88e665c9fb90",
-    "title": "Itinerario 2",
-    "description": "Itinerario hecho para 7 dias en Disney...",
+    "title": "Itinerary 2",
+    "description": "Itinerary made for 7 days at Disney...",
     "dayStart": "2024-10-30T00:00:00.000Z",
     "dayEnd": "2024-11-23T00:00:00.000Z",
     "place": "67157b64371c9028019e640c",
-    "participants": [...]
+    "participants": []
   }
 }
 ```
 
-Errores:
+**Error Responses:**
 
-500 Internal Server Error: Error del servidor
+400 Bad Request:
 
-#### Actualizar parcialmente un itinerario
-
-PATCH /api/itineraries/:id
-
-Actualiza solo los campos específicos de un itinerario existente.
-
-Parámetros URL:
-id: ID del itinerario a actualizar parcialmente
-
-Solicitud:
-
-```ts
-jsonContent-Type: application/json
+```json
 {
-  "title": "Nuevo título"
+  "message": "Invalid itinerary data"
 }
 ```
 
-Validación:
+401 Unauthorized:
 
-Cualquier campo que se incluya debe cumplir con las validaciones del schema del modelo
-El middleware sanitizeItineraryInput realiza una limpieza de los datos, eliminando campos indefinidos.
-
-Respuesta:
-
-```ts
-jsonContent-Type: application/json
+```json
 {
-  "message": "Itinerario actualizado con exito",
+  "message": "Authentication required"
+}
+```
+
+404 Not Found:
+
+```json
+{
+  "message": "Itinerary not found"
+}
+```
+
+500 Internal Server Error:
+
+```json
+{
+  "message": "Server error"
+}
+```
+
+**Example Request:**
+
+```bash
+curl -X PUT https://itineraria-backend.up.railway.app/api/itineraries/670bd0cc60eb88e665c9fb90 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "title": "Itinerary 2",
+    "description": "Itinerary made for 7 days at Disney...",
+    "dayStart": "2024-10-30",
+    "dayEnd": "2024-11-23",
+    "place": {
+      "id": "67157b64371c9028019e640c"
+    },
+    "participants": []
+  }'
+```
+
+### Update Itinerary (Partial)
+
+**HTTP Method & URL:** PATCH /api/itineraries/:id
+
+**Description:** Updates only specific fields of an existing itinerary.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:**
+
+- id (path parameter): Unique identifier of the itinerary to partially update
+
+**Request Body:**
+
+```json
+{
+  "title": "New title"
+}
+```
+
+**Validation Notes:**
+
+- Any included field must comply with the model schema validations
+- Fields are optional
+- The sanitizeItineraryInput middleware cleans the data by removing undefined fields
+
+**Response Codes:**
+
+- 200 OK: Itinerary successfully updated
+- 400 Bad Request: Invalid itinerary data
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Itinerary not found
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
+
+```json
+{
+  "message": "Itinerary updated successfully",
   "data": {
     "id": "670bd0cc60eb88e665c9fb90",
-    "title": "Nuevo título",
-    "description": "Itinerario hecho para 7 dias en Disney...",
+    "title": "New title",
+    "description": "Itinerary made for 7 days at Disney...",
     "dayStart": "2024-10-30T00:00:00.000Z",
     "dayEnd": "2024-11-23T00:00:00.000Z",
     "place": "67157b64371c9028019e640c",
-    "participants": [...]
+    "participants": []
   }
 }
 ```
 
-Errores:
+**Error Responses:**
 
-500 Internal Server Error: Error del servidor
+400 Bad Request:
 
-#### Eliminar un itinerario
-
-DELETE /api/itineraries/:id
-
-Elimina un itinerario específico del sistema.
-
-Parámetros URL:
-id: ID del itinerario a eliminar
-
-Respuesta:
-
-```ts
-jsonContent-Type: application/json
+```json
 {
-  "message": "Itinerario borrado",
+  "message": "Invalid itinerary data"
+}
+```
+
+401 Unauthorized:
+
+```json
+{
+  "message": "Authentication required"
+}
+```
+
+404 Not Found:
+
+```json
+{
+  "message": "Itinerary not found"
+}
+```
+
+500 Internal Server Error:
+
+```json
+{
+  "message": "Server error"
+}
+```
+
+**Example Request:**
+
+```bash
+curl -X PATCH https://itineraria-backend.up.railway.app/api/itineraries/670bd0cc60eb88e665c9fb90 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "title": "New title"
+  }'
+```
+
+### Delete Itinerary
+
+**HTTP Method & URL:** DELETE /api/itineraries/:id
+
+**Description:** Removes a specific itinerary from the system.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:**
+
+- id (path parameter): Unique identifier of the itinerary to delete
+
+**Request Body:** None
+
+**Response Codes:**
+
+- 200 OK: Itinerary successfully deleted
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Itinerary not found
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
+
+```json
+{
+  "message": "Itinerary deleted",
   "data": {
     "id": "670bd0cc60eb88e665c9fb90",
-    "title": "Itinerario 1111",
-    "description": "Itinerario hecho para 7 dias en Disney...",
+    "title": "Itinerary 1111",
+    "description": "Itinerary made for 7 days at Disney...",
     "dayStart": "2024-10-30T00:00:00.000Z",
     "dayEnd": "2024-11-23T00:00:00.000Z"
   }
 }
 ```
 
-Errores:
+**Error Responses:**
 
-500 Internal Server Error: Error del servidor
+401 Unauthorized:
+
+```json
+{
+  "message": "Authentication required"
+}
+```
+
+404 Not Found:
+
+```json
+{
+  "message": "Itinerary not found"
+}
+```
+
+500 Internal Server Error:
+
+```json
+{
+  "message": "Server error"
+}
+```
+
+**Example Request:**
+
+```bash
+curl -X DELETE https://itineraria-backend.up.railway.app/api/itineraries/670bd0cc60eb88e665c9fb90 \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
 
 ### External Services
 
-#### Data Models
+##### Data Models
 
 ExternalService
 
@@ -3787,21 +4419,24 @@ ExternalService
 | PATCH       | /api/externalServices/               | Partially update external service | ✅        |
 | DELETE      | /api/externalServices/               | Delete an external service        | ✅        |
 
-#### Submit Publicity Request
+### Submit Publicity Request
 
-POST /api/publicity
+**HTTP Method & URL:** POST /api/publicity
 
-Creates a new publicity request in pending status.
+**Description:** Creates a new publicity request with PENDING status for approval by administrators.
 
-Request:
+**Authentication Requirements:** No authentication required (Public endpoint)
 
-```ts
-jsonContent-Type: application/json
+**Request Parameters:** None
+
+**Request Body:**
+
+```json
 {
   "serviceType": "string",
   "name": "string",
   "description": "string",
-  "address": "string",
+  "adress": "string",
   "schedule": "string",
   "website": "string",
   "phoneNumber": "string",
@@ -3809,54 +4444,45 @@ jsonContent-Type: application/json
 }
 ```
 
-Validation:
+**Validation Notes:**
 
 - serviceType:
-
-  - "The service type must be a string"
-  - "The service type is required"
-  - "The service type must have at least 3 characters"
-
+  - Must be a string
+  - Required
+  - Minimum 3 characters
 - name:
-
-  - "The name must be a string"
-  - "The name is required"
-  - "The name must have at least 3 characters"
-
+  - Must be a string
+  - Required
+  - Minimum 3 characters
 - description:
-
-  - "The description must be a string"
-  - "The description is required"
-  - "The description must have at least 3 characters"
-
-- address:
-
-  - "The address must be a string"
-  - "The address is required"
-  - "The address must have at least 3 characters"
-
+  - Must be a string
+  - Required
+  - Minimum 3 characters
+- adress:
+  - Must be a string
+  - Required
+  - Minimum 3 characters
 - schedule:
-
-  - "The schedule must be a string"
-  - "The schedule is required"
-  - "The schedule must have at least 3 characters"
-
+  - Must be a string
+  - Required
+  - Minimum 3 characters
 - website (optional):
-
-  - "Invalid website format" (must match format: www.example.com)
-
+  - Must match format: www.example.com
 - phoneNumber (optional):
+  - Must be 10 digits
+- place:
+  - Must be a registered place ID
 
-  - "Invalid phone number format" (must be 10 digits)
+**Response Codes:**
 
-- place: The place must be registered
+- 201 Created: Request successfully submitted
+- 404 Not Found: Place not found
+- 409 Conflict: External service already exists
+- 500 Internal Server Error: Server error
 
-Response:
+**Response Body (Success - 201 Created):**
 
-```ts
-jsonStatus: 201 Created
-Content-Type: application/json
-
+```json
 {
   "message": "The request has been sent",
   "data": {
@@ -3864,7 +4490,7 @@ Content-Type: application/json
     "serviceType": "string",
     "name": "string",
     "description": "string",
-    "address": "string",
+    "adress": "string",
     "schedule": "string",
     "website": "string",
     "phoneNumber": "string",
@@ -3876,24 +4502,69 @@ Content-Type: application/json
 }
 ```
 
-Errors:
+**Error Responses:**
 
-404 Not Found: "The place does not exist"
-409 Conflict: "The external service already exists"
-500 Internal Server Error: Error message
+404 Not Found:
 
-#### Get All External Services
+```json
+{
+  "message": "The place does not exist"
+}
+```
 
-GET /api/publicity/places
+409 Conflict:
 
-Returns all external services.
+```json
+{
+  "message": "The external service already exists"
+}
+```
 
-Response:
+500 Internal Server Error:
 
-```ts
-jsonStatus: 200 OK
-Content-Type: application/json
+```json
+{
+  "message": "Server error"
+}
+```
 
+**Example Request:**
+
+```bash
+curl -X POST https://api.itineraria.com/api/publicity \
+  -H "Content-Type: application/json" \
+  -d '{
+    "serviceType": "Restaurant",
+    "name": "Bella Italia",
+    "description": "Authentic Italian cuisine in a family-friendly environment",
+    "adress": "123 Main St, Cityville",
+    "schedule": "Mon-Sun: 11:00-22:00",
+    "website": "www.bellaitalia.com",
+    "phoneNumber": "1234567890",
+    "place": "67157b64371c9028019e640c"
+  }'
+```
+
+### Get Public External Services
+
+**HTTP Method & URL:** GET /api/publicity/places
+
+**Description:** Retrieves all public external services.
+
+**Authentication Requirements:** No authentication required (Public endpoint)
+
+**Request Parameters:** None
+
+**Request Body:** None
+
+**Response Codes:**
+
+- 200 OK: Successfully retrieved external services (also returned if no services found)
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
+
+```json
 {
   "message": "All external services found",
   "data": [
@@ -3902,13 +4573,13 @@ Content-Type: application/json
       "serviceType": "string",
       "name": "string",
       "description": "string",
-      "address": "string",
+      "adress": "string",
       "schedule": "string",
       "website": "string",
       "phoneNumber": "string",
       "place": {
         "id": "string",
-        "name": "string",
+        "name": "string"
         // other place properties
       },
       "status": "string",
@@ -3919,23 +4590,51 @@ Content-Type: application/json
 }
 ```
 
-Errors:
+**Response Body (No Services - 200 OK):**
 
-200 OK (with message): If no external services are found: {"message": ["External services not found"]}
-500 Internal Server Error: Error message
+```json
+{
+  "message": "External services not found"
+}
+```
 
-#### Get All External Services
+**Error Responses:**
 
-GET /api/externalServices
+500 Internal Server Error:
 
-Returns all external services.
+```json
+{
+  "message": "Server error"
+}
+```
 
-Response:
+**Example Request:**
 
-```ts
-jsonStatus: 200 OK
-Content-Type: application/json
+```bash
+curl -X GET https://api.itineraria.com/api/publicity/places
+```
 
+### Get All External Services (Admin)
+
+**HTTP Method & URL:** GET /api/externalServices
+
+**Description:** Retrieves all external services, including those with PENDING status.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:** None
+
+**Request Body:** None
+
+**Response Codes:**
+
+- 200 OK: Successfully retrieved external services (also returned if no services found)
+- 401 Unauthorized: Authentication required
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
+
+```json
 {
   "message": "All external services found",
   "data": [
@@ -3944,13 +4643,13 @@ Content-Type: application/json
       "serviceType": "string",
       "name": "string",
       "description": "string",
-      "address": "string",
+      "adress": "string",
       "schedule": "string",
       "website": "string",
       "phoneNumber": "string",
       "place": {
         "id": "string",
-        "name": "string",
+        "name": "string"
         // other place properties
       },
       "status": "string",
@@ -3961,26 +4660,63 @@ Content-Type: application/json
 }
 ```
 
-Errors:
+**Response Body (No Services - 200 OK):**
 
-200 OK (with message): If no external services are found: {"message": ["External services not found"]}
-500 Internal Server Error: Error message
+```json
+{
+  "message": "External services not found"
+}
+```
 
-#### Get External Service by ID
+**Error Responses:**
 
-GET /api/externalServices/:id
+401 Unauthorized:
 
-Returns an external service by its ID.
+```json
+{
+  "message": "Authentication required"
+}
+```
 
-Parameters:
-id: External service ID (path parameter)
+500 Internal Server Error:
 
-Response:
+```json
+{
+  "message": "Server error"
+}
+```
 
-```ts
-jsonStatus: 200 OK
-Content-Type: application/json
+**Example Request:**
 
+```bash
+curl -X GET https://api.itineraria.com/api/externalServices \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+### Get External Service by ID
+
+**HTTP Method & URL:** GET /api/externalServices/:id
+
+**Description:** Retrieves detailed information about a specific external service.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:**
+
+- id (path parameter): Unique identifier of the external service to retrieve
+
+**Request Body:** None
+
+**Response Codes:**
+
+- 200 OK: Successfully retrieved the external service
+- 401 Unauthorized: Authentication required
+- 404 Not Found: External service not found
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
+
+```json
 {
   "message": "External service found",
   "data": {
@@ -3988,13 +4724,13 @@ Content-Type: application/json
     "serviceType": "string",
     "name": "string",
     "description": "string",
-    "address": "string",
+    "adress": "string",
     "schedule": "string",
     "website": "string",
     "phoneNumber": "string",
     "place": {
       "id": "string",
-      "name": "string",
+      "name": "string"
       // other place properties
     },
     "status": "string",
@@ -4004,40 +4740,70 @@ Content-Type: application/json
 }
 ```
 
-Errors:
+**Error Responses:**
 
-500 Internal Server Error: Error message (includes 404 Not Found scenarios)
+401 Unauthorized:
 
-#### Get External Services by Place ID
-
-GET /api/externalServices/findByPlace/:id
-
-Returns all external services associated with a specific place.
-
-Parameters:
-id: Place ID (path parameter)
-
-Response:
-
-```ts
-jsonStatus: 200 OK
-Content-Type: application/json
-
+```json
 {
-  "message": "Servicios externos encontrados",
+  "message": "Authentication required"
+}
+```
+
+500 Internal Server Error:
+
+```json
+{
+  "message": "Server error"
+}
+```
+
+**Example Request:**
+
+```bash
+curl -X GET https://api.itineraria.com/api/externalServices/670bd0cc60eb88e665c9fb90 \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+### Get External Services by Place ID
+
+**HTTP Method & URL:** GET /api/externalServices/findByPlace/:id
+
+**Description:** Retrieves all external services associated with a specific place.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:**
+
+- id (path parameter): Unique identifier of the place whose services are requested
+
+**Request Body:** None
+
+**Response Codes:**
+
+- 200 OK: Successfully retrieved place's external services (also returned if no services found)
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Place not found
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
+
+```json
+{
+  "message": "External services found",
   "data": [
     {
       "id": "string",
       "serviceType": "string",
       "name": "string",
       "description": "string",
-      "address": "string",
+      "adress": "string",
       "schedule": "string",
       "website": "string",
       "phoneNumber": "string",
       "place": {
         "id": "string",
-        "name": "string",
+        "name": "string"
         // other place properties
       },
       "status": "string",
@@ -4048,28 +4814,65 @@ Content-Type: application/json
 }
 ```
 
-Errors:
+**Response Body (No Services - 200 OK):**
 
-200 OK (with message): If no external services are found: {"message": ["External services not found for that place"]}
-404 Not Found: {"message": ["A place with that id was not found"]}
-500 Internal Server Error: Error message
+```json
+{
+  "message": "External services not found for that place"
+}
+```
 
-#### Create External Service
+**Error Responses:**
 
-POST /api/externalServices
+401 Unauthorized:
 
-Creates a new external service with ACTIVE status.
+```json
+{
+  "message": "Authentication required"
+}
+```
 
-Request:
+404 Not Found:
 
-```ts
-jsonContent-Type: application/json
+```json
+{
+  "message": "A place with that id was not found"
+}
+```
 
+500 Internal Server Error:
+
+```json
+{
+  "message": "Server error"
+}
+```
+
+**Example Request:**
+
+```bash
+curl -X GET https://api.itineraria.com/api/externalServices/findByPlace/67157b64371c9028019e640c \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+### Create External Service
+
+**HTTP Method & URL:** POST /api/externalServices
+
+**Description:** Creates a new external service with ACTIVE status.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:** None
+
+**Request Body:**
+
+```json
 {
   "serviceType": "string",
   "name": "string",
   "description": "string",
-  "address": "string",
+  "adress": "string",
   "schedule": "string",
   "website": "string",
   "phoneNumber": "string",
@@ -4077,16 +4880,22 @@ jsonContent-Type: application/json
 }
 ```
 
-Validation:
+**Validation Notes:**
 
-Los campos deben cumplir con las validaciones del schema del modelo. Website and PhoneNumber are optionals.
+- All fields must comply with the model schema validations
+- website and phoneNumber are optional
 
-Response:
+**Response Codes:**
 
-```ts
-jsonStatus: 201 Created
-Content-Type: application/json
+- 201 Created: External service successfully created
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Place not found
+- 409 Conflict: External service already exists
+- 500 Internal Server Error: Server error
 
+**Response Body (Success - 201 Created):**
+
+```json
 {
   "message": "External service created",
   "data": {
@@ -4094,7 +4903,7 @@ Content-Type: application/json
     "serviceType": "string",
     "name": "string",
     "description": "string",
-    "address": "string",
+    "adress": "string",
     "schedule": "string",
     "website": "string",
     "phoneNumber": "string",
@@ -4106,27 +4915,82 @@ Content-Type: application/json
 }
 ```
 
-Errors:
+**Error Responses:**
 
-404 Not Found: {"message": ["The place does not exist"]}
-409 Conflict: {"message": ["The external service already exists"]}
-500 Internal Server Error: Error message
+401 Unauthorized:
 
-#### Accept Publicity Request
+```json
+{
+  "message": "Authentication required"
+}
+```
 
-POST /api/externalServices/acceptRequest/:id
+404 Not Found:
 
-Changes the status of a pending publicity request to ACTIVE.
+```json
+{
+  "message": "The place does not exist"
+}
+```
 
-Parameters:
-id: External service ID (path parameter)
+409 Conflict:
 
-Response:
+```json
+{
+  "message": "The external service already exists"
+}
+```
 
-```ts
-jsonStatus: 200 OK
-Content-Type: application/json
+500 Internal Server Error:
 
+```json
+{
+  "message": "Server error"
+}
+```
+
+**Example Request:**
+
+```bash
+curl -X POST https://api.itineraria.com/api/externalServices \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "serviceType": "Restaurant",
+    "name": "Bella Italia",
+    "description": "Authentic Italian cuisine in a family-friendly environment",
+    "adress": "123 Main St, Cityville",
+    "schedule": "Mon-Sun: 11:00-22:00",
+    "website": "www.bellaitalia.com",
+    "phoneNumber": "1234567890",
+    "place": "67157b64371c9028019e640c"
+  }'
+```
+
+### Accept Publicity Request
+
+**HTTP Method & URL:** POST /api/externalServices/acceptRequest/:id
+
+**Description:** Changes the status of a pending publicity request to ACTIVE.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:**
+
+- id (path parameter): Unique identifier of the external service request to approve
+
+**Request Body:** None
+
+**Response Codes:**
+
+- 200 OK: Request successfully accepted
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Request not found
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
+
+```json
 {
   "message": "The request has been accepted",
   "data": {
@@ -4134,7 +4998,7 @@ Content-Type: application/json
     "serviceType": "string",
     "name": "string",
     "description": "string",
-    "address": "string",
+    "adress": "string",
     "schedule": "string",
     "website": "string",
     "phoneNumber": "string",
@@ -4146,29 +5010,51 @@ Content-Type: application/json
 }
 ```
 
-Errors:
+**Error Responses:**
 
-500 Internal Server Error: Error message
+401 Unauthorized:
 
-#### Update External Service
+```json
+{
+  "message": "Authentication required"
+}
+```
 
-PUT /api/externalServices/:id
+500 Internal Server Error:
 
-Updates an external service completely.
+```json
+{
+  "message": "Server error"
+}
+```
 
-Parameters:
-id: External service ID (path parameter)
+**Example Request:**
 
-Request:
+```bash
+curl -X POST https://api.itineraria.com/api/externalServices/acceptRequest/670bd0cc60eb88e665c9fb90 \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
 
-```ts
-jsonContent-Type: application/json
+### Update External Service
 
+**HTTP Method & URL:** PUT /api/externalServices/:id
+
+**Description:** Updates all data of an existing external service.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:**
+
+- id (path parameter): Unique identifier of the external service to update
+
+**Request Body:**
+
+```json
 {
   "serviceType": "string",
   "name": "string",
   "description": "string",
-  "address": "string",
+  "adress": "string",
   "schedule": "string",
   "website": "string",
   "phoneNumber": "string",
@@ -4176,17 +5062,23 @@ jsonContent-Type: application/json
 }
 ```
 
-Validation:
+**Validation Notes:**
 
-Los campos deben cumplir con las validaciones del schema del modelo.
-El middleware sanitizeExternalServiceInput realiza una limpieza de los datos, eliminando campos indefinidos.
+- All fields must comply with the model schema validations
+- All fields must be included
+- The sanitizeExternalServiceInput middleware cleans the data by removing undefined fields
 
-Response:
+**Response Codes:**
 
-```ts
-jsonStatus: 200 OK
-Content-Type: application/json
+- 200 OK: External service successfully updated
+- 401 Unauthorized: Authentication required
+- 404 Not Found: External service not found
+- 409 Conflict: Service with that name already exists
+- 500 Internal Server Error: Server error
 
+**Response Body (Success - 200 OK):**
+
+```json
 {
   "message": "External service updated",
   "data": {
@@ -4194,7 +5086,7 @@ Content-Type: application/json
     "serviceType": "string",
     "name": "string",
     "description": "string",
-    "address": "string",
+    "adress": "string",
     "schedule": "string",
     "website": "string",
     "phoneNumber": "string",
@@ -4206,45 +5098,94 @@ Content-Type: application/json
 }
 ```
 
-Errors:
+**Error Responses:**
 
-409 Conflict: {"message": ["There is already a service with that name"]}
-500 Internal Server Error: Error message
+401 Unauthorized:
 
-#### Partially Update External Service
+```json
+{
+  "message": "Authentication required"
+}
+```
 
-PATCH /api/externalServices/:id
+409 Conflict:
 
-Updates only the provided fields of an external service.
+```json
+{
+  "message": "There is already a service with that name"
+}
+```
 
-Parameters:
-id: External service ID (path parameter)
+500 Internal Server Error:
 
-Request:
+```json
+{
+  "message": "Server error"
+}
+```
 
-```ts
-jsonContent-Type: application/json
+**Example Request:**
 
+```bash
+curl -X PUT https://api.itineraria.com/api/externalServices/670bd0cc60eb88e665c9fb90 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "serviceType": "Restaurant",
+    "name": "Bella Italia Updated",
+    "description": "Updated description for Italian restaurant",
+    "adress": "456 New St, Cityville",
+    "schedule": "Mon-Sun: 12:00-23:00",
+    "website": "www.bellaitalia-updated.com",
+    "phoneNumber": "9876543210",
+    "place": "67157b64371c9028019e640c"
+  }'
+```
+
+### Update External Service (Partial)
+
+**HTTP Method & URL:** PATCH /api/externalServices/:id
+
+**Description:** Updates only specific fields of an existing external service.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:**
+
+- id (path parameter): Unique identifier of the external service to partially update
+
+**Request Body:**
+
+```json
 {
   // Any combination of these fields
   "serviceType": "string",
   "name": "string",
   "description": "string",
-  "address": "string",
+  "adress": "string",
   "schedule": "string",
   "website": "string",
   "phoneNumber": "string"
 }
 ```
 
-Validation:
-Same as PUT request but all fields are optional.
-Response:
+**Validation Notes:**
 
-```ts
-jsonStatus: 200 OK
-Content-Type: application/json
+- Any included field must comply with the model schema validations
+- All fields are optional
+- The sanitizeExternalServiceInput middleware cleans the data by removing undefined fields
 
+**Response Codes:**
+
+- 200 OK: External service successfully updated
+- 401 Unauthorized: Authentication required
+- 404 Not Found: External service not found
+- 409 Conflict: Service with that name already exists
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
+
+```json
 {
   "message": "External service updated",
   "data": {
@@ -4252,7 +5193,7 @@ Content-Type: application/json
     "serviceType": "string",
     "name": "string",
     "description": "string",
-    "address": "string",
+    "adress": "string",
     "schedule": "string",
     "website": "string",
     "phoneNumber": "string",
@@ -4264,431 +5205,799 @@ Content-Type: application/json
 }
 ```
 
-Errors:
+**Error Responses:**
 
-409 Conflict: {"message": ["There is already a service with that name"]}
-500 Internal Server Error: Error message
+401 Unauthorized:
 
-#### Delete External Service
+```json
+{
+  "message": "Authentication required"
+}
+```
 
-DELETE /api/externalServices/:id
+409 Conflict:
 
-Deletes an external service.
+```json
+{
+  "message": "There is already a service with that name"
+}
+```
 
-Parameters:
-id: External service ID (path parameter)
+500 Internal Server Error:
 
-Response:
+```json
+{
+  "message": "Server error"
+}
+```
 
-```ts
-jsonStatus: 200 OK
-Content-Type: application/json
+**Example Request:**
 
+```bash
+curl -X PATCH https://api.itineraria.com/api/externalServices/670bd0cc60eb88e665c9fb90 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "description": "Updated description only",
+    "schedule": "Mon-Fri: 9:00-18:00"
+  }'
+```
+
+### Delete External Service
+
+**HTTP Method & URL:** DELETE /api/externalServices/:id
+
+**Description:** Removes a specific external service from the system.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:**
+
+- id (path parameter): Unique identifier of the external service to delete
+
+**Request Body:** None
+
+**Response Codes:**
+
+- 200 OK: External service successfully deleted
+- 401 Unauthorized: Authentication required
+- 404 Not Found: External service not found
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
+
+```json
 {
   "message": "External service deleted"
 }
 ```
 
-Errors:
+**Error Responses:**
 
-500 Internal Server Error: Error message
+401 Unauthorized:
+
+```json
+{
+  "message": "Authentication required"
+}
+```
+
+500 Internal Server Error:
+
+```json
+{
+  "message": "Server error"
+}
+```
+
+**Example Request:**
+
+```bash
+curl -X DELETE https://api.itineraria.com/api/externalServices/670bd0cc60eb88e665c9fb90 \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
 
 ### Activities
 
-####Modelo de datos
+##### Data Model
 
 Activity
 
 ```ts
 {
-  id: string;               // Identificador único
-  name: string;             // Nombre de la actividad
-  description: string;      // Descriptionde la actividad
-  outdoor: boolean;         // Indica si la actividad es al aire libre
-  transport?: boolean;      // Indica si se necesita transporte (opcional)
-  scheduleStart: string;    // Hora de inicio (formato HH:MM)
-  scheduleEnd: string;      // Hora de fin (formato HH:MM)
-  place: Place;             // Referencia al lugar donde se realiza
-  itinerary: Itinerary;     // Referencia al itinerario asociado
-  opinions: Opinion[];      // Colección de opiniones sobre la actividad
-  createdAt: Date;          // Fecha de creación
-  updatedAt: Date;          // Fecha de última actualización
+  id: string;               // Unique identifier
+  name: string;             // Activity name
+  description: string;      // Activity description
+  outdoor: boolean;         // Indicates if the activity is outdoors
+  transport?: boolean;      // Indicates if transportation is needed (optional)
+  scheduleStart: string;    // Start time (format HH:MM)
+  scheduleEnd: string;      // End time (format HH:MM)
+  place: Place;             // Reference to the location where it takes place
+  itinerary: Itinerary;     // Reference to the associated itinerary
+  opinions: Opinion[];      // Collection of opinions about the activity
 }
 ```
 
-| HTTP Method | Route               | Description                           | Protected |
-| ----------- | ------------------- | ------------------------------------- | --------- |
-| GET         | /api/activities     | Obtener todas las actividades         | ✅        |
-| GET         | /api/activities/:id | Obtener una actividad por ID          | ✅        |
-| POST        | /api/activities     | Crear una nueva actividad             | ✅        |
-| PUT         | /api/activities/    | Actualizar una actividad por completo | ✅        |
-| PATCH       | /api/activities/    | Actualizar parcialmente actividad     | ✅        |
-| DELETE      | /api/activities/    | Eliminar una actividad                | ✅        |
+### Activities
 
-#### Obtener todas las actividades
+##### Data Model
 
-GET /api/activities
-
-Retorna todas las actividades existentes en el sistema.
-
-Respuesta:
+Activity
 
 ```ts
-jsonContent-Type: application/json
-
 {
-  "message": "Todos las activities encontrados",
+  id: string;               // Unique identifier
+  name: string;             // Activity name
+  description: string;      // Activity description
+  outdoor: boolean;         // Indicates if the activity is outdoors
+  transport?: boolean;      // Indicates if transportation is needed (optional)
+  scheduleStart: string;    // Start time (format HH:MM)
+  scheduleEnd: string;      // End time (format HH:MM)
+  place: Place;             // Reference to the location where it takes place
+  itinerary: Itinerary;     // Reference to the associated itinerary
+  opinions: Opinion[];      // Collection of opinions about the activity
+}
+```
+
+Activity
+
+### Data Model
+
+**Activity**
+
+```ts
+{
+  id: string;                // Unique identifier
+  name: string;              // Activity name
+  description: string;       // Activity description
+  outdoor: boolean;          // Whether the activity is outdoors
+  transport?: boolean;       // Whether transport is needed (optional)
+  scheduleStart: string;     // Start time in HH format
+  scheduleEnd: string;       // End time in HH format
+  place: string | Place;     // Reference to a Place
+  itinerary: string | Itinerary; // Reference to an Itinerary
+  opinions: Opinion[];       // Collection of related opinions
+  createdAt?: Date;          // Creation timestamp
+  updatedAt?: Date;          // Last update timestamp
+}
+```
+
+| HTTP Method | Route               | Description                     | Protected |
+| ----------- | ------------------- | ------------------------------- | --------- |
+| GET         | /api/activities     | Get all activities              | ✅        |
+| GET         | /api/activities/:id | Get a specific activity         | ✅        |
+| POST        | /api/activities     | Create a new activity           | ✅        |
+| PUT         | /api/activities/:id | Update an activity completely   | ✅        |
+| PATCH       | /api/activities/:id | Update specific activity fields | ✅        |
+| DELETE      | /api/activities/:id | Delete an activity              | ✅        |
+
+### Get All Activities
+
+**HTTP Method & URL:** GET /api/activities
+
+**Description:** Retrieves all activities registered in the system.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:** None
+
+**Request Body:** None
+
+**Response Codes:**
+
+- 200 OK: Successfully retrieved activities (also returned if no activities found)
+- 401 Unauthorized: Authentication required
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
+
+```json
+{
+  "message": "All activities found",
   "data": [
     {
-      "id": "string",
-      "name": "string",
-      "description": "string",
-      "outdoor": boolean,
-      "transport": boolean,
-      "scheduleStart": "string",
-      "scheduleEnd": "string",
-      "place": {
-        "id": "string",
-        // otros datos del lugar
-      },
-      "itinerary": {
-        "id": "string",
-        // otros datos del itinerario
-      },
-      "opinions": [
-        {
-          "id": "string",
-          // datos de opiniones
-        }
-      ],
-      "createdAt": "timestamp",
-      "updatedAt": "timestamp"
-    }
+      "id": "60d21b4667d0d8992e610c85",
+      "name": "Beach Trip",
+      "description": "Day at the beach with surfing lessons",
+      "outdoor": true,
+      "transport": true,
+      "scheduleStart": "09",
+      "scheduleEnd": "17",
+      "place": {...},
+      "itinerary": {...},
+      "opinions": [...]
+    },
+    // Additional activities
   ]
 }
 ```
 
-Errores:
+**Response Body (No Activities - 200 OK):**
 
-200 OK (con mensaje): Si no hay actividades: {"message": "No se encontraron activities"}
-500 Internal Server Error: {"message": error.message}
-
-#### Obtener actividad por ID
-
-GET /api/activities/:id
-
-Retorna una actividad específica según su ID.
-
-Parámetros:
-id: ID de la actividad (parámetro de ruta)
-
-Respuesta:
-
-```ts
-jsonContent-Type: application/json
-
+```json
 {
-  "message": "Activity encontrada",
+  "message": "No activities found",
+  "data": []
+}
+```
+
+**Error Responses:**
+
+401 Unauthorized:
+
+```json
+{
+  "message": "Authentication required"
+}
+```
+
+500 Internal Server Error:
+
+```json
+{
+  "message": "Server error"
+}
+```
+
+**Example Request:**
+
+```bash
+curl -X GET https://itineraria-backend.up.railway.app/api/activities \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+### Get Activity by ID
+
+**HTTP Method & URL:** GET /api/activities/:id
+
+**Description:** Retrieves detailed information about a specific activity.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:**
+
+- id (path parameter): Unique identifier of the activity to retrieve
+
+**Request Body:** None
+
+**Response Codes:**
+
+- 200 OK: Successfully retrieved the activity
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Activity not found
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
+
+```json
+{
+  "message": "Activity found",
   "data": {
-    "id": "string",
-    "name": "string",
-    "description": "string",
-    "outdoor": boolean,
-    "transport": boolean,
-    "scheduleStart": "string",
-    "scheduleEnd": "string",
-    "place": {
-      "id": "string",
-      // otros datos del lugar
-    },
-    "itinerary": {
-      "id": "string",
-      // otros datos del itinerario
-    },
-    "opinions": [
-      {
-        "id": "string",
-        // datos de opiniones
-      }
-    ],
-    "createdAt": "timestamp",
-    "updatedAt": "timestamp"
+    "id": "60d21b4667d0d8992e610c85",
+    "name": "Beach Trip",
+    "description": "Day at the beach with surfing lessons",
+    "outdoor": true,
+    "transport": true,
+    "scheduleStart": "09",
+    "scheduleEnd": "17",
+    "place": {...},
+    "itinerary": {...},
+    "opinions": [...],
+    "createdAt": "2023-04-15T10:30:00.000Z",
+    "updatedAt": "2023-04-15T10:30:00.000Z"
   }
 }
 ```
 
-Errores:
+**Error Responses:**
 
-500 Internal Server Error: {"message": error.message} (incluye escenarios de 404 Not Found)
+401 Unauthorized:
 
-#### Crear actividad
-
-POST /api/activities
-
-Crea una nueva actividad.
-
-Solicitud:
-
-```ts
-jsonContent-Type: application/json
-
+```json
 {
-  "name": "string",
-  "description": "string",
-  "outdoor": boolean,
-  "transport": boolean,
-  "scheduleStart": "string",
-  "scheduleEnd": "string",
+  "message": "Authentication required"
+}
+```
+
+404 Not Found:
+
+```json
+{
+  "message": "Activity not found"
+}
+```
+
+500 Internal Server Error:
+
+```json
+{
+  "message": "Server error"
+}
+```
+
+**Example Request:**
+
+```bash
+curl -X GET https://itineraria-backend.up.railway.app/api/activities/60d21b4667d0d8992e610c85 \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+### Create Activity
+
+**HTTP Method & URL:** POST /api/activities
+
+**Description:** Creates a new activity in the system.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:** None
+
+**Request Body:**
+
+```json
+{
+  "name": "Beach Trip",
+  "description": "Day at the beach with surfing lessons",
+  "outdoor": true,
+  "transport": true,
+  "scheduleStart": "09",
+  "scheduleEnd": "17",
   "place": {
-    "id": "string"
+    "id": "60d21b4667d0d8992e610c87"
   },
   "itinerary": {
-    "id": "string"
+    "id": "60d21b4667d0d8992e610c86"
   }
 }
 ```
 
-Validación:
+**Validation Notes:**
 
 - name:
-
-  - "Name must be a string"
-  - "Name is required"
-  - "Name must have at least 3 characters"
-  - "Name can have a maximum of 20 characters"
-
+  - Must be a string
+  - Required
+  - Minimum 3 characters
+  - Maximum 20 characters
 - description:
-
-  - "Description must be a string"
-  - "Description is required"
-  - "Description must have at least 3 characters"
-  - "Description can have a maximum of 100 characters"
-
+  - Must be a string
+  - Required
+  - Minimum 3 characters
+  - Maximum 100 characters
 - outdoor:
-
-  - "You must specify if the activity is outdoor or not"
-
-- transport (opcional):
-
-  - "You must specify if the activity needs transport or not"
-
+  - Must be a boolean
+  - Required
+- transport:
+  - Must be a boolean
+  - Optional
 - scheduleStart:
-
-  - "Schedule start must be a string"
-  - "Schedule start is required"
-  - "Schedule start must be in the format HH"
-
+  - Must be a string
+  - Required
+  - Must be in HH format
 - scheduleEnd:
+  - Must be a string
+  - Required
+  - Must be in HH format
+- place:
+  - Must reference a valid place ID
+  - Required
+- itinerary:
+  - Must reference a valid itinerary ID
+  - Required
+- Additional validation:
+  - The activity must start before it ends (scheduleStart must be before scheduleEnd)
 
-  - "Schedule end must be a string"
-  - "Schedule end is required"
-  - "Schedule end must be in the format HH"
+**Response Codes:**
 
-- Validación adicional:
+- 201 Created: Activity successfully created
+- 400 Bad Request: Invalid activity data, itinerary not found, or activity already exists
+- 401 Unauthorized: Authentication required
+- 500 Internal Server Error: Server error
 
-"The activity must start before it ends" (scheduleStart debe ser anterior a scheduleEnd)
+**Response Body (Success - 201 Created):**
 
-Respuesta:
-
-```ts
-jsonStatus: 201 Created
-Content-Type: application/json
-
+```json
 {
-  "message": "Actvidad creada",
+  "message": "Activity created",
   "data": {
-    "id": "string",
-    "name": "string",
-    "description": "string",
-    "outdoor": boolean,
-    "transport": boolean,
-    "scheduleStart": "string",
-    "scheduleEnd": "string",
-    "place": "string (ID)",
+    "id": "60d21b4667d0d8992e610c85",
+    "name": "Beach Trip",
+    "description": "Day at the beach with surfing lessons",
+    "outdoor": true,
+    "transport": true,
+    "scheduleStart": "09",
+    "scheduleEnd": "17",
+    "place": "60d21b4667d0d8992e610c87",
     "itinerary": {
-      "id": "string",
-      // otros datos del itinerario
+      "id": "60d21b4667d0d8992e610c86"
+      // other itinerary data
     },
-    "createdAt": "timestamp",
-    "updatedAt": "timestamp"
+    "createdAt": "2023-04-15T10:30:00.000Z",
+    "updatedAt": "2023-04-15T10:30:00.000Z"
   }
 }
 ```
 
-Errores:
+**Error Responses:**
 
-400 Bad Request: {"message": ["Itinerario no encontrado"]}
-400 Bad Request: {"message": ["Activity ya existente"]}
-500 Internal Server Error: {"message": error.message}
+400 Bad Request:
 
-#### Actualizar actividad
-
-PUT /api/activities/:id
-
-Actualiza completamente una actividad existente.
-
-Parámetros:
-id: ID de la actividad (parámetro de ruta)
-
-Solicitud:
-
-```ts
-jsonContent-Type: application/json
-
+```json
 {
-  "name": "string",
-  "description": "string",
-  "outdoor": boolean,
-  "transport": boolean,
-  "scheduleStart": "string",
-  "scheduleEnd": "string",
+  "message": ["Itinerary not found"]
+}
+```
+
+OR
+
+```json
+{
+  "message": ["Activity already exists"]
+}
+```
+
+OR
+
+```json
+{
+  "message": ["Invalid activity data"]
+}
+```
+
+401 Unauthorized:
+
+```json
+{
+  "message": "Authentication required"
+}
+```
+
+500 Internal Server Error:
+
+```json
+{
+  "message": "Server error"
+}
+```
+
+**Example Request:**
+
+```bash
+curl -X POST https://itineraria-backend.up.railway.app/api/activities \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "name": "Beach Trip",
+    "description": "Day at the beach with surfing lessons",
+    "outdoor": true,
+    "transport": true,
+    "scheduleStart": "09",
+    "scheduleEnd": "17",
+    "place": {
+      "id": "60d21b4667d0d8992e610c87"
+    },
+    "itinerary": {
+      "id": "60d21b4667d0d8992e610c86"
+    }
+  }'
+```
+
+### Update Activity
+
+**HTTP Method & URL:** PUT /api/activities/:id
+
+**Description:** Updates all data of an existing activity.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:**
+
+- id (path parameter): Unique identifier of the activity to update
+
+**Request Body:**
+
+```json
+{
+  "name": "Museum Tour",
+  "description": "Guided tour through the city museum",
+  "outdoor": false,
+  "transport": true,
+  "scheduleStart": "10",
+  "scheduleEnd": "13",
   "place": {
-    "id": "string"
+    "id": "60d21b4667d0d8992e610c87"
   },
   "itinerary": {
-    "id": "string"
+    "id": "60d21b4667d0d8992e610c86"
   }
 }
 ```
 
-Validación:
+**Validation Notes:**
 
-Los campos deben cumplir con las validaciones del schema del modelo. Se deben incluir todos los campos.
+- All fields must meet the validations of the model schema
+- All fields must be included in the request
 
-Respuesta:
+**Response Codes:**
 
-```ts
-jsonStatus: 200 OK
-Content-Type: application/json
+- 200 OK: Activity successfully updated
+- 400 Bad Request: Invalid activity data or activity already exists with provided data
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Activity not found
+- 500 Internal Server Error: Server error
 
+**Response Body (Success - 200 OK):**
+
+```json
 {
-  "message": "Activity actualizada",
+  "message": "Activity updated",
   "data": {
-    "id": "string",
-    "name": "string",
-    "description": "string",
-    "outdoor": boolean,
-    "transport": boolean,
-    "scheduleStart": "string",
-    "scheduleEnd": "string",
-    "place": "string (ID)",
-    "itinerary": "string (ID)",
-    "createdAt": "timestamp",
-    "updatedAt": "timestamp"
+    "id": "60d21b4667d0d8992e610c85",
+    "name": "Museum Tour",
+    "description": "Guided tour through the city museum",
+    "outdoor": false,
+    "transport": true,
+    "scheduleStart": "10",
+    "scheduleEnd": "13",
+    "place": "60d21b4667d0d8992e610c87",
+    "itinerary": "60d21b4667d0d8992e610c86",
+    "createdAt": "2023-04-15T10:30:00.000Z",
+    "updatedAt": "2023-04-15T11:45:00.000Z"
   },
   "itinerary": {
-    "id": "string",
-    // otros datos del itinerario
+    "id": "60d21b4667d0d8992e610c86"
+    // other itinerary data
   }
 }
 ```
 
-Errores:
+**Error Responses:**
 
-400 Bad Request: {"message": ["Activity ya existente"]}
-500 Internal Server Error: {"message": error.message}
+400 Bad Request:
 
-#### Actualizar parcialmente actividad
-
-PATCH /api/activities/:id
-
-Actualiza parcialmente una actividad existente.
-
-Parámetros:
-id: ID de la actividad (parámetro de ruta)
-
-Solicitud:
-
-```ts
-jsonContent-Type: application/json
-
+```json
 {
-  // Cualquier combinación de estos campos
-  "name": "string",
-  "description": "string",
-  "outdoor": boolean,
-  "transport": boolean,
-  "scheduleStart": "string",
-  "scheduleEnd": "string",
-  "place": {
-    "id": "string"
-  },
-  "itinerary": {
-    "id": "string"
-  }
+  "message": ["Activity already exists"]
 }
 ```
 
-Validación:
+OR
 
-Same as PUT request but all fields are optional.
-
-Respuesta:
-
-```ts
-jsonStatus: 200 OK
-Content-Type: application/json
-
+```json
 {
-  "message": "Activity actualizada",
+  "message": ["Invalid activity data"]
+}
+```
+
+401 Unauthorized:
+
+```json
+{
+  "message": "Authentication required"
+}
+```
+
+404 Not Found:
+
+```json
+{
+  "message": "Activity not found"
+}
+```
+
+500 Internal Server Error:
+
+```json
+{
+  "message": "Server error"
+}
+```
+
+**Example Request:**
+
+```bash
+curl -X PUT https://itineraria-backend.up.railway.app/api/activities/60d21b4667d0d8992e610c85 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "name": "Museum Tour",
+    "description": "Guided tour through the city museum",
+    "outdoor": false,
+    "transport": true,
+    "scheduleStart": "10",
+    "scheduleEnd": "13",
+    "place": {
+      "id": "60d21b4667d0d8992e610c87"
+    },
+    "itinerary": {
+      "id": "60d21b4667d0d8992e610c86"
+    }
+  }'
+```
+
+### Update Activity (Partial)
+
+**HTTP Method & URL:** PATCH /api/activities/:id
+
+**Description:** Updates only specific fields of an existing activity.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:**
+
+- id (path parameter): Unique identifier of the activity to partially update
+
+**Request Body:**
+
+```json
+{
+  "name": "Updated Activity Name",
+  "transport": false
+}
+```
+
+**Validation Notes:**
+
+- Any included field must meet the validations of the model schema
+- Fields are optional for a partial update
+
+**Response Codes:**
+
+- 200 OK: Activity successfully updated
+- 400 Bad Request: Invalid activity data or activity already exists with provided data
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Activity not found
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
+
+```json
+{
+  "message": "Activity updated",
   "data": {
-    "id": "string",
-    "name": "string",
-    "description": "string",
-    "outdoor": boolean,
-    "transport": boolean,
-    "scheduleStart": "string",
-    "scheduleEnd": "string",
-    "place": "string (ID)",
-    "itinerary": "string (ID)",
-    "createdAt": "timestamp",
-    "updatedAt": "timestamp"
+    "id": "60d21b4667d0d8992e610c85",
+    "name": "Updated Activity Name",
+    "description": "Guided tour through the city museum",
+    "outdoor": false,
+    "transport": false,
+    "scheduleStart": "10",
+    "scheduleEnd": "13",
+    "place": "60d21b4667d0d8992e610c87",
+    "itinerary": "60d21b4667d0d8992e610c86",
+    "createdAt": "2023-04-15T10:30:00.000Z",
+    "updatedAt": "2023-04-15T12:15:00.000Z"
   },
   "itinerary": {
-    "id": "string",
-    // otros datos del itinerario
+    "id": "60d21b4667d0d8992e610c86"
+    // other itinerary data
   }
 }
 ```
 
-Errores:
+**Error Responses:**
 
-400 Bad Request: {"message": ["Activity ya existente"]}
-500 Internal Server Error: {"message": error.message}
+400 Bad Request:
 
-#### Eliminar actividad
-
-DELETE /api/activities/:id
-
-Elimina una actividad existente.
-
-Parámetros:
-id: ID de la actividad (parámetro de ruta)
-
-Respuesta:
-
-```ts
-jsonStatus: 200 OK
-Content-Type: application/json
-
+```json
 {
-  "message": "Activity eliminada",
+  "message": ["Activity already exists"]
+}
+```
+
+OR
+
+```json
+{
+  "message": ["Invalid activity data"]
+}
+```
+
+401 Unauthorized:
+
+```json
+{
+  "message": "Authentication required"
+}
+```
+
+404 Not Found:
+
+```json
+{
+  "message": "Activity not found"
+}
+```
+
+500 Internal Server Error:
+
+```json
+{
+  "message": "Server error"
+}
+```
+
+**Example Request:**
+
+```bash
+curl -X PATCH https://itineraria-backend.up.railway.app/api/activities/60d21b4667d0d8992e610c85 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "name": "Updated Activity Name",
+    "transport": false
+  }'
+```
+
+### Delete Activity
+
+**HTTP Method & URL:** DELETE /api/activities/:id
+
+**Description:** Removes a specific activity from the system.
+
+**Authentication Requirements:** Authentication required (Protected endpoint)
+
+**Request Parameters:**
+
+- id (path parameter): Unique identifier of the activity to delete
+
+**Request Body:** None
+
+**Response Codes:**
+
+- 200 OK: Activity successfully deleted
+- 401 Unauthorized: Authentication required
+- 404 Not Found: Activity not found
+- 500 Internal Server Error: Server error
+
+**Response Body (Success - 200 OK):**
+
+```json
+{
+  "message": "Activity deleted",
   "data": {
-    "id": "string",
-    "name": "string",
-    "description": "string",
-    "outdoor": boolean,
-    "transport": boolean,
-    "scheduleStart": "string",
-    "scheduleEnd": "string",
-    "place": "string (ID)",
-    "itinerary": "string (ID)",
-    "createdAt": "timestamp",
-    "updatedAt": "timestamp"
+    "id": "60d21b4667d0d8992e610c85",
+    "name": "Updated Activity Name",
+    "description": "Guided tour through the city museum",
+    "outdoor": false,
+    "transport": false,
+    "scheduleStart": "10",
+    "scheduleEnd": "13",
+    "place": "60d21b4667d0d8992e610c87",
+    "itinerary": "60d21b4667d0d8992e610c86",
+    "createdAt": "2023-04-15T10:30:00.000Z",
+    "updatedAt": "2023-04-15T12:15:00.000Z"
   }
 }
 ```
 
-Errores:
+**Error Responses:**
 
-500 Internal Server Error: {"message": error.message}
+401 Unauthorized:
+
+```json
+{
+  "message": "Authentication required"
+}
+```
+
+404 Not Found:
+
+```json
+{
+  "message": "Activity not found"
+}
+```
+
+500 Internal Server Error:
+
+```json
+{
+  "message": "Server error"
+}
+```
+
+**Example Request:**
+
+```bash
+curl -X DELETE https://itineraria-backend.up.railway.app/api/activities/60d21b4667d0d8992e610c85 \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```

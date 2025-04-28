@@ -9,19 +9,4 @@ export abstract class BaseEntity {
 
   @SerializedPrimaryKey()
   id!: string;
-
-    /*
-
-  @Property({ type: DateTimeType })
-  createdAt? = new Date()
-
-  @Property({
-    type: DateTimeType,
-    onUpdate: () => new Date(),
-  })
-  updatedAt? = new Date()
-
-  */
-
-
 }

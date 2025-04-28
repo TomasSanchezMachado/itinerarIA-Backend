@@ -4,7 +4,6 @@ import { Property, OneToMany, Collection, Entity, ManyToOne, Cascade, Rel, ManyT
 import { BaseEntity } from '../shared/db/baseEntity.entity.js'
 import { Participant } from '../participant/participant.entity.js'
 import { Place } from '../place/place.entity.js'
-import { Preference } from '../preference/preference.entity.js'
 
 @Entity()
 export class Itinerary extends BaseEntity {
@@ -13,9 +12,6 @@ export class Itinerary extends BaseEntity {
 
         @Property({ nullable: false })
         description?: string
-
-        // @Property({ nullable: false })
-        // duration!: number
 
         @Property({ nullable: false })
         dayStart!: DateType

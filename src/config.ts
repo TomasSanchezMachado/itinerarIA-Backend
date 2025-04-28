@@ -1,8 +1,4 @@
-// export const {
-//   PORT = process.env.port || 3000,
-//   SALT_ROUNDS = 10,
-//   TOKEN_SECRET = process.env.TOKEN_SECRET || "secret",
-// } = process.env
+// This file contains the configuration for the application.
 
 export const TOKEN_SECRET = process.env.TOKEN_SECRET || "secret"
 export const DB_NAME = (process.env.NODE_ENV === "test") ? "itinerarIA_test" : "itinerarIA";

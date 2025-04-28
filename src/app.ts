@@ -3,7 +3,7 @@ import express, { Router } from "express";
 import { placeRouter } from "./place/place.routes.js";
 import { itineraryRouter } from "./itinerary/itinerary.routes.js";
 import { actividadRouter } from "./activity/activity.routes.js";
-import { orm, syncSchema } from "./shared/db/orm.js";
+import { orm} from "./shared/db/orm.js";
 import { RequestContext } from "@mikro-orm/core";
 import { externalServiceRouter } from "./externalService/externalService.routes.js";
 import { userRouter } from "./user/user.routes.js";
@@ -17,9 +17,7 @@ import { authenticateJWT } from "./shared/middlewares/jwtMiddleware.js";
 import { publicExternalServiceRouter } from "./externalService/externalService.routes.public.js";
 import { isAdmin } from "./shared/middlewares/adminMiddleware.js";
 import { testingRouter } from "./test/testing.routes.js";
-import cors from "cors";
 import { PORT } from "./config.js";
-import { ACCEPTED_ORIGINS } from "./shared/middlewares/corsMiddleware.js";
 
 const app = express();
 
@@ -78,8 +76,6 @@ app.use((_, res) => {
   res.status(404).send({ message: "Resource not found" });
 });
 
-// Sync database schema
-// await syncSchema();
 
 // Start server
 app.listen(PORT, () => {

@@ -20,18 +20,12 @@ export class Activity extends BaseEntity{
   @Property()
   transport?: boolean;
 
-  // @Property({nullable: false})
-  // schedule!: string;
 
   @Property({nullable: false})
   scheduleStart!: string;
 
   @Property({nullable: false})
   scheduleEnd!: string;
-
-
-  // @Property()
-  // fecha?: string;
 
   @ManyToOne(() => Place, {nullable: false})
   place!: Rel<Place>;

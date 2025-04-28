@@ -248,13 +248,7 @@ export async function addWithAI(req: Request, res: Response) {
 export async function update(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    // //Valido que, en caso de quererse cambiar el user,exista
-    // if(req.body.sanitizedInput.user){
-    //   const user = await em.findOne('User', {id: req.body.sanitizedInput.user});
-    //   if(!user){
-    //     return res.status(400).json({message: "El user ingresado no existe"});
-    //   }
-    // }
+    
     const place = await em.findOne(Place, {
       id: req.body.sanitizedInput.place.id,
     });

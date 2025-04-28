@@ -15,7 +15,7 @@ The system features robust authentication and authorization mechanisms, as well 
 ## Technology Stack
 
 - Backend Framework: Node.js with Express
-- Database: MongoDB with MikroORM as the ODM (Object Document Mapper)
+- Database: MongoDB with MikroORM as the ODM and MongoDB Atlas as a database for production (Object Document Mapper)
 - Authentication: JWT (JSON Web Tokens)
 - Validation: Zod schema validation
 - Testing: Vitest and Supertest
@@ -72,19 +72,10 @@ npm run start:dev
 
 The server is continuously running in production (hosted on Railway).
 There is no need to manually start it from the terminal. It is already configured to connect to the cloud database.
-
-### Test Environment
-
-To run End-to-End (E2E) tests:
-
+### Testing
+To run the tests, you can use the following command:
 ```bash
-npm run test:e2e
-```
-
-To run unit tests:
-
-```bash
-npm run test:vitest
+npm run vitest fileName.test.ts
 ```
 
 To verify that the application is running correctly, you should see the following message in the console:

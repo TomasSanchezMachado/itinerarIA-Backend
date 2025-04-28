@@ -2,96 +2,13 @@
 
 ## Project Overview
 
-itinerarIA is a RESTful API that facilitates the creation and management of travel itineraries. The application allows users to register, create personalized itineraries with AI, add participants, add activities, specify locations, advertise external services, and so on. The system includes user authentication, authorization mechanisms, and comprehensive data validation.
+itinerarIA is a RESTful API designed to facilitate the creation and management of personalized travel itineraries.
+The application allows users to register, generate itineraries using AI, add and manage participants, specify preferences, and associate activities for specific locations. Additionally, users can promote external services, submit reviews and opinions on activities, mark participants as favorites, and include them in itineraries.
+The system features robust authentication and authorization mechanisms, as well as comprehensive data validation to ensure consistency and security across all operations.
 
-## Base URL
+## Backend Base URL
 
-## [itinerarIA](https://itineraria-backend.up.railway.app/)
-
-## Technology Stack
-
-- Backend Framework: Node.js with Express
-- Database: MongoDB with MikroORM as the ODM (Object Document Mapper)
-- Authentication: JWT (JSON Web Tokens)
-- Validation: Zod schema validation
-- Testing: Vitest and Supertest
-- Containerization: Docker and Docker Compose
-
-## Getting Started
-
-### System Requirements
-
-- Node.js (v16+)
-- MongoDB (local or Atlas)
-- npm or yarn package manager
-
-### Installation
-
-#### Local Installation
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/TomasSanchezMachado/itinerarIA-Backend.git
-cd itinerarIA-Backend
-```
-
-2. Install dependencies:
-
-```bash
-npm install
-```
-
-3. Setup environment variables (create a .env file in the root directory):
-
-JWT_SECRET=your_jwt_secret
-MONGO_URI=your_mongodb_LOCAL_connection_string
-GEMINI_API_KEY=your_gemini_api_key
-
-NOTE: The variable MONGO_URI must contain the connection string to your LOCAL database.
-
-4. Docker Installation
-
-- Clone the repository and navigate to the project folder
-- Configure environment variables for Docker:
-
-  - MONGO_INITDB_ROOT_USERNAME=your_username
-  - MONGO_INITDB_ROOT_PASSWORD=your_password
-
-- Build and run with Docker Compose:
-
-```bash
-docker-compose up -d
-```
-
-#### Running the Application
-
-##### Development Mode
-
-```bash
-npm run start:dev
-```
-
-The local server is setted up to run with the database related to the variable MONGO_URI
-
-##### Production Mode
-
-The server in production mode is running always. There's no need of running it from the bash.
-It is already setted up to run with the cloud database.
-
-##### Test Environment
-
-Para ejecutar tests End to End
-
-```bash
-npm run test:e2e
-```
-
-Para ejecutar tests unitarios
-
-```bash
-npm run test:vitest
-```
+### [itinerarIA](https://itineraria-backend.up.railway.app/)
 
 ## Authentication
 

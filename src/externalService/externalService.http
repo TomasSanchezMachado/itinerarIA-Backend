@@ -1,0 +1,56 @@
+### GET all externalServices
+GET http://localhost:3000/api/externalServices
+
+### POST servicioExterno
+# @name createServicioExterno
+POST http://localhost:3000/api/externalServices
+Content-Type: application/json
+
+{
+  
+  "tipoServicio": "Alquiler de bicicletas",
+  "nombre": "MiBiciTuBicii",
+  "descripcion": "Alquiler de bicis en todo el mundooo",
+  "direccion": "Av. 9 de Julio 1234",
+  "horario": "Lunes a Viernes de 10 a 12hs",
+  "sitioWeb": "www.mibicitubici.com",
+  "telContacto": "3413531061",
+  "lugar": "667ebe879b52c622400b1065"
+
+}
+
+### ID
+# 
+@id = {{createServicioExterno.response.body.data.id}}
+
+### GET servicioExterno by ID
+
+GET http://localhost:3000/api/externalServices/66e37760aaf541a2d11e0da5
+
+
+### GET servicioExterno by Place
+GET http://localhost:3000/api/externalServices/findByPlace/667ebe879b52c622400b1065
+
+
+### Update servicioExterno by ID
+# @name updateServicioExterno
+PUT http://localhost:3000/api/externalServices/66e37760aaf541a2d11e0da5
+Content-Type: application/json
+
+{
+  "tipoServicio": "Alquiler de autos",
+  "nombre": "Hertz",
+  "descripcion": "Alquiler de autos en todo el mundooo",
+  "direccion": "Av. 9 de Julio 1234",
+  "horario": "Lunes a Viernes de 10 a 12hs",
+  "sitioWeb": "www.hertz.com",
+  "telContacto": "1234567891",
+  "lugar": "667ebe879b52c622400b1065"
+
+}
+
+### DELETE servicioExterno by ID
+DELETE http://localhost:3000/api/externalServices/{{id}}
+
+### ACCEPT Publicity Request
+POST http://localhost:3000/api/externalServices/acceptRequest/6738aef1a47656ddec0a40f9

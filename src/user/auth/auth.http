@@ -1,0 +1,28 @@
+###REGISTER
+POST http://localhost:3000/api/auth/register
+Content-Type:application/json
+
+{
+    "username": "facu",
+    "password": "1234Facu",
+    "names": "Jaminton",
+    "lastName": "Campaz",
+    "dateOfBirth": "2024-04-24",
+    "mail": "bichito@gmail.com",
+    "phoneNumber": "123456789",
+    "isAdmin": false
+}
+
+###LOGIN
+POST http://localhost:3000/api/auth/login
+Content-Type:application/json
+
+{
+    "username": "vitto1889",
+    "password": "Vitto123"
+}
+
+###LOGOUT
+POST http://localhost:3000/api/auth/logout
+###PROFILE
+POST http://localhost:3000/api/auth/profile

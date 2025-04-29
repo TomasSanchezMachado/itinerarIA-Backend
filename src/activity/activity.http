@@ -1,0 +1,40 @@
+GET http://localhost:3000/api/activities
+# @name createActividad
+###
+POST http://localhost:3000/api/activities
+Content-Type: application/json
+
+{
+    "name": "Museo Messii",
+    "description": "Visita guiada al museo de Lionel Messi",
+    "outdoor": false,
+    "transport": true,
+    "scheduleStart": "11:59",
+    "scheduleEnd": "12:00",
+    "place": "67236e6e1706dd5a0709c4df",
+    "itinerary": "6713c67fa3b8326eea6abdee"
+}
+###
+@id = {{createActividad.response.body.data.id}}
+
+###
+GET http://localhost:3000/api/activities/{{id}}
+
+###
+PUT http://localhost:3000/api/activities/{{id}}
+Content-Type: application/json
+
+{
+    "nombre":"Museo Messi",
+    "descripcion" : "Visita guiada al museo de Lionel Messi",
+    "aireLibre" : false,
+    "transporte" : "Auto",
+    "horario" : "10:00",
+    "lugar": "667e248fd5fe6e6bc049c0dc"
+
+
+}
+###
+
+###
+DELETE http://localhost:3000/api/activities/{{id}}

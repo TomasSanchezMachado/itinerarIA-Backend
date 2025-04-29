@@ -1,0 +1,56 @@
+GET http://localhost:3000/api/participants/66fc4785f2b5cf4ef633816a
+###
+# @name createParticipant
+POST http://localhost:3000/api/participants
+Content-Type: application/json
+
+{
+    "name": "Participant 2",
+    "age": 20,
+    "disability": false,
+    "preferences": ["670bcc78732bbbc7b6926278"],
+    "user": "66fc4785f2b5cf4ef633816a"
+
+}
+
+###
+POST http://localhost:3000/api/participants/favorite
+Content-Type: application/json
+
+{
+    "name": "Participant 1",
+    "age": 20,
+    "disability": true,
+    "preferences": ["670bce6416da0fb6e0947f31"],
+    "user": "66fc4785f2b5cf4ef633816a"
+
+}
+
+###
+@id = {{createParticipant.response.body.data.id}}
+
+
+### GET ONE
+GET http://localhost:3000/api/participants/getone/670bd0cc60eb88e665c9fb90
+###
+PUT http://localhost:3000/api/participants/670bd0cc60eb88e665c9fb90
+Content-Type: application/json
+
+{
+    "name": "Facundo",
+  "age": 24,
+  "disability": false,
+  "preferences": [{"id":"670bce8c16da0fb6e0947f33"},{"id":"670bce6416da0fb6e0947f31"}]
+
+}
+###
+PATCH http://localhost:3000/api/participants/66ff22aece8bda39a2e5be6c
+Content-Type: application/json
+
+{
+    "name" : "Nicolás Escobar"
+}
+
+
+###
+DELETE http://localhost:3000/api/participants/66ff22aece8bda39a2e5be6c

@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    container_name: itinerarIA-app
+    ports:
+      - '3000:3000'
+  mongo-db:
+    container_name: itinerarIA-mongo
+    image: percona/percona-server-mongodb:latest
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}

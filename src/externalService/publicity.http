@@ -1,0 +1,19 @@
+### GET PLACES
+
+GET http://localhost:3000/api/publicity/places
+
+### PUBLICITY REQUEST
+
+POST http://localhost:3000/api/publicity
+Content-Type: application/json
+  
+  {
+    "serviceType": "Publicidad",
+    "name": "Publicidad en la vía pública jeje",
+    "description": "Publicidad en la vía pública",
+    "address": "Av. 9 de Julio 1234",
+    "schedule": "Lunes a Viernes de 10 a 12hs",
+    "website": "www.publicidad.com",
+    "phoneNumber": "3413531061",
+    "place": "67264de93c6f8376047e0b18"
+  }

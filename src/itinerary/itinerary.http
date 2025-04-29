@@ -1,0 +1,68 @@
+GET http://localhost:3000/api/itinerarios
+
+
+###
+# @name createItinerario
+
+POST http://localhost:3000/api/itinerarios
+Content-Type: application/json
+
+{
+    "title": "Itinerario 1111",
+    "description": "Itinerario hecho para 7 dias en Disney...",
+    "dayStart": "2024-10-30",
+    "dayEnd": "2024-11-23",
+    "user":"6722862eeed0a44e8abde61f",
+    "place":"67157b64371c9028019e640c",
+    "activities":["66fd97cb2e28ca23b47f2058","66fd97cb2e28ca23b47f2058"],
+    "participants":[]
+    
+}
+
+###
+
+POST http://localhost:3000/api/itinerarios/ia
+Content-Type: application/json
+
+{
+    "title": "DISNEY",
+    "description": "Itinerario hecho para 7 dias en Disney...",
+    "dayStart": "2024-10-30",
+    "dayEnd": "2024-11-23",
+    "user":"6722862eeed0a44e8abde61f",
+    "place":"67236e6e1706dd5a0709c4df",
+    "participants":["6724d5e367bf8ca176f0b7ca","6724d5ee67bf8ca176f0b7cb"]
+    
+}
+###
+
+###
+@id = {{createItinerario.response.body.data.id}}
+
+### GET ONE
+GET http://localhost:3000/api/itinerarios/{{id}}
+
+### GET all by user
+GET http://localhost:3000/api/itinerarios/user/66fc4785f2b5cf4ef633816a
+
+###
+PUT http://localhost:3000/api/itinerarios/{{id}}
+Content-Type: application/json
+
+{
+    "titulo": "Itinerario 2",
+    "descripcion": "Itinerario hecho para 7 dias en Disney...",
+    "cantDias": 5
+
+}
+###
+PATCH http://localhost:3000/api/itinerarios/{{id}}
+Content-Type: application/json
+
+{
+    "cantDias": 7
+}
+
+
+###
+DELETE http://localhost:3000/api/itinerarios/{{id}}

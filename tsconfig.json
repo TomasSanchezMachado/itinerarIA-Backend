@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "incremental": true,
+    "baseUrl": "./src", // Use src as the base for imports
+    "paths": {
+      "*": ["*", "../dist/*"] // Resolve modules in src and fallback to dist
+    },
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "alwaysStrict": true,
+    "skipLibCheck": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowJs": true
+  },
+  "include": ["src/**/*", "**/*.ts", "src/**/*.test.ts", "jest.config.mjs"],
+  "exclude": ["node_modules", "dist","jest.config.mjs","babel.config.js"]
+}

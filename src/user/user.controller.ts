@@ -72,7 +72,6 @@ export async function findOne(req: Request, res: Response) {
 
 export async function add(req: Request, res: Response) {
   try {
-    req.body.sanitizedInput.isAdmin = false;
     const user = em.create(User, req.body.sanitizedInput);
     await em.flush();
     const token = await createAccessToken({ id: user._id });

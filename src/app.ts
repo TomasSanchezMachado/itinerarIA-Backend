@@ -5,7 +5,8 @@ import { itineraryRouter } from "./itinerary/itinerary.routes.js";
 import { actividadRouter } from "./activity/activity.routes.js";
 import { orm} from "./shared/db/orm.js";
 import { RequestContext } from "@mikro-orm/core";
-import { externalServiceRouter } from "./externalService/externalService.routes.js";
+import { externalServiceAdminRouter } from "./externalService/externalServiceAdmin.routes.js";
+import { externalServiceProtectedRouter } from "./externalService/externalServiceProtected.routes.js";
 import { userRouter } from "./user/user.routes.js";
 import { opinionRouter } from "./opinion/opinion.routes.js";
 import { authRouter } from "./user/auth/auth.routes.js";
@@ -41,6 +42,8 @@ publicRouter.use("/api/users", userRouter);
 publicRouter.use("/api/places", placeRouter);
 
 
+
+
 // Protected routes
 const protectedRouter = Router();
 protectedRouter.use(authenticateJWT);
@@ -48,13 +51,15 @@ protectedRouter.use("/api/itineraries", itineraryRouter);
 protectedRouter.use("/api/activities", actividadRouter);
 protectedRouter.use("/api/opinions", opinionRouter);
 protectedRouter.use("/api/participants", participantRouter);
+protectedRouter.use("/api/externalServices", externalServiceProtectedRouter);
+
 
 // Admin protected routes
 const protectedAdminRouter = Router();
 protectedAdminRouter.use(authenticateJWT);
 protectedAdminRouter.use(isAdmin);
 protectedAdminRouter.use("/api/preferences", preferenceRouter);
-protectedAdminRouter.use("/api/externalServices", externalServiceRouter);
+protectedAdminRouter.use("/api/externalServices", externalServiceAdminRouter);
 
 // Testing router
 if (process.env.NODE_ENV === "test") {
